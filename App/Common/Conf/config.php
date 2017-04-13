@@ -10,10 +10,10 @@ return array(
 	'AUTH_CONFIG'=>array(
         'AUTH_ON' => true, 
         'AUTH_TYPE' => 1, // 认证方式，1为时时认证；2为登录认证。
-        'AUTH_GROUP' => 'xy_auth_group', 
-        'AUTH_GROUP_ACCESS' => 'xy_auth_group_access', 
-        'AUTH_RULE' => 'xy_auth_rule', 
-        'AUTH_USER' => 'xy_user'
+        'AUTH_GROUP' => 'v2_auth_group', 
+        'AUTH_GROUP_ACCESS' => 'v2_auth_group_access', 
+        'AUTH_RULE' => 'v2_auth_rule', 
+        'AUTH_USER' => 'v2_user'
     ),
 	'NOT_AUTH_MODULE' => 'Public,Index', // 默认无需认证模块
     //超级管理员id,拥有全部权限,只要用户uid在这个角色组里的,就跳出认证.可以设置多个值,如array('1','2','3')

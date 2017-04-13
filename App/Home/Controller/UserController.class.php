@@ -43,10 +43,11 @@ class UserController extends CommonController {
 	$uid=I('get.id');
 	//if ($uid<>session('uid')){
 	M('auth_group_access')->where('uid='.$uid.'')->delete(); 
-	$gcdata['uid']=$uid;
-	$gcdata['group_id']=M('auth_group')->where(array("title"=>I('get.depname')))->getField('id');
-	M('auth_group_access')->data($gcdata)->add();
-	$gcdata['group_id']=M('auth_group')->where(array("title"=>I('get.posname')))->getField('id');
+	$gcdata['uid'] = $uid;
+	$gcdata['group_id'] = M('auth_group')->where(array("title"=>urldecode(I('get.posname'))))->getField('id');
+	if(!$gcdata['group_id']){
+		$this->mtReturn(300,'失败，职位名称【'.urldecode(I('get.posname')).'】不存在或已被修改',$_REQUEST['navTabId'],true);  
+	}
 	M('auth_group_access')->data($gcdata)->add();
 	$this->mtReturn(200,"设置成功".$id,$_REQUEST['navTabId'],false); 
 	//}
