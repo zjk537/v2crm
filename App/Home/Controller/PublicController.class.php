@@ -10,7 +10,7 @@ class PublicController extends Controller {
 		if (!$rs['status']) {
             $this->error($rs['data']);
         }
-		$this->success('登录成功，正在跳转...','/',1);
+		$this->success('登录成功，正在跳转...',__ROOT__,1);
 	  }
 	  else{
 		  $this->display();
