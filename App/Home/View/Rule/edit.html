@@ -10,18 +10,18 @@
 	          <foreach name="list" item="v">
                <option <if condition="$v.id EQ $Rs['pid'] ">selected value="{$Rs['pid']}" <else/>value="{$v.id}"</if> >
              	<switch name="v.level">  <case value="0">+</case> <case value="1">+--</case><case value="2">+------</case><default /></switch>
-	           {$v.title} <if condition="$v.status EQ 1 "><else/><font color=red>[未启用]</font></if>
+	           {$v.name} <if condition="$v.status EQ 1 "><else/><font color=red>[未启用]</font></if>
 	           </option>
               </foreach>
              </select>
             </td></tr>
             <tr><td>
-                <label for="j_title" class="control-label x85">权限名称：</label>
-                <input type="text" data-rule="required" size="30" name="title" id="j_title" value="{$Rs['title']}" >
+                <label for="j_name" class="control-label x85">权限名称：</label>
+                <input type="text" data-rule="required" size="30" name="name" id="j_name" value="{$Rs['name']}" >
             </td></tr>
             <tr><td>
-                <label for="j_title" class="control-label x85">权限网址：</label>
-                <input type="text" data-rule="required" size="30" name="name" id="j_name" value="{$Rs['name']}" >
+                <label for="j_action" class="control-label x85">权限网址：</label>
+                <input type="text" data-rule="required" size="30" name="action" id="j_action" value="{$Rs['action']}" >
 				<span>模块/动作/方法</span>
             </td></tr>
 			<if condition="$id EQ '' ">

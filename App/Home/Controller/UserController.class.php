@@ -31,10 +31,13 @@ class UserController extends CommonController {
   
     public function _befor_update($data){
 	 if (strlen(I('pwd'))!==32){
-	 $password=md5(md5(I('pwd')));
-	 $data['password']=$password;
+	 	$password=md5(md5(I('pwd')));
+	 	$data['password']=$password;
 	 }
 	 unset($data['pwd']);
+	 // 更新用户权限 
+	 $gcId = M('auth_group')->where(array("title"=>$data['posname']))->getField('id');
+	 M('auth_group_access')->where('uid='.$data['id'].'')->setField('group_id',$gcId);
 	 return $data;
   }
 

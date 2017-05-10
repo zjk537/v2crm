@@ -20,10 +20,10 @@
     <table data-toggle="tablefixed" data-width="100%" data-layout-h="0">
         <thead>
             <tr>
-                <th data-order-field="id">No.</th>
-                <th data-order-field="name">产品名称</th>
-                <th data-order-field="fenlei">产品分类</th>
-				<th data-order-field="sjiage">销售价格</th>
+                <th data-order-field="id">ID</th>
+                <th data-order-field="name">商品名称</th>
+                <th data-order-field="fenlei">商品分类</th>
+				<th data-order-field="jiage">进价</th>
                 <th data-order-field="type">计量单位</th>
                 <th width="74">操作</th>
             </tr>
@@ -34,7 +34,7 @@
              <td>{$v.id}</td>
              <td>{$v.name}</td>
 			 <td>{$v.fenlei}</td>
-		     <td>{$v.sjiage} </td>
+		     <td>{$v.jiage} </td>
 		     <td>{$v.type}</td>
                 <td>
                     <a href="javascript:;" data-toggle="lookupback" data-args="{jpid:'{$v.id}', jpname:'{$v.name}',jpjiage:'{$v.sjiage}',jpdanwei:'{$v.type}',jpguige:'{$v.title}'}" class="btn btn-blue" title="选择本项" data-icon="check">选择</a>

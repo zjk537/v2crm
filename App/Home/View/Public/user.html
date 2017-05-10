@@ -7,7 +7,7 @@
             <select name="filter" data-toggle="selectpicker">
 			<option value="">全部</option>
 			    <foreach name="filters" item="v">
-			    <option value="{$v.title}"  <if condition="$v.title EQ $_REQUEST['filter'] ">selected<else/>{$_REQUEST['filter']}</if> >{$v.title}</option>
+			    <option value="{$v.name}"  <if condition="$v.name EQ $_REQUEST['filter'] ">selected<else/>{$_REQUEST['filter']}</if> >{$v.name}</option>
 				 </foreach>
             </select>&nbsp;
              <label>关键词：</label><input type="text" value="{$_REQUEST['keys']}" name="keys" class="form-control" size="15" />
@@ -26,8 +26,8 @@
                 <th data-order-field="id">No.</th>
 				<th data-order-field="username">账号</th>
                 <th data-order-field="truename">姓名</th>
-                <th data-order-field="depname">部门</th>
-                <th data-order-field="depname">职位</th>
+                <th data-order-field="depname">店面</th>
+                <th data-order-field="depname">角色</th>
                 <th width="28"><input type="checkbox" class="checkboxCtrl" data-group="ids" data-toggle="icheck"></th>
                 <th width="74">操作</th>
             </tr>

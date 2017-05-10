@@ -1,23 +1,217 @@
 <div class="bjui-pageContent">
     <form action="__URL__/add/navTabId/{:CONTROLLER_NAME}" class="pageForm" data-toggle="validate">
-		<input type="hidden" name="id" value="{$id}">
-        <div class="pageFormContent" data-layout-h="0">
-          <table class="table table-condensed table-hover" width="100%">
-           <tbody>
-			<tr><td><label for='jpid_input' class='control-label x85'>产品ID:</label><input type='text' id='jpid' name='jpid'  size='20' data-toggle='lookup' data-url='__MODULE__/public/proname/navTabId/{:CONTROLLER_NAME}'  value='{$Rs.jpid}'  ></td><td><label for='jpname_input' class='control-label x85'>产品名称:</label><input type='text' id='jpname' name='jpname'  size='20' data-toggle='lookup' data-url='__MODULE__/public/proname/navTabId/{:CONTROLLER_NAME}'  value='{$Rs.jpname}'  ></td></tr>
-<tr><td><label for='jpjiage_input' class='control-label x85'>产品价格:</label><input type='text' id='jpjiage' name='jpjiage'  size='20' data-toggle='lookup' data-url='__MODULE__/public/proname/navTabId/{:CONTROLLER_NAME}'  value='{$Rs.jpjiage}'  ></td><td><label for='jpdanwei_input' class='control-label x85'>计量单位:</label><input type='text' id='jpdanwei' name='jpdanwei'  size='20' data-toggle='lookup' data-url='__MODULE__/public/proname/navTabId/{:CONTROLLER_NAME}'  value='{$Rs.jpdanwei}'  ></td></tr>
-<tr><td><label for='jpguige_input' class='control-label x85'>规格型号:</label><input type='text' id='jpguige' name='jpguige'  size='20' data-toggle='lookup' data-url='__MODULE__/public/proname/navTabId/{:CONTROLLER_NAME}'  value='{$Rs.jpguige}'  ></td><td><label for='shuliang_input' class='control-label x85'>出库数量:</label><input type='text' id='shuliang' name='shuliang' data-rule='required;' size='20'   value='{$Rs.shuliang}'  ></td></tr>
-<tr><td><label for='juid_input' class='control-label x85'>经办人:</label><input type='text' id='juid' name='juid'  size='20' data-toggle='lookup' data-url='__MODULE__/public/user/navTabId/{:CONTROLLER_NAME}'  value='{$Rs.juid}'  ></td><td><label for='juname_input' class='control-label x85'>经办人:</label><input type='text' id='juname' name='juname'  size='20' data-toggle='lookup' data-url='__MODULE__/public/user/navTabId/{:CONTROLLER_NAME}'  value='{$Rs.juname}'  ></td></tr>
-<tr><td><label for='title_input' class='control-label x85'>说明:</label><input type='text' id='title' name='title'  size='20'   value='{$Rs.title}'  ></td><td><label for='jhid_input' class='control-label x85'>关联合同:</label><input type='text' id='jhid' name='jhid'  size='20' data-toggle='lookup' data-url='__MODULE__/public/htname/navTabId/{:CONTROLLER_NAME}'  value='{$Rs.jhid}'  ></td></tr>
-<tr><td><label for='jhname_input' class='control-label x85'>关联合同:</label><input type='text' id='jhname' name='jhname'  size='20' data-toggle='lookup' data-url='__MODULE__/public/htname/navTabId/{:CONTROLLER_NAME}'  value='{$Rs.jhname}'  ></td>
-           </tbody>
-          </table>
-        </div>
-        <div class="bjui-footBar">
-            <ul>
-                <li><button type="button" class="btn-close" data-icon="close">取消</button></li>
-                <li><button type="submit" class="btn-default" data-icon="save">保存</button></li>
-            </ul>
-        </div>
+        <input name="jpid" type="hidden" value="{$Rs.id}">
+            <div class="pageFormContent" data-layout-h="0">
+                <table class="table table-condensed table-hover" width="100%">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <label class="control-label x85">
+                                    商品名称:
+                                </label>
+                                <input readonly="true" name="jpname" size="20" type="text" value="{$Rs.name}"/>
+                            </td>
+                            <td>
+                                <label class="control-label x85" for="j_fenlei">
+                                    商品分类:
+                                </label>
+                                <input disabled="disabled" size="20" type="text" value="{$Rs.fenlei}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="control-label x85">
+                                    商品编码:
+                                </label>
+                                <input disabled="disabled" size="20" type="text" value="{$Rs.code}"/>
+                            </td>
+                            <td>
+                                <label class="control-label x85">
+                                    商品状态:
+                                </label>{$Rs.status}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="control-label x85">
+                                    标价:
+                                </label>
+                                <input disabled="disabled" size="20" type="text" value="{$Rs.bjiage}"/>
+                            </td>
+                            <td>
+                                <label class="control-label x85" for="j_jpsjiage">
+                                    售价:
+                                </label>
+                                <input data-rule="required;" id='j_jpsjiage' name="jpsjiage" size="20" type="text" value=""/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="control-label x85" for="j_yufu">
+                                    预付金额:
+                                </label>
+                                <input id='j_yufu' name="yufu" size="20" type="text" value=""/>
+                            </td>
+                            <td>
+                                <label class="control-label x85" for="j_zhekou">
+                                    折扣金额:
+                                </label>
+                                <input id='j_zhekou' name="zhekou" size="20" type="text" value=""/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="control-label x85" for="j_custname">
+                                    顾客姓名:
+                                </label>
+                                <input id='j_custname' name="custname" size="20" type="text" value=""/>
+                            </td>
+                            <td>
+                                <label class="control-label x85" for="j_custphone">
+                                    顾客电话:
+                                </label>
+                                <input id='j_custphone' name="custphone" size="20" type="text" value=""/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="control-label x85" for="j_beizhu">
+                                    销售备注:
+                                </label>
+                                <input id="j_beizhu" name="beizhu" size="20" type="text" value=""/>
+                            </td>
+                            <td>
+                                <label class="control-label x85">
+                                    付款方式:
+                                </label>
+                                <select data-rule="required;" data-toggle="selectpicker" name="paytype">
+                                    <option value="">
+                                        请选择
+                                    </option>
+                                    <volist id="paytype" name="Think.config.PRO_PAY_TYPE">
+                                        <option value="{$paytype}" <if condition=" $paytype EQ $Rs['paytype'] " >selected</if> >
+                                            {$paytype}
+                                        </option>
+                                    </volist>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="control-label x85" for="juname_input">
+                                    经办人:
+                                </label>
+                                <input data-toggle="lookup" data-rule="required;" data-url="__MODULE__/public/user/navTabId/{:CONTROLLER_NAME}" id="juname" name="juname" size="20" type="text" value="{$Rs.juname}"/>
+                                <input name="juid" size="20" type="hidden" value="{$Rs.juid}"/>
+                            </td>
+                            <td>
+                                <label class="control-label x85">
+                                    部件:
+                                </label>
+                                <input disabled="disabled" size="20" type="text" value="{$Rs.bujian}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="control-label x85">
+                                    颜色:
+                                </label>
+                                <input disabled="disabled" size="20" type="text" value="{$Rs.color}"/>
+                            </td>
+                            <td>
+                                <label class="control-label x85">
+                                    成色:
+                                </label>
+                                <input disabled="disabled" size="20" type="text" value="{$Rs.chengse}"/>
+                            </td>
+                        </tr>
+                        <if condition=" $Rs.fenlei EQ '衣服' " >
+                        <tr>
+                            <td>
+                                <label class="control-label x85">
+                                    尺码:
+                                </label>
+                                <input disabled="disabled" size="20" type="text" value="{$Rs.chima}"/>
+                            </td>
+                            <td>
+                                <label class="control-label x85">
+                                    肩宽:
+                                </label>
+                                <input disabled="disabled" size="20" type="text" value="{$Rs.jiankuan}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="control-label x85">
+                                    腰围:
+                                </label>
+                                <input disabled="disabled" size="20" type="text" value="{$Rs.yaowei}"/>
+                            </td>
+                            <td>
+                                <label class="control-label x85">
+                                    胸围:
+                                </label>
+                                <input disabled="disabled" size="20" type="text" value="{$Rs.xiongwei}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="control-label x85">
+                                    臀围:
+                                </label>
+                                <input disabled="disabled" size="20" type="text" value="{$Rs.tunwei}"/>
+                            </td>
+                            <td>
+                                <label class="control-label x85">
+                                    衣长:
+                                </label>
+                                <input disabled="disabled" size="20" type="text" value="{$Rs.yichang}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="control-label x85">
+                                    裤长:
+                                </label>
+                                <input disabled="disabled" size="20" type="text" value="{$Rs.kuchang}"/>
+                            </td>
+                            <td>
+                                <label class="control-label x85">
+                                    袖长:
+                                </label>
+                                <input disabled="disabled" size="20" type="text" value="{$Rs.xiuchang}"/>
+                            </td>
+                        </tr>
+                        </if>
+                        <tr>
+                            <td colspan="2">
+                                <label class="control-label x85">
+                                    详细说明:
+                                </label>
+                                <div style="display: inline-block; vertical-align: middle;">
+                                    <textarea disabled="disabled" data-items="fontname, fontsize, |, forecolor, hilitecolor, bold, italic, underline, removeformat, |, justifyleft, justifycenter, justifyright, insertorderedlist, insertunorderedlist, |, emoticons, image, link" data-minheight="150" data-toggle="kindeditor">
+                                        {$Rs.remark}
+                                    </textarea>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="bjui-footBar">
+                <ul>
+                    <li>
+                        <button class="btn-close" data-icon="close" type="button">
+                            取消
+                        </button>
+                    </li>
+                    <li>
+                        <button class="btn-default" data-icon="save" type="submit">
+                            保存
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </input>
     </form>
 </div>

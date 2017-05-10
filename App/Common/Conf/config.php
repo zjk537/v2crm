@@ -19,7 +19,7 @@ return array(
     //超级管理员id,拥有全部权限,只要用户uid在这个角色组里的,就跳出认证.可以设置多个值,如array('1','2','3')
     'ADMINISTRATOR'=>array('1'),
 	'SESSION_OPTIONS' =>  array('expire'=>36000),
-	'SESSION_PREFIX'        =>  'xykj', 
+	'SESSION_PREFIX'        =>  'v2', 
 	
 	 // 加载扩展配置文件 多个用,隔开
 	'LOAD_EXT_CONFIG' => 'web,db', 

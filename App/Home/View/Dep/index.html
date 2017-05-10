@@ -21,7 +21,7 @@
             <th>编号</th>
 			<th>职位名称</th>
 			<th <php>echo display(CONTROLLER_NAME.'/edit');</php> >操作</th>
-			<th width="70%"></th>
+			<th width="30"></th>
             </tr>
         </thead>
         <tbody>
@@ -29,7 +29,7 @@
        <foreach name="list" item="v">
     	<tr>
         <td height=25></td><Td>{$v.id}</td><Td>
-		<B>+</b>{$v.title}
+		<B>+</b>{$v.name}
 	    {$v.sort} <if condition="$v.status EQ 1 "><else/><img src="__PUBLIC__/images/locked.gif" border="0"/></if>
 	    </td>
 		<td <php>echo display(CONTROLLER_NAME.'/edit');</php> > <a href="__URL__/edit/id/{$v['id']}/type/1/navTabId/{:CONTROLLER_NAME}"   class="btn btn-green btn-sm" data-toggle="dialog" data-width="600" data-height="300" data-id="dialog-mask" data-mask="true" >编辑</a>
