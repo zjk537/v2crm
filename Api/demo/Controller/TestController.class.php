@@ -9,23 +9,15 @@
 namespace V1\Controller;
 
 use Common\Controller\ApiController;
-use Think\Controller\RestController;
 
-class TestController extends RestController{
+class TestController extends ApiController{
     public function _initialize(){
         //模块初始化，重写父类方法，避免该模块进入token验证
     }
 
     public function index(){
-        $my_array['id'] = "DogHorse";
-        $my_array['name'] = "DogHorse";
-        $my_array['id1'] = "DogHorse1";
-        $my_array['name1'] = "DogHorse1";
-
-        while(list($changpin,$jiage)=each($my_array))
-        {
-            echo "$changpin=>$jiage".'<br>';
-        }
+        $data = I('post.');
+        $this->mtReturn('请求参数',200,json_encode($data));
 //        $va = M('feedback')->select();
 //        if($va) $this->myApiPrint('success',200,$va);
 //        else $this->myApiPrint('don\'t find ');

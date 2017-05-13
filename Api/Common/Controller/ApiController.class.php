@@ -14,9 +14,9 @@ class ApiController extends Controller
 
     public function _initialize()
     {
-        // if(!IS_POST){
-        //     $this->mtReturn('只支持POST请求');
-        // }
+        if(!IS_POST){
+            $this->mtReturn('只支持POST请求');
+        }
 
         // $data = I('post.');
         // $token = $data['token'];

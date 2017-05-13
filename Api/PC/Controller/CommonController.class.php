@@ -1,19 +1,15 @@
 <?php
 namespace Home\Controller;
 
-use Think\Controller;
+use Common\Controller\ApiController;
 
-class CommonController extends Controller
+class CommonController extends ApiController
 {
 
     public function _initialize()
     {
-
+        parent::_initialize();
         $this->_name = CONTROLLER_NAME;
-
-        if (!session('uid')) {
-            redirect(U('Public/login'));
-        }
 
         $config = S('DB_CONFIG_DATA');
         if (!$config) {
