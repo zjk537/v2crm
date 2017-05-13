@@ -17,7 +17,7 @@ class TestController extends ApiController{
 
     public function index(){
         $data = I('post.');
-        echo $data;exit;
+        echo json_encode($data);exit;
         $this->mtReturn('请求参数',200, $data);
 //        $va = M('feedback')->select();
 //        if($va) $this->myApiPrint('success',200,$va);
