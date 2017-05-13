@@ -6,7 +6,7 @@
  * @author David
  *
  */
-namespace V1\Controller;
+namespace Demo\Controller;
 
 use Common\Controller\ApiController;
 
