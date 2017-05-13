@@ -8,31 +8,58 @@ use Think\Controller;
 
 class ApiController extends Controller
 {
+    protected $cacheUser = null;
     protected $userStuID = null;
     protected $userTeaID = null;
 
     public function _initialize()
     {
+        // if(!IS_POST){
+        //     $this->mtReturn('只支持POST请求');
+        // }
+
+        // $data = I('post.');
+        // $token = $data['token'];
+        // $this->cacheUser = S($token);
+        // if(!$this->cacheUser){
+        //     $this->mtReturn('请先登录',201);
+        // }
+
+        
         //验证token
-        $token = I('request.token');
-        $stu_user = I('request.stu_user');
-        $tea_user = I('request.tea_user');
-        if($stu_user)
-        {
-            $vToken = myDes_decode($token,$stu_user);
-            $arrStr = explode('|',$vToken);
-            if($stu_user && $arrStr[0] === $stu_user) $this->userStuID = $arrStr[1];
-            else $this->myApiPrint('user name error !');
-        }
-        else if($tea_user)
-        {
-            $tToken = myDes_decode($token,$tea_user);
-            $teaStr = explode('|',$tToken);
-            if($tea_user && $teaStr[0] === $tea_user) $this->userTeaID = $teaStr[1];
-            else $this->myApiPrint('user name error!');
-        }
-        else
-            $this->myApiPrint('user name error!');
+        // $token = I('request.token');
+        // $stu_user = I('request.stu_user');
+        // $tea_user = I('request.tea_user');
+        // if($stu_user)
+        // {
+        //     $vToken = myDes_decode($token,$stu_user);
+        //     $arrStr = explode('|',$vToken);
+        //     if($stu_user && $arrStr[0] === $stu_user) $this->userStuID = $arrStr[1];
+        //     else $this->myApiPrint('user name error !');
+        // }
+        // else if($tea_user)
+        // {
+        //     $tToken = myDes_decode($token,$tea_user);
+        //     $teaStr = explode('|',$tToken);
+        //     if($tea_user && $teaStr[0] === $tea_user) $this->userTeaID = $teaStr[1];
+        //     else $this->myApiPrint('user name error!');
+        // }
+        // else
+        //     $this->myApiPrint('user name error!');
+    }
+
+    /**
+     * 公共错误返回
+     * @param $msg 需要打印的错误信息
+     * @param $code 默认打印300信息
+     */
+    public function mtReturn($msg='',$code=300,$data=''){
+        $result = array(
+            'code' => $code,
+            'msg' => $msg,
+            'data' => $data
+        );
+        $this->ajaxReturn($result);exit;
     }
 
     /*
@@ -40,16 +67,17 @@ class ApiController extends Controller
      *@return 混合模型
      * */
     public function checkUserAccount($user,$t=0){
-//        if(!preg_match("/1[3578]{1}\d{9}$/",$user)){
-//            $this->myApiPrint('手机号码格式不对');
-//        }
-        $where['stu_user'] = $user;
-        $owner = M('student');
-        $resn = $owner->where($where)->find();
-        if($t==1&&!$resn){
-            $this->myApiPrint('非法请求，账号不存在');
-        }
-        return $resn;
+        $this->mtReturn('test');
+// //        if(!preg_match("/1[3578]{1}\d{9}$/",$user)){
+// //            $this->myApiPrint('手机号码格式不对');
+// //        }
+//         $where['stu_user'] = $user;
+//         $owner = M('student');
+//         $resn = $owner->where($where)->find();
+//         if($t==1&&!$resn){
+//             $this->myApiPrint('非法请求，账号不存在');
+//         }
+//         return $resn;
     }
 
     /**
@@ -76,19 +104,7 @@ class ApiController extends Controller
         }
     }
 
-    /**
-     * 公共错误返回
-     * @param $msg 需要打印的错误信息
-     * @param $code 默认打印300信息
-     */
-    public function myApiPrint($msg='',$code=300,$data=''){
-        $result = array(
-            'code' => $code,
-            'msg' => $msg,
-            'result' => $data
-        );
-        $this->ajaxReturn($result);exit;
-    }
+    
 
     /*
      * 生成定长22位的订单码

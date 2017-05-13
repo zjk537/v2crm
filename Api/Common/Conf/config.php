@@ -19,7 +19,7 @@ return array(
     'SESSION_TYPE'       => '', // session hander类型 默认无需设置 除非扩展了session hander驱动
     'SESSION_PREFIX'     => 'v2', // session 前缀
 
-    'DEFAULT_MODULE'     => 'V1', // 默认模块
+    'DEFAULT_MODULE'     => 'PC', // 默认模块
     'DEFAULT_CONTROLLER' =>  'Index', // 默认控制器名称
     'DEFAULT_ACTION'      =>  'index', // 默认操作名称
 
@@ -39,7 +39,7 @@ return array(
     'HAND_IMG_PATH'   =>  '/Public/pic_hand_img.png',
 
     /*加密KEY*/
-    'PASS_KEY'    => 'IAMYOURFATHER',
+    'PASS_KEY'    => 'ZJKDRAVOGUE2',
 
     /*支付方式*/
     'PAY_STATUS'   => array(

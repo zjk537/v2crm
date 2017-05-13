@@ -69,6 +69,7 @@ class ProController extends CommonController
         $count           = $model->where('date(addtime) = CURDATE()')->count('id');
         $data['code']    = $code . date("Ymd", time()) . str_pad($count + 1, 3, '0', STR_PAD_LEFT);
         $data['addtime'] = date("Y-m-d H:i:s", time());
+        echo json_encode($data);exit();
         return $data;
     }
 
