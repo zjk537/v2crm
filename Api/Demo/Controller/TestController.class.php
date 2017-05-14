@@ -16,6 +16,9 @@ class TestController extends ApiController{
     }
 
     public function index(){
+    	$headers = $_SERVER;
+    	$this->mtReturn('_SERVER',200,$headers);
+
         $json = file_get_contents("php://input");;
         $data = json_decode($json,true);
         $this->mtReturn('请求参数',200, $data);
