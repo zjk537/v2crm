@@ -18,8 +18,7 @@ class ApiController extends Controller
             $this->mtReturn('只支持POST请求');
         }
 
-        // $data = I('post.');
-        // $token = $data['token'];
+        //$token = $_SERVER['HTTP_V2_TOKEN'];
         // $this->cacheUser = S($token);
         // if(!$this->cacheUser){
         //     $this->mtReturn('请先登录',201);

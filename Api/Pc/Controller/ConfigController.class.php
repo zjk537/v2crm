@@ -27,7 +27,7 @@ class ConfigController extends ApiController
                 $config[$value['name']] = self::parse($value['type'], $value['value']);
             }
         }
-        $this->mtReturn('SUCCESS',200,$config);
+        $this->mtReturn('SUCCESS',200,$data);
     }
 
 
