@@ -18,11 +18,11 @@ class ApiController extends Controller
             $this->mtReturn('只支持POST请求');
         }
 
-        // $token = $_SERVER;
-        // $this->curUser = S($token);
-        // if(!$this->curUser){
-        //     $this->mtReturn('请先登录',201);
-        // }
+        $token = $_SERVER['HTTP_V2AUTHTOKEN'];
+        $this->curUser = S($token);
+        if(!$this->curUser){
+            $this->mtReturn('请先登录',201);
+        }
 
         
         //验证token

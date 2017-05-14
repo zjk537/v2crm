@@ -16,7 +16,7 @@ class TestController extends ApiController{
     }
 
     public function index(){
-    	$headers = $_SERVER['HTTP_V2AUTHTOKEN'];
+    	$token = $_SERVER['HTTP_V2AUTHTOKEN'];
     	$this->mtReturn('TOKEN',200,$headers);
 
         $json = file_get_contents("php://input");;
