@@ -16,7 +16,7 @@ class TestController extends ApiController{
     }
 
     public function index(){
-        $json = $GLOBALS['HTTP_RAW_POST_DATA'];
+        $json = file_get_contents("php://input");;
         $data = json_decode($json,true);
         $this->mtReturn('请求参数',200, $data);
 //        $va = M('feedback')->select();
