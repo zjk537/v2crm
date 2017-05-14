@@ -11,15 +11,15 @@ class CommonController extends ApiController
         parent::_initialize();
         $this->_name = CONTROLLER_NAME;
 
-        $config = S('DB_CONFIG_DATA');
-        if (!$config) {
-            $config = api('Config/lists');
-            S('DB_CONFIG_DATA', $config);
-        }
-        C($config);
+        // $config = S('DB_CONFIG_DATA');
+        // if (!$config) {
+        //     $config = api('Config/lists');
+        //     S('DB_CONFIG_DATA', $config);
+        // }
+        // C($config);
 
         $name = MODULE_NAME . '/' . CONTROLLER_NAME . '/' . ACTION_NAME;
-        if (!authcheck($name, session('uid'))) {
+        if (!authcheck($name, $this->curUser['uid'])) {
             //$this->error(''.session('username').'很抱歉,此项操作您没有权限！');
             $this->mtReturn(300, '' . session('username') . '很抱歉,此项操作您没有权限！', $_REQUEST['navTabId']);
         }

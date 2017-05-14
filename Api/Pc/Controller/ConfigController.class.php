@@ -21,12 +21,12 @@ class ConfigController extends ApiController
     {
         $map    = array('status' => 1);
         $data   = M('Config')->where($map)->field('type,name,value')->select();
-        $config = array();
-        if($data && is_array($data)){
-            foreach ($data as $value) {
-                $config[$value['name']] = self::parse($value['type'], $value['value']);
-            }
-        }
+        // $config = array();
+        // if($data && is_array($data)){
+        //     foreach ($data as $value) {
+        //         $config[$value['name']] = self::parse($value['type'], $value['value']);
+        //     }
+        // }
         $this->mtReturn('SUCCESS',200,$data);
     }
 

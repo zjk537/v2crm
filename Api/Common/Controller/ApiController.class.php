@@ -8,21 +8,22 @@ use Think\Controller;
 
 class ApiController extends Controller
 {
-    protected $cacheUser = null;
+    protected $curUser = null;
     protected $userStuID = null;
     protected $userTeaID = null;
 
     public function _initialize()
     {
-        // if(!IS_POST){
-        //     $this->mtReturn('只支持POST请求');
-        // }
+        if(!IS_POST){
+            $this->mtReturn('只支持POST请求');
+        }
 
-        //$token = $_SERVER['HTTP_V2_TOKEN'];
-        // $this->cacheUser = S($token);
-        // if(!$this->cacheUser){
-        //     $this->mtReturn('请先登录',201);
-        // }
+        $token = $_SERVER['HTTP_V2_TOKEN'];
+        $this->mtReturn('token',200,$token);
+        $this->curUser = S($token);
+        if(!$this->curUser){
+            $this->mtReturn('请先登录',201);
+        }
 
         
         //验证token
