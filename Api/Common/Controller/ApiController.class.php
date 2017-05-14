@@ -18,7 +18,7 @@ class ApiController extends Controller
             $this->mtReturn('只支持POST请求');
         }
 
-        $token = $_SERVER['HTTP_V2_TOKEN'];
+        $token = $_SERVER;
         $this->mtReturn('token',200,$token);
         $this->curUser = S($token);
         if(!$this->curUser){
