@@ -16,8 +16,8 @@ class TestController extends ApiController{
     }
 
     public function index(){
-    	$headers = $_SERVER;
-    	$this->mtReturn('_SERVER',200,$headers);
+    	$headers = $_COOKIE;
+    	$this->mtReturn('_COOKIE',200,$headers);
 
         $json = file_get_contents("php://input");;
         $data = json_decode($json,true);
