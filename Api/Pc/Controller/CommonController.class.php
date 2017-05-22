@@ -1,71 +1,28 @@
 <?php
-namespace Home\Controller;
+namespace Pc\Controller;
 
 use Common\Controller\ApiController;
 
 class CommonController extends ApiController
 {
-
+    protected $postData;
     public function _initialize()
     {
         parent::_initialize();
         $this->_name = CONTROLLER_NAME;
 
-        // $config = S('DB_CONFIG_DATA');
-        // if (!$config) {
-        //     $config = api('Config/lists');
-        //     S('DB_CONFIG_DATA', $config);
+        $json = @file_get_contents("php://input");;
+        $this->postData = json_decode($json,true);
+        $config = S('DB_CONFIG_DATA');
+        if (!$config) {
+            $config = A('Config')->listAll();
+            S('DB_CONFIG_DATA', $config);
+        }
+        C($config);
+        // $name = MODULE_NAME . '/' . CONTROLLER_NAME . '/' . ACTION_NAME;
+        // if (!authcheck($name, $this->curUser['uid'])) {
+        //     $this->mtReturn($this->curUser['username'] . '很抱歉,此项操作您没有权限！');
         // }
-        // C($config);
-
-        $name = MODULE_NAME . '/' . CONTROLLER_NAME . '/' . ACTION_NAME;
-        if (!authcheck($name, $this->curUser['uid'])) {
-            //$this->error(''.session('username').'很抱歉,此项操作您没有权限！');
-            $this->mtReturn(300, '' . session('username') . '很抱歉,此项操作您没有权限！', $_REQUEST['navTabId']);
-        }
-    }
-
-    protected function mtReturn($status, $info, $navTabId = "", $closeCurrent = true)
-    {
-
-        $udata['id']          = session('uid');
-        $udata['update_time'] = time();
-        $Rs                   = M("user")->save($udata);
-        $dat['username']      = session('username');
-        $dat['content']       = $info;
-        $dat['os']            = $_SERVER['HTTP_USER_AGENT'];
-        $dat['url']           = U();
-        $dat['addtime']       = date("Y-m-d H:i:s", time());
-        $dat['ip']            = get_client_ip();
-        M("log")->add($dat);
-
-        $result                   = array();
-        $result['statusCode']     = $status;
-        $result['message']        = $info;
-        $result['tabid']          = strtolower($navTabId) . '/index';
-        $result['forward']        = '';
-        $result['forwardConfirm'] = '';
-        $result['closeCurrent']   = $closeCurrent;
-
-        if (empty($type)) {
-            $type = C('DEFAULT_AJAX_RETURN');
-        }
-
-        if (strtoupper($type) == 'JSON') {
-            // 返回JSON数据格式到客户端 包含状态信息
-            header("Content-Type:text/html; charset=utf-8");
-            exit(json_encode($result));
-        } elseif (strtoupper($type) == 'XML') {
-            // 返回xml格式数据
-            header("Content-Type:text/xml; charset=utf-8");
-            exit(xml_encode($result));
-        } elseif (strtoupper($type) == 'EVAL') {
-            // 返回可执行的js脚本
-            header("Content-Type:text/html; charset=utf-8");
-            exit($data);
-        } else {
-            // TODO 增加其它格式
-        }
     }
 
     /**
@@ -73,10 +30,12 @@ class CommonController extends ApiController
      */
     protected function _list($model, $map, $asc = false)
     {
-
+        //echo json_encode($this->postData);exit;
+        // $json = @file_get_contents("php://input");;
+        // $postData = json_decode($json,true);
         //排序字段 默认为主键名
-        if (isset($_REQUEST['orderField'])) {
-            $order = $_REQUEST['orderField'];
+        if (isset($postData['order'])) {
+            $order = $postData['order'];
         }
         if ($order == '') {
             $order = $model->getPk();
@@ -85,70 +44,67 @@ class CommonController extends ApiController
 
         //排序方式默认按照倒序排列
         //接受 sost参数 0 表示倒序 非0都 表示正序
-        if (isset($_REQUEST['orderDirection'])) {
-            $sort = $_REQUEST['orderDirection'];
+        if (isset($postData['sort'])) {
+            $sort = $postData['sort'];
         }
         if ($sort == '') {
             $sort = $asc ? 'asc' : 'desc';
 
         }
 
-        if (isset($_REQUEST['pageCurrent'])) {
-            $pageCurrent = $_REQUEST['pageCurrent'];
+        if (isset($postData['pageIndex'])) {
+            $pageIndex = $postData['pageIndex'];
         }
-        if ($pageCurrent == '') {
-            $pageCurrent = 1;
+        if ($pageIndex == '') {
+            $pageIndex = 1;
 
         }
 
         //取得满足条件的记录数
         $count = $model->where($map)->count();
-
+        $resData = array();        
         if ($count > 0) {
 
-            $numPerPage = C('PERPAGE');
-
-            $voList = $model->where($map)->order("`" . $order . "` " . $sort)->limit($numPerPage)->page($pageCurrent . ',' . $numPerPage . '')->select();
+            $pageSize = C('PERPAGE');
+            $voList = $model->where($map)->order("`" . $order . "` " . $sort)->limit($pageSize)->page($pageIndex . ',' . $pageSize . '')->select();
 
             //列表排序显示
             $sortImg = $sort; //排序图标
-            $sortAlt = $sort == 'desc' ? '升序排列' : '倒序排列'; //排序提示
+            //$sortAlt = $sort == 'desc' ? '升序排列' : '倒序排列'; //排序提示
             $sort    = $sort == 'desc' ? 1 : 0; //排序方式
 
             if (method_exists($this, '_after_list')) {
-
-                $voList = $this->_after_list($voList);
+                $this->_after_list($voList);
             }
-
-            $this->assign('list', $voList);
+            $resData['list'] = $voList;
 
         }
-        $this->assign('totalCount', $count); //数据总数
-        $this->assign('currentPage', !empty($_REQUEST[C('VAR_PAGE')]) ? $_REQUEST[C('VAR_PAGE')] : 1); //当前的页数，默认为1
-        $this->assign('numPerPage', $numPerPage); //每页显示多少条
-        cookie('_currentUrl_', __SELF__);
-        return;
+        $resData['totalCount'] = (int)$count; //数据总数
+        $resData['pageIndex'] = $pageIndex; //当前的页数，默认为1
+        $resData['pageSize'] = (int)$pageSize; //每页显示多少条
+
+        return $resData;
     }
 
-    public function index()
+    public function lists()
     {
         $model = D($this->dbname);
         $map   = $this->_search();
+        $resData = array();
         if (method_exists($this, '_filter')) {
             $this->_filter($map);
         }
         if (!empty($model)) {
-            $this->_list($model, $map);
+            $resData = $this->_list($model, $map);
         }
-        if (method_exists($this, '_befor_index')) {
-            $this->_befor_index();
-        }
-        $this->display();
+        // if (method_exists($this, '_before_response')) {
+        //     $this->_before_response();
+        // }
+        $this->mtReturn('数据查询成功，pageIndex:'.$resData['pageIndex'],200,$resData);
     }
 
     protected function _search($dbname = '')
     {
-
         $dbname = $dbname ? $dbname : $this->dbname;
         $model  = D($dbname);
         $map    = array();
@@ -173,67 +129,60 @@ class CommonController extends ApiController
 
     public function add()
     {
-        if (IS_POST) {
-            $model = D($this->dbname);
-            $data  = I('post.');
-            if (false === $data = $model->create()) {
-                $this->mtReturn(300, '失败，请检查值是否已经存在', $_REQUEST['navTabId'], true);
-            }
-            if (method_exists($this, '_befor_insert')) {
-                $data = $this->_befor_insert($data);
-            }
-            if ($model->add($data)) {
-                if (method_exists($this, '_after_add')) {
-                    $id = $model->getLastInsID();
-                    $this->_after_add($id);
-                }
-                //$id = $model->getLastInsID();
-                $this->mtReturn(200, "成功", $_REQUEST['navTabId'], true);
-            }
+        $model = D($this->dbname);
+        $data  = $this->postData;
+        if (false === $data = $model->create($data)) {
+            $this->mtReturn('失败，请检查值是否已经存在');
         }
-        if (method_exists($this, '_befor_add')) {
-            $this->_befor_add();
+        if (method_exists($this, '_befor_insert')) {
+            $data = $this->_befor_insert($data);
         }
-        $this->display();
+        if ($model->add($data)) {
+            if (method_exists($this, '_after_add')) {
+                $id = $model->getLastInsID();
+                $this->_after_add($id);
+            }
+            //$id = $model->getLastInsID();
+            $this->mtReturn( $this->dbname." 新增成功", 200);
+        }
+        
     }
 
     public function edit()
     {
         $model = D($this->dbname);
-        if (IS_POST) {
-            $data = I('post.');
-            if (false === $data = $model->create()) {
-                $this->mtReturn(300, '失败，请检查值是否已经存在', $_REQUEST['navTabId'], true);
+        // if (IS_POST) {
+            $data = $this->postData;
+            $id = $data['id'];
+            if (false === $data = $model->create($data)) {
+                $this->mtReturn('失败，请检查值是否已经存在');
             }
             if (method_exists($this, '_befor_update')) {
                 $data = $this->_befor_update($data);
             }
             if ($model->save($data)) {
                 if (method_exists($this, '_after_edit')) {
-                    $id = $data['id'];
                     $this->_after_edit($id);
                 }
             }
-            $id = $data['id'];
-            $this->mtReturn(200, "编辑成功" . $id, $_REQUEST['navTabId'], true);
-        }
-        if (method_exists($this, '_befor_edit')) {
-            $this->_befor_edit();
-        }
-        $id = $_REQUEST[$model->getPk()];
-        $vo = $model->getById($id);
-        $this->assign('id', $id);
-        $this->assign('Rs', $vo);
-        $this->display();
+            $this->mtReturn($this->dbname." 编辑成功".$id,200);
+        // }
+        // if (method_exists($this, '_befor_edit')) {
+        //     $this->_befor_edit();
+        // }
+        // $id = $_REQUEST[$model->getPk()];
+        // $vo = $model->getById($id);
+        // $this->assign('id', $id);
+        // $this->assign('Rs', $vo);
+        // $this->display();
     }
 
-    public function view()
-   	{
+    public function detail()
+    {
         $model = D($this->dbname);
-        $id    = $_REQUEST[$model->getPk()];
+        $id    = $this->postData['id'];
         $vo    = $model->getById($id);
-        $this->assign('Rs', $vo);
-        $this->display();
+        $this->mtReturn('Success',200,$vo);
     }
 
     public function del()
@@ -399,7 +348,7 @@ class CommonController extends ApiController
             //行写入
             $span = ord("A");
             foreach ($rows as $keyName => $value) {
-			// 列写入
+                // 列写入
                 $j = chr($span);
 
                 $objActSheet->setCellValueExplicit($j . $column, $value);

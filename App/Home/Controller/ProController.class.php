@@ -59,7 +59,7 @@ class ProController extends CommonController
         $code = 'ZY';
         if ($data['type'] == '寄售') {
             $code              = 'JS';
-            $data['starttime'] = date("Y-m-d H:i:s", time());
+            $data['starttime'] = gettime();
             $data['endtime'] = empty($data['endtime']) ? null : $data['endtime'];
         } else {
             $code = 'ZY';

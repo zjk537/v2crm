@@ -254,10 +254,10 @@ function gettime(){
 	return date('Y-m-d H:i:s',time());
 }
 
-    function encrypt($data) {
-        //return md5(C('AUTH_MASK') . md5($data));
-		return md5(md5($data));
-    }
+function encrypt($data) {
+    //return md5(C('AUTH_MASK') . md5($data));
+	return md5(md5($data));
+}
 
 //html´úÂëÊä³ö
 function html_out($str){

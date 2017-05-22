@@ -7,7 +7,7 @@
  *
  */
 
-namespace PC\Controller;
+namespace Pc\Controller;
 
 use Common\Controller\ApiController;
 
@@ -21,16 +21,21 @@ class ConfigController extends ApiController
     {
         $map    = array('status' => 1);
         $data   = M('Config')->where($map)->field('type,name,value')->select();
-        // $config = array();
-        // if($data && is_array($data)){
-        //     foreach ($data as $value) {
-        //         $config[$value['name']] = self::parse($value['type'], $value['value']);
-        //     }
-        // }
         $this->mtReturn('SUCCESS',200,$data);
     }
 
-
+    public function listAll()
+    {
+        $map    = array('status' => 1);
+        $data   = M('Config')->where($map)->field('type,name,value')->select();
+        $config = array();
+        if($data && is_array($data)){
+            foreach ($data as $value) {
+                $config[$value['name']] = self::parse($value['type'], $value['value']);
+            }
+        }
+        return $config;
+    }
      /**
      * 根据配置类型解析配置
      * @param  integer $type  配置类型

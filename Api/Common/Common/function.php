@@ -1,16 +1,49 @@
 <?php
 
 /**
+ * 检查权限
+ * @param name string|array  需要验证的规则列表,支持逗号分隔的权限规则或索引数组
+ * @param uid  int           认证用户的id
+ * @param string mode        执行check的模式
+ * @param relation string    如果为 'or' 表示满足任一条规则即通过验证;如果为 'and'则表示需满足所有规则才能通过验证
+ * @return boolean           通过验证返回true;失败返回false
+ */
+function authcheck($name, $uid, $type = 1, $mode = 'url', $relation = 'or')
+{
+    if (!in_array($uid, C('ADMINISTRATOR'))) {
+        $auth = new \Think\Auth();
+        return $auth->check($name, $uid, $type, $mode, $relation) ? true : false;
+    } else {
+        return true;
+    }
+}
+
+function getuserid(){
+    return S($_SERVER['HTTP_'.C("AUTH_TOKEN")])["uid"];
+}
+
+
+function gettruename(){
+    return S($_SERVER['HTTP_'.C('AUTH_TOKEN')])["truename"];
+}
+
+function gettime(){
+    return date('Y-m-d H:i:s',time());
+}
+
+
+
+/**
  * 浮点数舍去指定位数小数点部分。全舍不入
  * @param $n float浮点值
  * @param $len 截取长度字数
  * @return string 截取后的值
  */
-    // function sub_float($n,$len)
-    // {
-    //     stripos($n, '.') && $n= (float)substr($n,0,stripos($n, '.')+$len+1);
-    //     return $n;
-    // }
+// function sub_float($n,$len)
+// {
+//     stripos($n, '.') && $n= (float)substr($n,0,stripos($n, '.')+$len+1);
+//     return $n;
+// }
 
 /**
  * 系统缓存缓存管理
@@ -73,7 +106,7 @@
  * 产生随机字符
  * $length  int 生成字符传的长度
  * $numeric  int  , = 0 随机数是大小写字符+数字 , = 1 则为纯数字
-*/
+ */
 // function randCodeM($length, $numeric = 0)
 // {
 //     $seed = base_convert(md5(print_r($_SERVER, 1) . microtime()), 16, $numeric ? 10 : 35);
@@ -126,9 +159,9 @@
  */
 function myDes_encode($str, $key)
 {
-    $va = \Think\Crypt\Driver\Des::encrypt($str, $key.C('PASS_KEY'));
+    $va = \Think\Crypt\Driver\Des::encrypt($str, $key . C('PASS_KEY'));
     $va = base64_encode($va);
-    return str_replace(array('+','/'), array('-','_'), $va);
+    return str_replace(array('+', '/'), array('-', '_'), $va);
 }
 
 /**
@@ -139,9 +172,8 @@ function myDes_encode($str, $key)
  */
 function myDes_decode($str, $key)
 {
-    $str = str_replace(array('-','_'), array('+','/'), $str);
+    $str = str_replace(array('-', '_'), array('+', '/'), $str);
     $str = base64_decode($str);
-    $va = \Think\Crypt\Driver\Des::decrypt($str, $key.C('PASS_KEY'));
+    $va  = \Think\Crypt\Driver\Des::decrypt($str, $key . C('PASS_KEY'));
     return trim($va);
 }
- ?>

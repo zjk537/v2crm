@@ -40,6 +40,7 @@ return array(
 
     /*加密KEY*/
     'PASS_KEY'    => 'ZJKDRAVOGUE2',
+    'AUTH_TOKEN'  => 'V2AUTHTOKEN',
 
     /*支付方式*/
     'PAY_STATUS'   => array(

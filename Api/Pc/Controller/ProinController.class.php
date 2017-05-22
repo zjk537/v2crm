@@ -2,14 +2,12 @@
 
 /**
  *      入库记录控制器
- *      [X-Mis] (C)2007-2099
- *      This is NOT a freeware, use is subject to license terms
- *      http://www.xinyou88.com
- *      tel:400-000-9981
- *      qq:16129825
+ *      
+ *      @author zjk
+ *
  */
 
-namespace Home\Controller;
+namespace Pc\Controller;
 
 use Think\Controller;
 
@@ -98,10 +96,10 @@ class ProinController extends CommonController
     {
     	$model = D('proin');
     	if (false === $data = $model->create($data)) {
-            $this->mtReturn(300, '自动同步入库记录失败，请检查值是否已经存在', $_REQUEST['navTabId'], true);
+            $this->mtReturn('自动同步入库记录失败，请检查值是否已经存在');
         }
         if (!$model->add($data)) {
-            $this->mtReturn(300, "自动同步入库记录失败，请手动添加入库记录", $_REQUEST['navTabId'], true);
+            $this->mtReturn("自动同步入库记录失败，请手动添加入库记录");
         }
     }
 

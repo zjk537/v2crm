@@ -2,14 +2,12 @@
 
 /**
  *      产品管理控制器
- *      [X-Mis] (C)2007-2099
- *      This is NOT a freeware, use is subject to license terms
- *      http://www.xinyou88.com
- *      tel:400-000-9981
- *      qq:16129825
+ *      
+ *      @author zjk
+ *      
  */
 
-namespace Home\Controller;
+namespace Pc\Controller;
 
 use Think\Controller;
 
@@ -30,9 +28,8 @@ class ProController extends CommonController
 
     }
 
-    public function _befor_index()
+    public function _after_list($data)
     {
-
     }
 
     public function _befor_add()
@@ -45,7 +42,7 @@ class ProController extends CommonController
     public function _after_add($id)
     {
       // 更新进货记录
-      $data = I('post.');
+      $data = $this->postData;
       $data['jpid'] = (int)$id;
       $data['jpname'] = $data['name'];
       $data['jpjiage'] = $data['jiage'];
@@ -59,7 +56,7 @@ class ProController extends CommonController
         $code = 'ZY';
         if ($data['type'] == '寄售') {
             $code              = 'JS';
-            $data['starttime'] = date("Y-m-d H:i:s", time());
+            $data['starttime'] = gettime();
             $data['endtime'] = empty($data['endtime']) ? null : $data['endtime'];
         } else {
             $code = 'ZY';
@@ -69,7 +66,6 @@ class ProController extends CommonController
         $count           = $model->where('date(addtime) = CURDATE()')->count('id');
         $data['code']    = $code . date("Ymd", time()) . str_pad($count + 1, 3, '0', STR_PAD_LEFT);
         $data['addtime'] = date("Y-m-d H:i:s", time());
-        echo json_encode($data);exit();
         return $data;
     }
 
@@ -88,7 +84,7 @@ class ProController extends CommonController
             $model = D($this->dbname);
             $info = $model->getById($data['id']);
             if(empty($info['starttime'])){
-                $data['starttime'] = date("Y-m-d H:i:s", time());
+                $data['starttime'] = gettime();
             }
         } else {
             unset($data['endtime']);

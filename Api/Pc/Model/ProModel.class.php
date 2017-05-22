@@ -9,7 +9,7 @@
  *      qq:16129825
  */
 
-namespace Home\Model;
+namespace Pc\Model;
 use Think\Model;
 
 class ProModel extends Model{

@@ -9,8 +9,8 @@ use Think\Controller;
 class ApiController extends Controller
 {
     protected $curUser = null;
-    protected $userStuID = null;
-    protected $userTeaID = null;
+    //protected $userStuID = null;
+    //protected $userTeaID = null;
 
     public function _initialize()
     {
@@ -18,33 +18,11 @@ class ApiController extends Controller
             $this->mtReturn('只支持POST请求');
         }
 
-        $token = $_SERVER['HTTP_V2AUTHTOKEN'];
+        $token = $_SERVER['HTTP_'.C('AUTH_TOKEN')];
         $this->curUser = S($token);
         if(!$this->curUser){
             $this->mtReturn('请先登录',201);
         }
-
-        
-        //验证token
-        // $token = I('request.token');
-        // $stu_user = I('request.stu_user');
-        // $tea_user = I('request.tea_user');
-        // if($stu_user)
-        // {
-        //     $vToken = myDes_decode($token,$stu_user);
-        //     $arrStr = explode('|',$vToken);
-        //     if($stu_user && $arrStr[0] === $stu_user) $this->userStuID = $arrStr[1];
-        //     else $this->myApiPrint('user name error !');
-        // }
-        // else if($tea_user)
-        // {
-        //     $tToken = myDes_decode($token,$tea_user);
-        //     $teaStr = explode('|',$tToken);
-        //     if($tea_user && $teaStr[0] === $tea_user) $this->userTeaID = $teaStr[1];
-        //     else $this->myApiPrint('user name error!');
-        // }
-        // else
-        //     $this->myApiPrint('user name error!');
     }
 
     /**
@@ -53,6 +31,17 @@ class ApiController extends Controller
      * @param $code 默认打印300信息
      */
     public function mtReturn($msg='',$code=300,$data=''){
+        // $udata['id']          = $this->curUser['uid'];
+        // $udata['update_time'] = time();
+        // $Rs                   = M("user")->save($udata);
+        // $dat['username']      = $this->curUser['username'];
+        // $dat['content']       = $info;
+        // $dat['os']            = $_SERVER['HTTP_USER_AGENT'];
+        // $dat['url']           = MODULE_NAME . '/' . CONTROLLER_NAME . '/' . ACTION_NAME;;
+        // $dat['addtime']       = date("Y-m-d H:i:s", time());
+        // $dat['ip']            = get_client_ip();
+        // M("log")->add($dat);
+
         $result = array(
             'code' => $code,
             'msg' => $msg,

@@ -1035,7 +1035,6 @@ class Model {
                 }
             }
         }
-
         // 数据自动验证
         if(!$this->autoValidation($data,$type)) return false;
 
@@ -1056,7 +1055,6 @@ class Model {
                 }
             }
         }
-
         // 创建完成对数据进行自动处理
         $this->autoOperation($data,$type);
         // 赋值当前数据对象
