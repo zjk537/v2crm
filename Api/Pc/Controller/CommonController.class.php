@@ -11,7 +11,7 @@ class CommonController extends ApiController
         parent::_initialize();
         $this->_name = CONTROLLER_NAME;
 
-        $json = @file_get_contents("php://input");;
+        $json = @file_get_contents("php://input");
         $this->postData = json_decode($json,true);
         $config = S('DB_CONFIG_DATA');
         if (!$config) {
@@ -30,43 +30,43 @@ class CommonController extends ApiController
      */
     protected function _list($model, $map, $asc = false)
     {
-        //echo json_encode($this->postData);exit;
-        // $json = @file_get_contents("php://input");;
-        // $postData = json_decode($json,true);
         //排序字段 默认为主键名
-        if (isset($postData['order'])) {
-            $order = $postData['order'];
-        }
-        if ($order == '') {
+        $order = '';
+        if ($this->postData['order'] != '') {
+            $order = $this->postData['order'];
+        } 
+        if($order == '') {
             $order = $model->getPk();
-
         }
 
         //排序方式默认按照倒序排列
         //接受 sost参数 0 表示倒序 非0都 表示正序
-        if (isset($postData['sort'])) {
-            $sort = $postData['sort'];
-        }
-        if ($sort == '') {
-            $sort = $asc ? 'asc' : 'desc';
-
+        $sort = $asc ? 'asc' : 'desc';
+        if ($this->postData['sort'] != '') {
+            $sort = $this->postData['sort'];
         }
 
-        if (isset($postData['pageIndex'])) {
-            $pageIndex = $postData['pageIndex'];
-        }
-        if ($pageIndex == '') {
-            $pageIndex = 1;
-
+        $pageIndex = 1;
+        if ($this->postData['pageIndex'] != '') {
+            $pageIndex = $this->postData['pageIndex'];
         }
 
+        $join = "";
+        if(method_exists($this, '_complex_join')){
+            $join = $this->_complex_join();
+        } 
         //取得满足条件的记录数
-        $count = $model->where($map)->count();
+        $count = $model->join($join)->where($map)->count();
+        
         $resData = array();        
         if ($count > 0) {
 
             $pageSize = C('PERPAGE');
-            $voList = $model->where($map)->order("`" . $order . "` " . $sort)->limit($pageSize)->page($pageIndex . ',' . $pageSize . '')->select();
+            $field = "";
+            if(method_exists($this, '_complex_field')){
+                $field = $this->_complex_field();
+            }
+            $voList = $model->join($join)->where($map)->field($field)->order("`" . $order . "` " . $sort)->limit($pageSize)->page($pageIndex . ',' . $pageSize . '')->select();
 
             //列表排序显示
             $sortImg = $sort; //排序图标
@@ -109,9 +109,9 @@ class CommonController extends ApiController
         $model  = D($dbname);
         $map    = array();
         foreach ($model->getDbFields() as $key => $val) {
-            if (isset($_REQUEST['keys']) && $_REQUEST['keys'] != '') {
+            if (!empty(trim($this->postData['keys']))) {
                 if (in_array($val, C('SEARCHKEY'))) {
-                    $map[$val] = array('like', '%' . trim($_REQUEST['keys']) . '%');
+                    $map[$val] = array('like', '%' . trim($this->postData['keys']) . '%');
                 } else {
                     //$map [$val] = $_REQUEST['keys'];
                 }
@@ -119,7 +119,7 @@ class CommonController extends ApiController
             }
         }
         $map['_logic'] = 'or';
-        if ((IS_POST) && isset($_REQUEST['keys']) && $_REQUEST['keys'] != '') {
+        if ((IS_POST) && !empty(trim($this->postData['keys']))) {
             $where['_complex'] = $map;
             return $where;
         } else {
@@ -142,7 +142,6 @@ class CommonController extends ApiController
                 $id = $model->getLastInsID();
                 $this->_after_add($id);
             }
-            //$id = $model->getLastInsID();
             $this->mtReturn( $this->dbname." 新增成功", 200);
         }
         
@@ -180,9 +179,16 @@ class CommonController extends ApiController
     public function detail()
     {
         $model = D($this->dbname);
-        $id    = $this->postData['id'];
-        $vo    = $model->getById($id);
-        $this->mtReturn('Success',200,$vo);
+        $keys = trim($this->postData['keys']);
+        if(empty($keys)){
+            $id    = $this->postData['id'];
+            $vo    = $model->getById($id);
+            $this->mtReturn('Success',200,$vo);
+        }
+
+        $map = $this->_search();
+        $vo = $model->where($map)->limit(5)->select(); 
+        $this->mtReturn('Success',200,$vo);       
     }
 
     public function del()

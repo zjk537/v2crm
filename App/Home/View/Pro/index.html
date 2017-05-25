@@ -7,6 +7,12 @@
                 关键词：
             </label>
             <input class="form-control" name="keys" size="15" type="text" value="{$_REQUEST['keys']}"/>
+            <label>
+                添加时间：
+            </label>
+            <input class="form-control" data-toggle="datepicker" name="time1" size="15" type="text" value="{$_REQUEST['stime']}"/>
+            -
+            <input class="form-control" data-toggle="datepicker" name="time2" size="15" type="text" value="{$_REQUEST['etime']}"/>
             <button class="btn-default" data-icon="search" type="submit">
                 查询
             </button>

@@ -24,10 +24,13 @@ class ProController extends CommonController
 
     public function _filter(&$map)
     {
-        //if(!in_array(session('uid'),C('ADMINISTRATOR'))){
-        //$map['id'] = array('EQ', session("uid"));
-        //}
+        // if(!in_array(session('uid'),C('ADMINISTRATOR'))){
+        //     $map['id'] = array('EQ', session("uid"));
+        // }
 
+        if(IS_POST && isset($_REQUEST['stime']) && $_REQUEST['stime'] != ''&&isset($_REQUEST['etime']) && $_REQUEST['etime'] != ''){
+         $map['addtime'] =array(array('egt',I('stime')),array('elt',I('etime'))) ;
+        }
     }
 
     public function _befor_index()

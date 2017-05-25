@@ -25,11 +25,45 @@ class ProController extends CommonController
         //if(!in_array(session('uid'),C('ADMINISTRATOR'))){
         //$map['id'] = array('EQ', session("uid"));
         //}
+        if(IS_POST && $this->postData['stime'] != '' && $this->postData['etime'] != ''){
+            $map['`'.C('DB_PREFIX').'pro`.`addtime`'] = array(array('egt',$this->postData['stime']),array('elt',$this->postData['etime'])) ;
+        }
 
     }
 
     public function _after_list($data)
     {
+        
+    }
+
+    private function fieldMap($prefix,$array)
+    {
+        $tmpArr = array();
+        foreach ($array as $value) {
+            $newValue = '`'.C('DB_PREFIX').$prefix.'`.`'.$value.'` as `'.$prefix.$value.'`';
+            array_push($tmpArr, $newValue);
+        }
+        return $tmpArr;
+    }
+
+    public function _complex_field()
+    {
+        $proFields = $this->fieldMap('pro',M('pro')->getDbFields());
+        $proinFields = $this->fieldMap('proin',M('proin')->getDbFields());
+        $prooutFields = $this->fieldMap('proout',M('proout')->getDbFields());
+        $custFields = $this->fieldMap('cust',M('cust')->getDbFields());
+        $field = implode(',', $proFields).','
+                .implode(',', $proinFields).','
+                .implode(',', $prooutFields).','
+                .implode(',', $custFields);
+        return $field;
+    }
+    public function _complex_join()
+    {
+        $join = sprintf('LEFT JOIN `%1$sproin` ON `%1$spro`.`id` = `%1$sproin`.`jpid` 
+            LEFT JOIN `%1$sproout` on `%1$spro`.`id` = `%1$sproout`.`jpid`
+            LEFT JOIN `%1$scust` on `%1$spro`.`cid` = `%1$scust`.`id`',C('DB_PREFIX'));
+        return $join;
     }
 
     public function _befor_add()
@@ -65,7 +99,17 @@ class ProController extends CommonController
         $model           = D($this->dbname);
         $count           = $model->where('date(addtime) = CURDATE()')->count('id');
         $data['code']    = $code . date("Ymd", time()) . str_pad($count + 1, 3, '0', STR_PAD_LEFT);
-        $data['addtime'] = date("Y-m-d H:i:s", time());
+        $data['addtime'] = gettime();
+
+        // 更新供应商
+        $custData = $this->postData['cust'];
+        $custData['juid'] = $data['juid'];
+        $custData['juname'] = $data['juname'];
+        $cust = A('cust');
+        $custid = $cust->autoUpdate($custData);
+
+        $data['cid'] = $custid;
+        $data['cname'] = $custData['name'];
         return $data;
     }
 
@@ -116,8 +160,8 @@ class ProController extends CommonController
         if (method_exists($this, '_filter')) {
             $this->_filter($map);
         }
-        $list     = $model->where($map)->field('id,name,fenlei,jiage,sjiage,type,ruku,kucun,chuku,title,uname,addtime,updatetime')->select();
-        $headArr  = array('商品编码', '商品名称', '商品分类', '进价', '售价', '计量单位', '入库数量', '库存数量', '出库数量', '型号规格', '添加人', '添加时间', '更新时间');
+        $list     = $model->where($map)->field('id,name,fenlei,jiage,sjiage,type,uname,addtime,updatetime')->select();
+        $headArr  = array('商品编码', '商品名称', '商品分类', '进价', '售价', '计量单位', '添加人', '添加时间', '更新时间');
         $filename = '商品信息';
         $this->xlsout($filename, $headArr, $list);
     }

@@ -30,38 +30,38 @@ class DatabaseController extends CommonController{
 
 	public function bakup(){
 		//列出备份文件列表
-                $path = realpath(C('DATA_BACKUP_PATH'));
-                $flag = \FilesystemIterator::KEY_AS_FILENAME;
-                $glob = new \FilesystemIterator($path,  $flag);
+        $path = realpath(C('DATA_BACKUP_PATH'));
+        $flag = \FilesystemIterator::KEY_AS_FILENAME;
+        $glob = new \FilesystemIterator($path,  $flag);
 
-                $list = array();
-                foreach ($glob as $name => $file) {
-                    if(preg_match('/^\d{8,8}-\d{6,6}-\d+\.sql(?:\.gz)?$/', $name)){
-                        $name = sscanf($name, '%4s%2s%2s-%2s%2s%2s-%d');
+        $list = array();
+        foreach ($glob as $name => $file) {
+            if(preg_match('/^\d{8,8}-\d{6,6}-\d+\.sql(?:\.gz)?$/', $name)){
+                $name = sscanf($name, '%4s%2s%2s-%2s%2s%2s-%d');
 
-                        $date = "{$name[0]}-{$name[1]}-{$name[2]}";
-                        $time = "{$name[3]}:{$name[4]}:{$name[5]}";
-                        $part = $name[6];
+                $date = "{$name[0]}-{$name[1]}-{$name[2]}";
+                $time = "{$name[3]}:{$name[4]}:{$name[5]}";
+                $part = $name[6];
 
-                        if(isset($list["{$date} {$time}"])){
-                            $info = $list["{$date} {$time}"];
-                            $info['part'] = max($info['part'], $part);
-                            $info['size'] = $info['size'] + $file->getSize();
-                        } else {
-                            $info['part'] = $part;
-                            $info['size'] = $file->getSize();
-                        }
-                        $extension        = strtoupper(pathinfo($file->getFilename(), PATHINFO_EXTENSION));
-                        $info['compress'] = ($extension === 'SQL') ? '-' : $extension;
-                        $info['time']     = strtotime("{$date} {$time}");
-
-                        $list["{$date} {$time}"] = $info;
-                    }
+                if(isset($list["{$date} {$time}"])){
+                    $info = $list["{$date} {$time}"];
+                    $info['part'] = max($info['part'], $part);
+                    $info['size'] = $info['size'] + $file->getSize();
+                } else {
+                    $info['part'] = $part;
+                    $info['size'] = $file->getSize();
                 }
-                $title = '数据还原';
-				$this->assign('meta_title', $title);
-                $this->assign('list', $list);
-                $this->display();
+                $extension        = strtoupper(pathinfo($file->getFilename(), PATHINFO_EXTENSION));
+                $info['compress'] = ($extension === 'SQL') ? '-' : $extension;
+                $info['time']     = strtotime("{$date} {$time}");
+
+                $list["{$date} {$time}"] = $info;
+            }
+        }
+        $title = '数据还原';
+		$this->assign('meta_title', $title);
+        $this->assign('list', $list);
+        $this->display();
 		
 	}   
 

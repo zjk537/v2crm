@@ -137,6 +137,7 @@ abstract class Driver {
      * @return mixed
      */
     public function query($str,$fetchSql=false) {
+        
         $this->initConnect(false);
         if ( !$this->_linkID ) return false;
         $this->queryStr     =   $str;

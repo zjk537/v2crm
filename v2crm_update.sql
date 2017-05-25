@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `v2_auth_group`;
 CREATE TABLE `v2_auth_group` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
   `type` tinyint(1) NOT NULL COMMENT '类型 0 店面; 1 职位',
-  `name` char(50) NOT NULL COMMENT '名称',-- update title
+  `name` varchar(50) NOT NULL COMMENT '名称',-- update title
   `level` int(2) NOT NULL COMMENT '所属级别',
   `pid` int(4) NOT NULL COMMENT '父级id',
   `sort` int(4) NOT NULL COMMENT '排序',
@@ -205,23 +205,23 @@ DROP TABLE IF EXISTS `v2_cust`;
 CREATE TABLE `v2_cust` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL COMMENT '联系人',-- update xingming
-  `phone` varchar(50) NOT NULL COMMENT '手机号',
+  `phone` varchar(11) NOT NULL COMMENT '手机号',
   `status` tinyint(1) NOT NULL DEFAULT '1',
   `remark` varchar(200) NOT NULL DEFAULT '' COMMENT '备注',-- update beizhu
   -- `title` varchar(50) NOT NULL DEFAULT '' COMMENT '公司名称',-- del
   `dizhi` varchar(200) NOT NULL DEFAULT '' COMMENT '地址',
   -- `email` varchar(200) NOT NULL DEFAULT '' COMMENT '电子邮件',-- del
   -- `qq` varchar(50) NOT NULL DEFAULT '' COMMENT 'QQ' ,-- del
-  `sex` varchar(10) NOT NULL DEFAULT '' COMMENT '性别',
-  `yhname` varchar(10) NOT NULL DEFAULT '' COMMENT '开户行',-- new
-  `yhcard` varchar(10) NOT NULL DEFAULT '' COMMENT '银行卡号', -- new
-  `idcard` varchar(10) NOT NULL DEFAULT '' COMMENT '身份证号', -- new
+  `sex` varchar(2) NOT NULL DEFAULT '' COMMENT '性别',
+  `yhname` varchar(50) NOT NULL DEFAULT '' COMMENT '开户行',-- new
+  `yhcard` varchar(30) NOT NULL DEFAULT '' COMMENT '银行卡号', -- new
+  `idcard` varchar(20) NOT NULL DEFAULT '' COMMENT '身份证号', -- new
   -- `bumen` varchar(50) NOT NULL DEFAULT '' COMMENT '部门', -- del
-  `type` varchar(50) NOT NULL DEFAULT '' COMMENT '客户来源',
+  `type` varchar(20) NOT NULL DEFAULT '' COMMENT '客户来源',
   -- `fenlei` varchar(20) NOT NULL DEFAULT '' COMMENT '进展',-- del
   -- `name` varchar(100) NOT NULL DEFAULT '',-- del
-  `juid` varchar(1000) NOT NULL DEFAULT 0 COMMENT '经办人Id',
-  `juname` varchar(1000) NOT NULL DEFAULT '' COMMENT '经办人',
+  `juid` int(11) NOT NULL DEFAULT 0 COMMENT '经办人Id',
+  `juname` varchar(50) NOT NULL DEFAULT '' COMMENT '经办人',
   `uid` int(11) NOT NULL COMMENT '操作人Id',
   `uname` varchar(50) NOT NULL COMMENT '操作人',
   `addtime` datetime NOT NULL COMMENT '添加时间',
@@ -230,7 +230,8 @@ CREATE TABLE `v2_cust` (
   `updatetime` datetime NULL COMMENT '更新时间',
   -- `xcrq` date NULL COMMENT '下次联系时间',-- del
   -- `addm` varchar(20) NULL DEFAULT '' COMMENT '添加月份', -- del
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY (`phone`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='客户管理';
 
 -- ----------------------------
@@ -312,12 +313,14 @@ COMMIT;
 DROP TABLE IF EXISTS `v2_pro`;
 CREATE TABLE `v2_pro` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `depid` int(11) NOT NULL COMMENT '店面Id',
+  `depname` varchar(50) NOT NULL COMMENT '店面名称',
   `name` varchar(50) NOT NULL COMMENT '产品名称',
   `fenlei` varchar(20) NOT NULL COMMENT '产品分类',
   `code` varchar(20) NOT NULL DEFAULT '' COMMENT '产品编码',-- new
   `jcode` varchar(20) NOT NULL COMMENT '原始编码',-- new
-  `jcustid` int(11) NOT NULL DEFAULT 0 COMMENT '寄售联系人id',-- new
-  `jcustname` varchar(50) NOT NULL DEFAULT '' COMMENT '寄售联系人', -- new
+  `cid` int(11) NOT NULL DEFAULT 0 COMMENT '寄售人或供应商id',-- new
+  `cname` varchar(50) NOT NULL DEFAULT '' COMMENT '寄售人或供应商', -- new
   `type` varchar(20) NOT NULL COMMENT '来源类型', -- update
   `color` varchar(20) NOT NULL DEFAULT '' COMMENT '颜色', -- new
   `chengse` varchar(20) NOT NULL DEFAULT '' COMMENT '成色', -- new 
@@ -419,12 +422,12 @@ CREATE TABLE `v2_proout` (
 DROP TABLE IF EXISTS `v2_user`;
 CREATE TABLE `v2_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` char(20) NOT NULL DEFAULT '',
+  `username` varchar(50) NOT NULL DEFAULT '',
   `password` char(32) NOT NULL DEFAULT '',
   `memo` varchar(50) NOT NULL,
   `depname` varchar(50) NOT NULL,
   `posname` varchar(50) NOT NULL,
-  `truename` char(30) NOT NULL,
+  `truename` varchar(50) NOT NULL,
   `sex` char(5) NOT NULL,
   `tel` varchar(20) NOT NULL DEFAULT '',
   `phone` char(11) NOT NULL,

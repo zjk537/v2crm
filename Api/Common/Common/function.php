@@ -27,11 +27,22 @@ function gettruename(){
     return S($_SERVER['HTTP_'.C('AUTH_TOKEN')])["truename"];
 }
 
+function getdepid($depname)
+{
+    $depid = S($_SERVER['HTTP_'.C("AUTH_TOKEN")])["depid"];
+    if($depid == ''){
+        $dep = M('auth_group')->where(array('name'=>$depname))->limit(1)->select();
+        $depid =  $dep[0]['id'];
+    }
+    return $depid;
+}
+function getdepname($value='')
+{
+    return S($_SERVER['HTTP_'.C("AUTH_TOKEN")])["depname"];
+}
 function gettime(){
     return date('Y-m-d H:i:s',time());
 }
-
-
 
 /**
  * 浮点数舍去指定位数小数点部分。全舍不入
