@@ -72,25 +72,17 @@
                     </tr>
                     <tr>
                         <td>
+                            <label class="control-label x85" for="juname_input">
+                                经办人:
+                            </label>
+                            <input data-toggle="lookup" data-rule="required;" data-url="__MODULE__/public/user/navTabId/{:CONTROLLER_NAME}" id="juname" name="juname" size="20" type="text" value="{$Rs.juname}"/>
+                            <input name="juid" size="20" type="hidden" value="{$Rs.juid}"/>
+                        </td>
+                        <td>
                             <label class="control-label x85" for="j_bujian">
                                 部件:
                             </label>
                             <input id="j_bujian" name="bujian" size="20" type="text" value="{$Rs.bujian}"/>
-                        </td>
-                        <td>
-                            <label class="control-label x85">
-                                付款状态:
-                            </label>
-                            <select data-rule="required;" data-toggle="selectpicker" name="paystatus">
-                                <option value="">
-                                    请选择
-                                </option>
-                                <volist id="paystatus" name="Think.config.PRO_PAY_STATUS">
-                                    <option value="{$paystatus}">
-                                        {$paystatus}
-                                    </option>
-                                </volist>
-                            </select>
                         </td>
                     </tr>
                     <tr>
@@ -161,15 +153,6 @@
                                 袖长:
                             </label>
                             <input id="j_xiuchang" name="xiuchang" size="20" type="text" value="{$Rs.xiuchang}"/>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <label class="control-label x85" for="juname_input">
-                                经办人:
-                            </label>
-                            <input data-toggle="lookup" data-rule="required;" data-url="__MODULE__/public/user/navTabId/{:CONTROLLER_NAME}" id="juname" name="juname" size="20" type="text" value="{$Rs.juname}"/>
-                            <input name="juid" size="20" type="hidden" value="{$Rs.juid}"/>
                         </td>
                     </tr>
                     <tr>

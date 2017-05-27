@@ -195,7 +195,9 @@ INSERT INTO `v2_config` VALUES
 ('37', '库存管理', 'PRO_TYPE', '3', '产品来源', '', '', '2015-03-04 20:47:13', NULL, '1', '寄售\r\n进货自有', '0'), 
 ('39', '库存管理', 'PRO_STATUS', '3', '产品状态', '', '', '2015-03-04 20:47:13', NULL, '1', '在库\r\n预定\r\n售出\r\n取回', '0'), 
 ('40', '库存管理', 'PRO_PAY_TYPE', '3', '付款方式', '', '', '2015-03-04 20:47:13', NULL, '1', '1:现金\r\n2:汇款\r\n3:信用卡\r\n4:网银转帐', '0'), 
-('41', '库存管理', 'PRO_PAY_STATUS', '4', '付款状态', '1:已打款\r\n2:未打款', '付款状态', '2015-02-01 15:58:48', NULL, '1', '1', '0');
+('41', '库存管理', 'PRO_PAY_STATUS', '4', '付款状态', '1:已打款\r\n2:未打款', '付款状态', '2015-02-01 15:58:48', NULL, '1', '1', '0'),
+('42', '库存管理', 'PRO_JS_WARN', '0', '寄售预警时间', '', '寄售到期提前7天给预警提示', '2017-05-26 13:29:29', null, '1', '7', '0'),
+('43', '系统', 'PRO_ZY_WARN', '0', '售出商品预警时间', '', '已售出未付款超过2天', '2017-05-26 14:36:22', null, '1', '2', '0');
 COMMIT;
 
 -- ----------------------------
@@ -320,30 +322,31 @@ CREATE TABLE `v2_pro` (
   `code` varchar(20) NOT NULL DEFAULT '' COMMENT '产品编码',-- new
   `jcode` varchar(20) NOT NULL COMMENT '原始编码',-- new
   `cid` int(11) NOT NULL DEFAULT 0 COMMENT '寄售人或供应商id',-- new
-  `cname` varchar(50) NOT NULL DEFAULT '' COMMENT '寄售人或供应商', -- new
+  `cname` varchar(50) NULL COMMENT '寄售人或供应商', -- new
   `type` varchar(20) NOT NULL COMMENT '来源类型', -- update
-  `color` varchar(20) NOT NULL DEFAULT '' COMMENT '颜色', -- new
-  `chengse` varchar(20) NOT NULL DEFAULT '' COMMENT '成色', -- new 
-  `bujian` varchar(20) NOT NULL DEFAULT '' COMMENT '部件', -- new 
+  `color` varchar(20) NULL COMMENT '颜色', -- new
+  `chengse` varchar(20) NULL COMMENT '成色', -- new 
+  `bujian` varchar(20) NULL COMMENT '部件', -- new 
 
-  `chima` varchar(20) NOT NULL DEFAULT '' COMMENT '尺码', -- new 
-  `jiankuan` varchar(20) NOT NULL DEFAULT '' COMMENT '肩宽', -- new 
-  `yaowei` varchar(20) NOT NULL DEFAULT '' COMMENT '腰围', -- new 
-  `xiongwei` varchar(20) NOT NULL DEFAULT '' COMMENT '胸围', -- new 
-  `tunwei` varchar(20) NOT NULL DEFAULT '' COMMENT '臀围', -- new 
-  `yichang` varchar(20) NOT NULL DEFAULT '' COMMENT '衣长', -- new 
-  `kuchang` varchar(20) NOT NULL DEFAULT '' COMMENT '裤长', -- new 
-  `xiuchang` varchar(20) NOT NULL DEFAULT '' COMMENT '袖长', -- new 
+  `chima` varchar(20) NULL COMMENT '尺码', -- new 
+  `jiankuan` varchar(20) NULL COMMENT '肩宽', -- new 
+  `yaowei` varchar(20) NULL COMMENT '腰围', -- new 
+  `xiongwei` varchar(20) NULL COMMENT '胸围', -- new 
+  `tunwei` varchar(20) NULL COMMENT '臀围', -- new 
+  `yichang` varchar(20) NULL COMMENT '衣长', -- new 
+  `kuchang` varchar(20) NULL COMMENT '裤长', -- new 
+  `xiuchang` varchar(20) NULL COMMENT '袖长', -- new 
   `jiage` int(11) NOT NULL COMMENT '进价',
   `bjiage` int(11) NOT NULL COMMENT '标价',-- new
   `sjiage` int(11) NOT NULL DEFAULT 0 COMMENT '销售价格',
   `yufu` int(11) NOT NULL DEFAULT 0 COMMENT '预付金额',-- new
   `zhekou` int(11) NOT NULL DEFAULT 0 COMMENT '折扣金额', -- new
   `status` varchar(20) NOT NULL COMMENT '产品状态',-- update
-  `paystatus` varchar(20) NOT NULL COMMENT '付款状态',-- new
-  `remark` text NOT NULL COMMENT '备注', -- update beizhi
+  `paystatus` varchar(20) NULL COMMENT '付款状态',-- new
+  `remark` text NULL COMMENT '备注', -- update beizhi
   `starttime` datetime NULL COMMENT '寄售开始时间', -- new
   `endtime` datetime NULL COMMENT '寄售结束时间', -- new
+  `outtime` datetime NULL COMMENT '售出时间', -- new
   -- `title` varchar(50) NOT NULL COMMENT '型号规格', -- del
   `uid` int(11) NOT NULL COMMENT '添加人Id',
   `uname` varchar(50) NOT NULL COMMENT '添加人',

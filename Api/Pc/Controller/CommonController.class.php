@@ -32,22 +32,21 @@ class CommonController extends ApiController
     {
         //排序字段 默认为主键名
         $order = '';
-        if ($this->postData['order'] != '') {
+        if (!empty($this->postData['order'])) {
             $order = $this->postData['order'];
-        } 
-        if($order == '') {
+        } else {
             $order = $model->getPk();
         }
 
         //排序方式默认按照倒序排列
         //接受 sost参数 0 表示倒序 非0都 表示正序
         $sort = $asc ? 'asc' : 'desc';
-        if ($this->postData['sort'] != '') {
+        if (!empty($this->postData['sort'])) {
             $sort = $this->postData['sort'];
         }
 
         $pageIndex = 1;
-        if ($this->postData['pageIndex'] != '') {
+        if (!empty($this->postData['pageIndex'])) {
             $pageIndex = $this->postData['pageIndex'];
         }
 
@@ -132,7 +131,7 @@ class CommonController extends ApiController
         $model = D($this->dbname);
         $data  = $this->postData;
         if (false === $data = $model->create($data)) {
-            $this->mtReturn('失败，请检查值是否已经存在');
+            $this->mtReturn($model->getError());
         }
         if (method_exists($this, '_befor_insert')) {
             $data = $this->_befor_insert($data);
@@ -142,7 +141,7 @@ class CommonController extends ApiController
                 $id = $model->getLastInsID();
                 $this->_after_add($id);
             }
-            $this->mtReturn( $this->dbname." 新增成功", 200);
+            $this->mtReturn( $this->dbname." 操作成功", 200);
         }
         
     }

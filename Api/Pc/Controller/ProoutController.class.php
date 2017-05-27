@@ -38,20 +38,22 @@ class ProoutController extends CommonController
         // $attid=time();
         // $this->assign('attid',$attid);
 
-        $model = D('pro');
-        $id    = I('get.id');
-        $vo    = $model->getById($id);
-        $this->assign('Rs', $vo);
+        // $model = D('pro');
+        // $id    = I('get.id');
+        // $vo    = $model->getById($id);
+        // $this->assign('Rs', $vo);
 
     }
 
     public function _after_add($id)
     {
-        $postData  = I('post.');
+        $postData  = $this->postData;
         $data['id'] = $postData['jpid'];
         $data['sjiage'] = $postData['jpsjiage'];
         $data['yufu'] = $postData['yufu'];
         $data['zhekou'] = $postData['zhekou'];
+        $data['paystatus'] = $postData['paystatus'];
+        $data['outtime'] = gettime();
         $data['status'] = '售出';
     	$pro = A('pro');
     	$pro->autoUpdate($data);
@@ -59,8 +61,7 @@ class ProoutController extends CommonController
 
     public function _befor_insert($data)
     {
-        // M("pro")->where('id=' . I("jpid"))->setInc('chuku', I("shuliang"));
-        // M("pro")->where('id=' . I("jpid"))->setDec('kucun', I("shuliang"));
+        
     }
 
     public function _befor_edit()

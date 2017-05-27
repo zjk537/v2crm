@@ -43,6 +43,17 @@ function getdepname($value='')
 function gettime(){
     return date('Y-m-d H:i:s',time());
 }
+// 商品是否售出
+function isproout($jpid){
+    $model = M('pro');
+    $tmpPro = $model->where( array('id' => $jpid ))->select();
+    return $tmpPro[0]["status"] == "在库" || $tmpPro[0]['status'] == '取回';
+}
+// 寄售商品 结束时间不能小于当前时间
+function iseltnow($endtime){
+    $end = strtotime($endtime);
+    return NOW_TIME <= $end;
+}
 
 /**
  * 浮点数舍去指定位数小数点部分。全舍不入

@@ -21,64 +21,36 @@
                         <tr>
                             <td>
                                 <label class="control-label x85">
-                                    商品编码:
-                                </label>
-                                <input disabled="disabled" size="20" type="text" value="{$Rs.code}"/>
-                            </td>
-                            <td>
-                                <label class="control-label x85">
                                     商品状态:
                                 </label>{$Rs.status}
                             </td>
-                        </tr>
-                        <tr>
                             <td>
                                 <label class="control-label x85">
                                     标价:
                                 </label>
                                 <input disabled="disabled" size="20" type="text" value="{$Rs.bjiage}"/>
                             </td>
+                        </tr>
+                        <tr>
                             <td>
                                 <label class="control-label x85" for="j_jpsjiage">
                                     售价:
                                 </label>
                                 <input data-rule="required;" id='j_jpsjiage' name="jpsjiage" size="20" type="text" value=""/>
                             </td>
-                        </tr>
-                        <tr>
                             <td>
                                 <label class="control-label x85" for="j_yufu">
                                     预付金额:
                                 </label>
                                 <input id='j_yufu' name="yufu" size="20" type="text" value=""/>
                             </td>
+                        </tr>
+                        <tr>
                             <td>
                                 <label class="control-label x85" for="j_zhekou">
                                     折扣金额:
                                 </label>
                                 <input id='j_zhekou' name="zhekou" size="20" type="text" value=""/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <label class="control-label x85" for="j_custname">
-                                    顾客姓名:
-                                </label>
-                                <input id='j_custname' name="custname" size="20" type="text" value=""/>
-                            </td>
-                            <td>
-                                <label class="control-label x85" for="j_custphone">
-                                    顾客电话:
-                                </label>
-                                <input id='j_custphone' name="custphone" size="20" type="text" value=""/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <label class="control-label x85" for="j_beizhu">
-                                    销售备注:
-                                </label>
-                                <input id="j_beizhu" name="beizhu" size="20" type="text" value=""/>
                             </td>
                             <td>
                                 <label class="control-label x85">
@@ -96,6 +68,44 @@
                                 </select>
                             </td>
                         </tr>
+                        <tr>
+                            <td>
+                                <label class="control-label x85" for="j_beizhu">
+                                    销售备注:
+                                </label>
+                                <input id="j_beizhu" name="beizhu" size="20" type="text" value=""/>
+                            </td>
+                            <td>
+                            <label class="control-label x85">
+                                付款状态:
+                            </label>
+                            <select data-rule="required;" data-toggle="selectpicker" name="paystatus">
+                                <option value="">
+                                    请选择
+                                </option>
+                                <volist id="paystatus" name="Think.config.PRO_PAY_STATUS">
+                                    <option value="{$paystatus}">
+                                        {$paystatus}
+                                    </option>
+                                </volist>
+                            </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="control-label x85" for="j_custname">
+                                    顾客姓名:
+                                </label>
+                                <input id='j_custname' name="custname" size="20" type="text" value=""/>
+                            </td>
+                            <td>
+                                <label class="control-label x85" for="j_custphone">
+                                    顾客电话:
+                                </label>
+                                <input id='j_custphone' name="custphone" size="20" type="text" value=""/>
+                            </td>
+                        </tr>
+                        
                         <tr>
                             <td>
                                 <label class="control-label x85" for="juname_input">

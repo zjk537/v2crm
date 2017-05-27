@@ -166,27 +166,93 @@ class ProController extends CommonController
         $this->xlsout($filename, $headArr, $list);
     }
     
-    public function getBack()
+    public function getback()
     {
         $model = D($this->dbname);
-        $id    = I('get.id');
-        $data['id'] = $id;
+        $data['id'] = $this->postData['id'];
+        $tmpPro = $model->where(array('id' => $data['id']))->select();
+        if($tmpPro[0]['status'] != '售出'){
+            $this->mtReturn('售出的商品才能取回');
+        }
         $data['status'] = '取回';
         if(false === $data = $model->create($data,$model::MODEL_UPDATE)){
-            $this->mtReturn(300, '失败，请检查值是否已经存在', $_REQUEST['navTabId'], true);
+            $this->mtReturn($model->getError());
         }
-        $model->save($data);
-        $this->mtReturn(200, "取回成功" , $_REQUEST['navTabId'], true);
+        if(!$model->save($data)){
+            $this->mtReturn($model->getError());
+        }
+        $this->mtReturn($this->dbname.' 取回成功! proid:'.$data["id"],200);
     }
 
     public function autoUpdate($data)
     {
         $model = D('pro');
         if (false === $data = $model->create($data,$model::MODEL_UPDATE)) {
-            $this->mtReturn(300, '自动同步库存记录失败，请检查值是否已经存在', $_REQUEST['navTabId'], true);
+            $this->mtReturn($model->getError());
         }
         if (!$model->save($data)) {
-            $this->mtReturn(300, "自动同步库存记录失败", $_REQUEST['navTabId'], true);
+            $this->mtReturn($model->getError());
         }
+    }
+
+    public function baojing()
+    {
+        // 寄售 到期前7天预警   售出2天后还未付款预警
+        $model = D($this->dbname);
+        $mapJS['code'] = array('like', 'JS%');
+        $mapJS['status'] = array('neq','售出');
+        $mapJS['_string'] = 'datediff(`endtime`,NOW()) < '.C('PRO_JS_WARN');
+        $resData['jsdue'] = $model->where($mapJS)->count();
+        
+        $mapSC['status'] = array('eq','售出');
+        $mapSC['paystatus'] = array('eq','未打款');
+        $mapSC['_string'] = 'datediff(`outtime`,NOW()) <= '.C('PRO_ZY_WARN');
+        $resData['paydue'] = $model->where($mapSC)->count();
+        $this->mtReturn("Success",200,$resData);
+    }
+
+    public function bjlists()
+    {
+        // 寄售 到期前7天预警   售出2天后还未付款预警
+        $model = D($this->dbname);
+        $map = array();
+        if(strtoupper($this->postData['keys']) == 'JS'){
+            $map['code'] = array('like', 'JS%');
+            $map['status'] = array('neq','售出');
+            $map['_string'] = 'datediff(`endtime`,NOW()) <= '.C('PRO_JS_WARN');
+        } else {
+            $map['status'] = array('eq','售出');
+            $map['paystatus'] = array('eq','未打款');
+            $map['_string'] = 'datediff(`outtime`,NOW()) <= '.C('PRO_ZY_WARN');
+        }
+
+        //排序字段 默认为主键名
+        $order = '';
+        if (!empty($this->postData['order'])) {
+            $order = $this->postData['order'];
+        } else {
+            $order = $model->getPk();
+        }
+
+        //排序方式默认按照倒序排列
+        //接受 sost参数 0 表示倒序 非0都 表示正序
+        $sort = $asc ? 'asc' : 'desc';
+        if (!empty($this->postData['sort'])) {
+            $sort = $this->postData['sort'];
+        }
+
+        $pageIndex = 1;
+        if (!empty($this->postData['pageIndex'])) {
+            $pageIndex = $this->postData['pageIndex'];
+        }
+
+
+        $resData['jscount'] = $model->where($mapJS)->count();
+
+        $mapSC['status'] = array('eq','售出');
+        $mapSC['paystatus'] = array('eq','未打款');
+        $mapSC['_string'] = 'datediff(`outtime`,NOW()) <= '.C('PRO_ZY_WARN');
+        $resData['zycount'] = $model->where($mapSC)->count();
+        $this->mtReturn("Success",200,$resData);
     }
 }

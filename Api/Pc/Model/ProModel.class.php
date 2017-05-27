@@ -2,11 +2,8 @@
 
 /**
  *      产品管理模型
- *      [X-Mis] (C)2007-2099  
- *      This is NOT a freeware, use is subject to license terms
- *      http://www.xinyou88.com
- *      tel:400-000-9981
- *      qq:16129825
+ *      
+ *		@author zjk
  */
 
 namespace Pc\Model;
@@ -17,6 +14,8 @@ class ProModel extends Model{
 
     protected $_validate = array(
         array('code','','保存失败，请重试！',0,'unique',1),// 产品编号生成重复
+        array('endtime',null,'寄售结束时间不能为空！',0,'notequal',1),
+        array('endtime','iseltnow','寄售结束时间不能小于当前时间！',0,'function'),
     );
     
 		// 自动完成规则
