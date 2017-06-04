@@ -56,21 +56,20 @@ class CommonController extends ApiController
         } 
         //取得满足条件的记录数
         $count = $model->join($join)->where($map)->count();
-        
+        $pageSize = C('PERPAGE');
         $resData = array();        
         if ($count > 0) {
 
-            $pageSize = C('PERPAGE');
             $field = "";
             if(method_exists($this, '_complex_field')){
                 $field = $this->_complex_field();
             }
             $voList = $model->join($join)->where($map)->field($field)->order("`" . $order . "` " . $sort)->limit($pageSize)->page($pageIndex . ',' . $pageSize . '')->select();
 
-            //列表排序显示
-            $sortImg = $sort; //排序图标
-            //$sortAlt = $sort == 'desc' ? '升序排列' : '倒序排列'; //排序提示
-            $sort    = $sort == 'desc' ? 1 : 0; //排序方式
+            // //列表排序显示
+            // $sortImg = $sort; //排序图标
+            // //$sortAlt = $sort == 'desc' ? '升序排列' : '倒序排列'; //排序提示
+            // $sort    = $sort == 'desc' ? 1 : 0; //排序方式
 
             if (method_exists($this, '_after_list')) {
                 $this->_after_list($voList);

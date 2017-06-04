@@ -1,77 +1,105 @@
 <?php
 /**
  * 公共接口API
- * 
- * 
+ *
+ *
  * @author zjk
  *
  */
 
 namespace PC\Controller;
+
 use Common\Controller\ApiController;
 
-class PublicController extends ApiController{
-    
-    public function _initialize(){
+class PublicController extends ApiController
+{
+
+    public function _initialize()
+    {
         //模块初始化，重写父类方法，避免该模块进入token验证
     }
 
     // 登录成功 返回token用于登录认证 uname pwd
     public function login()
     {
-        if(!IS_POST){
+        if (!IS_POST) {
             $this->mtReturn('只支持POST请求');
         }
-        $json = @file_get_contents("php://input");;
-        $data = json_decode($json,true);
+        $json = @file_get_contents("php://input");
+        $data = json_decode($json, true);
         if (!$this->existAccount($data['username'])) {
-			$this->mtReturn('用户不存在');
+            $this->mtReturn('用户不存在');
         }
 
         $account = M('user')->getByUsername($data['username']);
         if ($account['password'] != $this->encrypt($data['password'])) {
-			$this->mtReturn('密码不正确');
+            $this->mtReturn('密码不正确');
         }
 
-        $strToken = $account['username'].'|'.$account['id'];
-        $token = myDes_encode($strToken,$account['username']);
-		//cache user
-        $resData['uid'] = $account['id'];
-		$resData['username'] = $account['username'];
-		$resData['truename'] = $account['truename'];
-        $resData['depid'] = getdepid($account['depname']);
-		$resData['depname'] = $account['depname'];
-		$resData['posname'] = $account['posname'];
-        $resData['token'] = $token;
-        S($token,$resData);
+        $strToken = $account['username'] . '|' . $account['id'];
+        $token    = myDes_encode($strToken, $account['username']);
+        //cache user
+        $resData['uid']      = $account['id'];
+        $resData['username'] = $account['username'];
+        $resData['truename'] = $account['truename'];
+        $resData['depid']    = getdepid($account['depname']);
+        $resData['depname']  = $account['depname'];
+        $resData['posname']  = $account['posname'];
+        $resData['token']    = $token;
+        S($token, $resData);
 
-        $userData['id'] = $account['uid'];
-        $userData['logintime'] = date("Y-m-d H:i:s",time());
-        $userData['loginip'] = get_client_ip();
-		$userData['logins'] = array('exp','logins+1');
-		$userData['update_time'] = time();
+        $userData['id']          = $account['uid'];
+        $userData['logintime']   = date("Y-m-d H:i:s", time());
+        $userData['loginip']     = get_client_ip();
+        $userData['logins']      = array('exp', 'logins+1');
+        $userData['update_time'] = time();
         M("user")->save($userData);
-        
+
         $logData['username'] = $account['username'];
-        $logData['content'] = '登录成功！';
-		$logData['os'] = $_SERVER['HTTP_USER_AGENT'];
-        $logData['url'] = '';
-        $logData['addtime'] = date("Y-m-d H:i:s",time());
-        $logData['ip'] = get_client_ip();
+        $logData['content']  = '登录成功！';
+        $logData['os']       = $_SERVER['HTTP_USER_AGENT'];
+        $logData['url']      = '';
+        $logData['addtime']  = date("Y-m-d H:i:s", time());
+        $logData['ip']       = get_client_ip();
         M("log")->add($logData);
 
-        $this->mtReturn('登录成功',200,$resData);
+        $this->mtReturn('登录成功', 200, $resData);
     }
 
-    public function existAccount($username) {
-        if (M('user')->where(array("username"=>$username,"status"=>1))->count() > 0) {
+    public function existAccount($username)
+    {
+        if (M('user')->where(array("username" => $username, "status" => 1))->count() > 0) {
             return true;
         }
         return false;
     }
 
-    public function encrypt($data) {
+    public function encrypt($data)
+    {
         //return md5(C('AUTH_MASK') . md5($data));
         return md5(md5($data));
+    }
+    public function base64_upload($base64)
+    {
+        $base64_image = str_replace(' ', '+', $base64);
+        //post的数据里面，加号会被替换为空格，需要重新替换回来，如果不是post的数据，则注释掉这一行
+        if (preg_match('/^(data:\s*image\/(\w+);base64,)/', $base64_image, $result)) {
+            //匹配成功
+            if ($result[2] == 'jpeg') {
+                $image_name = uniqid() . '.jpg';
+                //纯粹是看jpeg不爽才替换的
+            } else {
+                $image_name = uniqid() . '.' . $result[2];
+            }
+            $image_file = "./upload/test/{$image_name}";
+            //服务器文件存储路径
+            if (file_put_contents($image_file, base64_decode(str_replace($result[1], '', $base64_image)))) {
+                return $image_name;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 }

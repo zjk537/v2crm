@@ -25,10 +25,72 @@ class ProController extends CommonController
         //if(!in_array(session('uid'),C('ADMINISTRATOR'))){
         //$map['id'] = array('EQ', session("uid"));
         //}
-        if(IS_POST && $this->postData['stime'] != '' && $this->postData['etime'] != ''){
+        if(!empty($this->postData['stime']) && !empty($this->postData['etime'])){
             $map['`'.C('DB_PREFIX').'pro`.`addtime`'] = array(array('egt',$this->postData['stime']),array('elt',$this->postData['etime'])) ;
         }
-
+        if(empty($this->postData['keys'])){
+            return;
+        }
+        $keys = strtolower($this->postData['keys']);
+        
+        switch ($keys) {
+            case 'jsbaojing':// 寄售报警
+                unset($map['_complex']);
+                $map['`'.C('DB_PREFIX').'pro`.`code`'] = array('eq', '寄售');
+                $map['`'.C('DB_PREFIX').'pro`.`status`'] = array('neq','售出');
+                $map['_string'] = 'datediff(`'.C('DB_PREFIX').'pro`.`endtime`,NOW()) <= '.C('PRO_JS_WARN');
+                break;
+            case 'kcbaojing': // 寄售报警
+                unset($map['_complex']);
+                $map['`'.C('DB_PREFIX').'pro`.`status`'] = array('eq','售出');
+                $map['`'.C('DB_PREFIX').'pro`.`paystatus`'] = array('eq','未打款');
+                $map['_string'] = 'datediff(`'.C('DB_PREFIX').'pro`.`outtime`,NOW()) <= '.C('PRO_SC_WARN');
+                break;
+            case 'jsweidakuan': // 寄售已售出未打款
+                unset($map['_complex']);
+                //`type` = '寄售' AND `status` = '售出' AND `paystatus` = '未打款' 
+                $map['`'.C('DB_PREFIX').'pro`.`type`'] = array('eq','寄售');
+                $map['`'.C('DB_PREFIX').'pro`.`status`'] = array('eq','售出');
+                $map['`'.C('DB_PREFIX').'pro`.`paystatus`'] = array('eq','未打款');
+                break;
+            case 'jschaoqi': // 寄售超期
+                unset($map['_complex']);
+                //`type` = '寄售' AND `status` != '售出' AND  `endtime` < NOW() 
+                $map['`'.C('DB_PREFIX').'pro`.`type`'] = array('eq','寄售');
+                $map['`'.C('DB_PREFIX').'pro`.`status`'] = array('neq','售出');
+                $map['`'.C('DB_PREFIX').'pro`.`endtime`'] = array('lt',gettime());
+                break;
+            case 'jskucun': // 寄售库存
+                unset($map['_complex']);
+                //`type` = '寄售' AND `status` != '售出' 
+                $map['`'.C('DB_PREFIX').'pro`.`type`'] = array('eq','寄售');
+                $map['`'.C('DB_PREFIX').'pro`.`status`'] = array('neq','售出');
+                break;
+            case 'jhweidakuan': // 进货商品已售出未打款
+                unset($map['_complex']);
+                // `type` = '' AND `status`  = '售出' AND `paystatus` = '未打款'
+                $map['`'.C('DB_PREFIX').'pro`.`type`'] = array('eq','进货自有');
+                $map['`'.C('DB_PREFIX').'pro`.`status`'] = array('eq','售出');
+                $map['`'.C('DB_PREFIX').'pro`.`paystatus`'] = array('eq','未打款');
+                break;
+            case 'jhchaoqi': // 自有商品 超时 默认 180天
+                unset($map['_complex']);
+                // `type` = '进货自有' AND `status` != '售出' AND  DATEDIFF(`updatetime`,NOW()) > %s 
+                $map['`'.C('DB_PREFIX').'pro`.`type`'] = array('eq','进货自有');
+                $map['`'.C('DB_PREFIX').'pro`.`status`'] = array('neq','售出');
+                // $map['_string'] = 'datediff(`'.C('DB_PREFIX').'pro`.`updatetime`,NOW()) <= '.C('PRO_SC_WARN');
+                $map['_string'] = 'DATEDIFF(`'.C('DB_PREFIX').'pro`.`updatetime`,NOW()) > 180';
+                break;
+            case 'jhkucun': // 自有商品 未售出库存
+                unset($map['_complex']);
+                //`type` = '进货自有' AND `status` != '售出'
+                $map['`'.C('DB_PREFIX').'pro`.`type`'] = array('eq','进货自有');
+                $map['`'.C('DB_PREFIX').'pro`.`status`'] = array('neq','售出');
+                break;
+            default:
+                # code...
+                break;
+        }
     }
 
     public function _after_list($data)
@@ -199,14 +261,14 @@ class ProController extends CommonController
     {
         // 寄售 到期前7天预警   售出2天后还未付款预警
         $model = D($this->dbname);
-        $mapJS['code'] = array('like', 'JS%');
+        $mapJS['type'] = array('eq', '寄售');
         $mapJS['status'] = array('neq','售出');
         $mapJS['_string'] = 'datediff(`endtime`,NOW()) < '.C('PRO_JS_WARN');
         $resData['jsdue'] = $model->where($mapJS)->count();
         
         $mapSC['status'] = array('eq','售出');
         $mapSC['paystatus'] = array('eq','未打款');
-        $mapSC['_string'] = 'datediff(`outtime`,NOW()) <= '.C('PRO_ZY_WARN');
+        $mapSC['_string'] = 'datediff(`outtime`,NOW()) <= '.C('PRO_SC_WARN');
         $resData['paydue'] = $model->where($mapSC)->count();
         $this->mtReturn("Success",200,$resData);
     }
@@ -217,13 +279,11 @@ class ProController extends CommonController
         $model = D($this->dbname);
         $map = array();
         if(strtoupper($this->postData['keys']) == 'JS'){
-            $map['code'] = array('like', 'JS%');
-            $map['status'] = array('neq','售出');
-            $map['_string'] = 'datediff(`endtime`,NOW()) <= '.C('PRO_JS_WARN');
+            $map['`'.C('DB_PREFIX').'pro`.`code`'] = array('eq', '寄售');
+            $map['`'.C('DB_PREFIX').'pro`.`status`'] = array('neq','售出');
+            $map['_string'] = 'datediff(`'.C('DB_PREFIX').'pro`.`endtime`,NOW()) <= '.C('PRO_JS_WARN');
         } else {
-            $map['status'] = array('eq','售出');
-            $map['paystatus'] = array('eq','未打款');
-            $map['_string'] = 'datediff(`outtime`,NOW()) <= '.C('PRO_ZY_WARN');
+            
         }
 
         //排序字段 默认为主键名
@@ -246,13 +306,44 @@ class ProController extends CommonController
             $pageIndex = $this->postData['pageIndex'];
         }
 
+        $join = $this->_complex_join();
 
-        $resData['jscount'] = $model->where($mapJS)->count();
+        //取得满足条件的记录数
+        $count = $model->join($join)->where($map)->count();
+        $resData = array();        
+        $pageSize = C('PERPAGE');
+        if ($count > 0) {
 
-        $mapSC['status'] = array('eq','售出');
-        $mapSC['paystatus'] = array('eq','未打款');
-        $mapSC['_string'] = 'datediff(`outtime`,NOW()) <= '.C('PRO_ZY_WARN');
-        $resData['zycount'] = $model->where($mapSC)->count();
+            $field = $this->_complex_field();
+            $voList = $model->join($join)->where($map)->field($field)->order("`" . $order . "` " . $sort)->limit($pageSize)->page($pageIndex . ',' . $pageSize . '')->select();
+            $resData['list'] = $voList;
+        }
+        $resData['totalCount'] = (int)$count; //数据总数
+        $resData['pageIndex'] = $pageIndex; //当前的页数，默认为1
+        $resData['pageSize'] = (int)$pageSize; //每页显示多少条
         $this->mtReturn("Success",200,$resData);
+    }
+
+    public function tongji()
+    {
+        $model = M();
+        $dayspan = (int)$this->postData['dayspan'] ? 180 : (int)$this->postData['dayspan'];
+        $sql = sprintf("SELECT 
+                SUM(CASE WHEN `type` = '寄售' AND `status` = '售出' AND `paystatus` = '未打款' THEN 1 ELSE 0 END) AS JSWeiDaKuan, -- 寄售 已售 未打款 数
+                SUM(CASE WHEN `type` = '寄售' AND `status` != '售出' AND  `endtime` < NOW() THEN 1 ELSE 0 END) AS JSChaoQi, -- 寄售到期
+                SUM(CASE WHEN `type` = '寄售' AND `status` != '售出' THEN 1 ELSE 0 END) AS JSKuCun, -- 寄售未售出数
+                SUM(CASE WHEN `type` = '进货自有' AND `status`  = '售出' AND `paystatus` = '未打款' THEN 1 ELSE 0 END) AS JHWeiDaKuan, -- 自有 已售 未打款 数
+                SUM(CASE WHEN `type` = '进货自有' AND `status` != '售出' AND  DATEDIFF(`updatetime`,NOW()) > %s THEN 1 ELSE 0 END) AS JHChaoQi, -- 自有超过180天没有数据更新
+                SUM(CASE WHEN `type` = '进货自有' AND `status` != '售出' THEN 1 ELSE 0 END) AS JHKuCun, -- 自有未售出数
+                COUNT(`addtime`) AS JinHuoLiang, -- 进货量 包含寄售 自有
+                SUM(CASE WHEN ISNULL(`outtime`) then 0 ELSE 1 end) AS XiaoShouLiang -- 销售量
+            FROM `v2_pro`", $dayspan);
+        if(!empty($this->postData['stime']) && !empty($this->postData['etime'])){
+            $sql .= "WHERE `addtime` BETWEEN ".$this->postData['stime']." AND ".$this->postData['etime'];
+        }
+        $resData = $model->query($sql);
+        
+        $this->mtReturn('Success',200,$resData[0]);
+
     }
 }

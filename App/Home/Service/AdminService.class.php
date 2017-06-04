@@ -21,14 +21,15 @@ class AdminService extends CommonService {
        session('uid',$account['id']);
 	   session('username',$account['username']);
 	   session("truename",$account['truename']);
+       session('depid', getdepid($account['depname']));
 	   session('depname',$account['depname']);
 	   session('posname',$account['posname']);
 	   session('loginip',get_client_ip());
-	   session('logintime',date("Y-m-d H:i:s",time()));
+	   session('logintime',gettime());
 	   session('logins',$account['logins']);
 
         $data['id'] = session('uid');
-        $data['logintime'] = date("Y-m-d H:i:s",time());
+        $data['logintime'] = gettime();
         $data['loginip'] = get_client_ip();
 		$data['logins'] = array('exp','logins+1');
 		$data['update_time']=time();
@@ -40,7 +41,7 @@ class AdminService extends CommonService {
         $dat['content'] = '登录成功！';
 		$dat['os']=$_SERVER['HTTP_USER_AGENT'];
         $dat['url'] = U();
-        $dat['addtime'] = date("Y-m-d H:i:s",time());
+        $dat['addtime'] = gettime();
         $dat['ip'] = get_client_ip();
         M("log")->add($dat);
 
@@ -53,7 +54,7 @@ class AdminService extends CommonService {
         $dat['content'] = '退出成功！';
 		$dat['os']=$_SERVER['HTTP_USER_AGENT'];
         $dat['url'] = U();
-        $dat['addtime'] = date("Y-m-d H:i:s",time());
+        $dat['addtime'] = gettime();
         $dat['ip'] = get_client_ip();
         M("log")->add($dat);
         session_unset();

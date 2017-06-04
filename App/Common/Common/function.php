@@ -1,83 +1,96 @@
 <?php
 
-// 校验验证码	@return boolean
-   function checkVerify(){
-	$verify = new \Think\Verify();
-	return $verify->check(I('verify'));
-   }
+// 校验验证码    @return boolean
+function checkVerify()
+{
+    $verify = new \Think\Verify();
+    return $verify->check(I('verify'));
+}
 
-	/**
-      * 检查权限
-      * @param name string|array  需要验证的规则列表,支持逗号分隔的权限规则或索引数组
-      * @param uid  int           认证用户的id
-      * @param string mode        执行check的模式
-      * @param relation string    如果为 'or' 表示满足任一条规则即通过验证;如果为 'and'则表示需满足所有规则才能通过验证
-      * @return boolean           通过验证返回true;失败返回false
-     */
-	function authcheck($name, $uid, $type=1, $mode='url', $relation='or'){
-		if(!in_array($uid,C('ADMINISTRATOR'))){ 
-	    	$auth=new \Think\Auth();
-	    	return $auth->check($name, $uid, $type, $mode, $relation)?true:false;
-	    }else{
-	    	return true;
-	    }
-	}
-   
-   function display($name){
-   	$name='Home/'.$name;
-	$uid=session('uid');
-	if(!in_array($uid,C('ADMINISTRATOR'))){
-	if(!authcheck($name, $uid, $type=1, $mode='url', $relation='or')){
-	return "style='display:none'";
-	 }
-	}
-   }
-	
+/**
+ * 检查权限
+ * @param name string|array  需要验证的规则列表,支持逗号分隔的权限规则或索引数组
+ * @param uid  int           认证用户的id
+ * @param string mode        执行check的模式
+ * @param relation string    如果为 'or' 表示满足任一条规则即通过验证;如果为 'and'则表示需满足所有规则才能通过验证
+ * @return boolean           通过验证返回true;失败返回false
+ */
+function authcheck($name, $uid, $type = 1, $mode = 'url', $relation = 'or')
+{
+    if (!in_array($uid, C('ADMINISTRATOR'))) {
+        $auth = new \Think\Auth();
+        return $auth->check($name, $uid, $type, $mode, $relation) ? true : false;
+    } else {
+        return true;
+    }
+}
 
+function display($name)
+{
+    $name = 'Home/' . $name;
+    $uid  = session('uid');
+    if (!in_array($uid, C('ADMINISTRATOR'))) {
+        if (!authcheck($name, $uid, $type = 1, $mode = 'url', $relation = 'or')) {
+            return "style='display:none'";
+        }
+    }
+}
 
-function cateTree($pid=0,$level=0,$db=0){
-    $cate=M(''.$db.'');
-    $array=array();
-    $tmp=$cate->where(array('pid'=>$pid))->order("sort")->select();
-    if(is_array($tmp)){
-        foreach($tmp as $v){
-            $v['level']=$level;
+function cateTree($pid = 0, $level = 0, $db = 0)
+{
+    $cate  = M('' . $db . '');
+    $array = array();
+    $tmp   = $cate->where(array('pid' => $pid))->order("sort")->select();
+    if (is_array($tmp)) {
+        foreach ($tmp as $v) {
+            $v['level'] = $level;
             //$v['pid']>0;
-            $array[count($array)]=$v;
-            $sub=cateTree($v['id'],$level+1,$db);
-            if(is_array($sub))$array=array_merge($array,$sub);
+            $array[count($array)] = $v;
+            $sub                  = cateTree($v['id'], $level + 1, $db);
+            if (is_array($sub)) {
+                $array = array_merge($array, $sub);
+            }
+
         }
     }
     return $array;
 }
 
-function orgcateTree($pid=0,$level=0,$type=0){
-    $cate=M('auth_group');
-    $array=array();
-    $tmp=$cate->where(array('pid'=>$pid,'type'=>$type))->order("sort")->select();
-    if(is_array($tmp)){
-        foreach($tmp as $v){
-            $v['level']=$level;
+function orgcateTree($pid = 0, $level = 0, $type = 0)
+{
+    $cate  = M('auth_group');
+    $array = array();
+    $tmp   = $cate->where(array('pid' => $pid, 'type' => $type))->order("sort")->select();
+    if (is_array($tmp)) {
+        foreach ($tmp as $v) {
+            $v['level'] = $level;
             //$v['pid']>0;
-            $array[count($array)]=$v;
-            $sub=orgcateTree($v['id'],$level+1,$type);
-            if(is_array($sub))$array=array_merge($array,$sub);
+            $array[count($array)] = $v;
+            $sub                  = orgcateTree($v['id'], $level + 1, $type);
+            if (is_array($sub)) {
+                $array = array_merge($array, $sub);
+            }
+
         }
     }
     return $array;
 }
 
-function cateTreed($pid=0,$level=0){
-    $cate=M('datalist');
-    $array=array();
-    $tmp=$cate->where(array('pid'=>$pid))->order("sort")->select();
-    if(is_array($tmp)){
-        foreach($tmp as $v){
-		    $v['level']=$level;
+function cateTreed($pid = 0, $level = 0)
+{
+    $cate  = M('datalist');
+    $array = array();
+    $tmp   = $cate->where(array('pid' => $pid))->order("sort")->select();
+    if (is_array($tmp)) {
+        foreach ($tmp as $v) {
+            $v['level'] = $level;
             //$v['pid']>0;
-            $array[count($array)]=$v;
-            $sub=cateTreed($v['id'],$level+1);
-            if(is_array($sub))$array=array_merge($array,$sub);
+            $array[count($array)] = $v;
+            $sub                  = cateTreed($v['id'], $level + 1);
+            if (is_array($sub)) {
+                $array = array_merge($array, $sub);
+            }
+
         }
     }
     return $array;
@@ -90,9 +103,13 @@ function cateTreed($pid=0,$level=0){
  * @return string            格式化后的带单位的大小
  * @author 麦当苗儿 <zuojiazi@vip.qq.com>
  */
-function format_bytes($size, $delimiter = '') {
+function format_bytes($size, $delimiter = '')
+{
     $units = array('B', 'KB', 'MB', 'GB', 'TB', 'PB');
-    for ($i = 0; $size >= 1024 && $i < 5; $i++) $size /= 1024;
+    for ($i = 0; $size >= 1024 && $i < 5; $i++) {
+        $size /= 1024;
+    }
+
     return round($size, 2) . $delimiter . $units[$i];
 }
 
@@ -103,30 +120,32 @@ function format_bytes($size, $delimiter = '') {
  * @param  string  $name 格式 [模块名]/接口名/方法名
  * @param  array|string  $vars 参数
  */
-function api($name,$vars=array()){
-    $array     = explode('/',$name);
+function api($name, $vars = array())
+{
+    $array     = explode('/', $name);
     $method    = array_pop($array);
     $classname = array_pop($array);
-    $module    = $array? array_pop($array) : 'Common';
-    $callback  = $module.'\\Api\\'.$classname.'Api::'.$method;
-    if(is_string($vars)) {
-        parse_str($vars,$vars);
+    $module    = $array ? array_pop($array) : 'Common';
+    $callback  = $module . '\\Api\\' . $classname . 'Api::' . $method;
+    if (is_string($vars)) {
+        parse_str($vars, $vars);
     }
-    return call_user_func_array($callback,$vars);
+    return call_user_func_array($callback, $vars);
 }
 
-function check_table_exist($tableName){
+function check_table_exist($tableName)
+{
     $tableName = C('DB_PREFIX') . strtolower($tableName);
-    $tables = M()->query('show tables');
-    if(empty($tables)){
+    $tables    = M()->query('show tables');
+    if (empty($tables)) {
         exit('数据库中没有表');
     }
-    foreach($tables as $v){
-        if($v['tables_in_test']==$tableName){
-            return true ;
+    foreach ($tables as $v) {
+        if ($v['tables_in_test'] == $tableName) {
+            return true;
         }
     }
-    exit('数据库中没有 '.$tableName.' 表，请创建');
+    exit('数据库中没有 ' . $tableName . ' 表，请创建');
 }
 
 /**
@@ -137,52 +156,56 @@ function check_table_exist($tableName){
  * @param string $table 需要查询的表
  * @author huajie <banhuajie@163.com>
  */
-function get_table_field($value = null, $condition = 'id', $field = null, $table = null){
-    if(empty($value) || empty($table)){
+function get_table_field($value = null, $condition = 'id', $field = null, $table = null)
+{
+    if (empty($value) || empty($table)) {
         return false;
     }
 
     //拼接参数
     $map[$condition] = $value;
-    $info = M(ucfirst($table))->where($map);
-    if(empty($field)){
+    $info            = M(ucfirst($table))->where($map);
+    if (empty($field)) {
         $info = $info->field(true)->find();
-    }else{
+    } else {
         $info = $info->getField($field);
     }
     return $info;
 }
 
+function Hex($indata)
+{
+    $lX8 = $indata & 0x80000000;
+    if ($lX8) {
+        $indata = $indata & 0x7fffffff;
+    }
+    while ($indata > 16) {
+        $temp_1 = $indata % 16;
+        $indata = $indata / 16;
+        if ($temp_1 < 10) {
+            $temp_1 = $temp_1 + 0x30;
+        } else {
+            $temp_1 = $temp_1 + 0x41 - 10;
+        }
 
-function Hex($indata){
-	$lX8 = $indata & 0x80000000;
-	if($lX8)
-	{
-		$indata=$indata & 0x7fffffff;
-	}
-	while ($indata>16)
-	{
-		$temp_1=$indata % 16;
-		$indata=$indata /16 ;
-		if($temp_1<10)
-		   $temp_1=$temp_1+0x30;
-		else
-		   $temp_1=$temp_1+0x41-10; 
-		
-		$outstring= chr($temp_1) . $outstring ; 
-		   
-	}
-	$temp_1=$indata;
-	if($lX8)$temp_1=$temp_1+8;
-	if($temp_1<10)
-	   $temp_1=$temp_1+0x30;
-	else
-	   $temp_1=$temp_1+0x41-10; 
-	
-	$outstring= chr($temp_1) . $outstring ; 
-	
-	return $outstring;
-		 
+        $outstring = chr($temp_1) . $outstring;
+
+    }
+    $temp_1 = $indata;
+    if ($lX8) {
+        $temp_1 = $temp_1 + 8;
+    }
+
+    if ($temp_1 < 10) {
+        $temp_1 = $temp_1 + 0x30;
+    } else {
+        $temp_1 = $temp_1 + 0x41 - 10;
+    }
+
+    $outstring = chr($temp_1) . $outstring;
+
+    return $outstring;
+
 }
 
 /**
@@ -192,7 +215,8 @@ function Hex($indata){
  * @return array
  * @author 麦当苗儿 <zuojiazi@vip.qq.com>
  */
-function str2arr($str, $glue = ','){
+function str2arr($str, $glue = ',')
+{
     return explode($glue, $str);
 }
 
@@ -203,7 +227,8 @@ function str2arr($str, $glue = ','){
  * @return string
  * @author 麦当苗儿 <zuojiazi@vip.qq.com>
  */
-function arr2str($arr, $glue = ','){
+function arr2str($arr, $glue = ',')
+{
     return implode($glue, $arr);
 }
 
@@ -218,69 +243,79 @@ function arr2str($arr, $glue = ','){
  * @param string $suffix 截断显示字符
  * @return string
  */
-function msubstr($str, $start=0, $length) {
-	$charset="utf-8";
-	$suffix=true;
-    if(function_exists("mb_substr"))
+function msubstr($str, $start = 0, $length)
+{
+    $charset = "utf-8";
+    $suffix  = true;
+    if (function_exists("mb_substr")) {
         $slice = mb_substr($str, $start, $length, $charset);
-    elseif(function_exists('iconv_substr')) {
-        $slice = iconv_substr($str,$start,$length,$charset);
-        if(false === $slice) {
+    } elseif (function_exists('iconv_substr')) {
+        $slice = iconv_substr($str, $start, $length, $charset);
+        if (false === $slice) {
             $slice = '';
         }
-    }else{
-        $re['utf-8']   = "/[\x01-\x7f]|[\xc2-\xdf][\x80-\xbf]|[\xe0-\xef][\x80-\xbf]{2}|[\xf0-\xff][\x80-\xbf]{3}/";
+    } else {
+        $re['utf-8']  = "/[\x01-\x7f]|[\xc2-\xdf][\x80-\xbf]|[\xe0-\xef][\x80-\xbf]{2}|[\xf0-\xff][\x80-\xbf]{3}/";
         $re['gb2312'] = "/[\x01-\x7f]|[\xb0-\xf7][\xa0-\xfe]/";
         $re['gbk']    = "/[\x01-\x7f]|[\x81-\xfe][\x40-\xfe]/";
         $re['big5']   = "/[\x01-\x7f]|[\x81-\xfe]([\x40-\x7e]|\xa1-\xfe])/";
         preg_match_all($re[$charset], $str, $match);
-        $slice = join("",array_slice($match[0], $start, $length));
+        $slice = join("", array_slice($match[0], $start, $length));
     }
-    return $suffix ? $slice.'' : $slice;
+    return $suffix ? $slice . '' : $slice;
 }
 
-
-
-function getuserid(){
-	return session("uid");
+function getuserid()
+{
+    return session("uid");
 }
 
-
-function gettruename(){
-	return session("truename");
+function gettruename()
+{
+    return session("truename");
 }
 
-function gettime(){
-	return date('Y-m-d H:i:s',time());
+function getdepid($depname)
+{
+    $depid = session("depid");
+    if ($depid == '') {
+        $dep   = M('auth_group')->where(array('name' => $depname))->limit(1)->select();
+        $depid = $dep[0]['id'];
+    }
+    return $depid;
 }
 
-function encrypt($data) {
+function gettime()
+{
+    return date('Y-m-d H:i:s', time());
+}
+
+function encrypt($data)
+{
     //return md5(C('AUTH_MASK') . md5($data));
-	return md5(md5($data));
+    return md5(md5($data));
 }
 
 //html代码输出
-function html_out($str){
-    if(function_exists('htmlspecialchars_decode')){
-        $str=htmlspecialchars_decode($str);
-    }else{
-        $str=html_entity_decode($str);
+function html_out($str)
+{
+    if (function_exists('htmlspecialchars_decode')) {
+        $str = htmlspecialchars_decode($str);
+    } else {
+        $str = html_entity_decode($str);
     }
     $str = stripslashes($str);
     return $str;
 }
 
-function truename($id){
- $data=M('user')->where('id='.$id)->getField('truename');
- return $data;
+function truename($id)
+{
+    $data = M('user')->where('id=' . $id)->getField('truename');
+    return $data;
 }
 
-
-function comname($id){
- $data=M('cust')->where('id='.$id)->getField('title');
- return $data;
+function comname($id)
+{
+    $data = M('cust')->where('id=' . $id)->getField('title');
+    return $data;
 }
-
-
-
-
