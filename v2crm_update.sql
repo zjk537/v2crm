@@ -370,7 +370,7 @@ CREATE TABLE `v2_proin` (
   `jpid` int(11) NOT NULL COMMENT '产品Id',
   `jpname` varchar(50) NOT NULL COMMENT '产品名称',
   `jpjiage` int(11) NOT NULL COMMENT '进价', 
-  -- `paytype` varchar(50) NOT NULL COMMENT '付款方式', -- new
+  `paytype` varchar(50) NULL COMMENT '付款方式', -- new
   -- `jpdanwei` varchar(20) NOT NULL COMMENT '计量单位', -- del
   -- `jpguige` varchar(50) NOT NULL COMMENT '规格型号', -- del
   -- `ruku` int(11) NOT NULL DEFAULT 0 COMMENT '入库数量',-- update shuliang

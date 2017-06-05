@@ -72,11 +72,19 @@
                     </tr>
                     <tr>
                         <td>
-                            <label class="control-label x85" for="juname_input">
-                                经办人:
+                            <label class="control-label x85">
+                                付款方式:
                             </label>
-                            <input data-toggle="lookup" data-rule="required;" data-url="__MODULE__/public/user/navTabId/{:CONTROLLER_NAME}" id="juname" name="juname" size="20" type="text" value="{$Rs.juname}"/>
-                            <input name="juid" size="20" type="hidden" value="{$Rs.juid}"/>
+                            <select data-rule="required;" data-toggle="selectpicker" name="paytype">
+                                <option value="">
+                                    请选择
+                                </option>
+                                <volist id="paytype" name="Think.config.PRO_PAY_TYPE">
+                                    <option value="{$paytype}" <if condition=" $paytype EQ $Rs['paytype'] " >selected</if> >
+                                        {$paytype}
+                                    </option>
+                                </volist>
+                            </select>
                         </td>
                         <td>
                             <label class="control-label x85" for="j_bujian">
@@ -153,6 +161,15 @@
                                 袖长:
                             </label>
                             <input id="j_xiuchang" name="xiuchang" size="20" type="text" value="{$Rs.xiuchang}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <label class="control-label x85" for="juname_input">
+                                经办人:
+                            </label>
+                            <input data-toggle="lookup" data-rule="required;" data-url="__MODULE__/public/user/navTabId/{:CONTROLLER_NAME}" id="juname" name="juname" size="20" type="text" value="{$Rs.juname}"/>
+                            <input name="juid" size="20" type="hidden" value="{$Rs.juid}"/>
                         </td>
                     </tr>
                     <tr>

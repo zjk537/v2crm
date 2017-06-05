@@ -33,15 +33,15 @@
                 <tr>
                     <td>
                         <label class="control-label x85" for="juname_input">
+                            付款方式:
+                        </label>
+                        {$Rs.paytype}
+                    </td>
+                    <td>
+                        <label class="control-label x85" for="juname_input">
                             经办人:
                         </label>
                         {$Rs.juname}
-                    </td>
-                    <td>
-                        <label class="control-label x85" for="title_input">
-                            说明:
-                        </label>
-                        {$Rs.title}
                     </td>
                 </tr>
                 <tr>
@@ -70,6 +70,14 @@
                             更新时间:
                         </label>
                         {$Rs.updatetime}
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <label class="control-label x85">
+                            说明:
+                        </label>
+                        {$Rs.remark}
                     </td>
                 </tr>
             </tbody>

@@ -26,15 +26,22 @@
                             {$Rs.jpjiage}
                         </td>
                         <td>
+                            <label class="control-label x85">
+                                付款方式:
+                            </label>
+                            {$Rs.paytype}
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                        <td>
                             <label class="control-label x85" for="j_juname">
                                 经办人:
                             </label>
                             <input data-toggle="lookup" data-url="__MODULE__/public/user/navTabId/{:CONTROLLER_NAME}" id="j_juname" name="juname" size="20" type="text" value="{$Rs.juname}"/>
                             <input name="juid" size="20" type="hidden" value="{$Rs.juid}"/>
                         </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
+                        <td>
                             <label class="control-label x85" for="j_remark">
                                 说明:
                             </label>

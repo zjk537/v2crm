@@ -228,14 +228,29 @@ class ProController extends CommonController
         $this->xlsout($filename, $headArr, $list);
     }
     
-    public function getback()
+    // 寄售商品未售出 可取回
+    public function quhui()
     {
         $model = D($this->dbname);
-        $data['id'] = $this->postData['id'];
-        $tmpPro = $model->where(array('id' => $data['id']))->select();
-        if($tmpPro[0]['status'] != '售出'){
-            $this->mtReturn('售出的商品才能取回');
+        $ids = $this->postData['ids'];
+        if(empty($ids)){
+            $this->mtReturn("取回商品不能为空！");
         }
+        $map['id'] = array('in',implode(',', $ids));
+        $where['type'] = array('neq','寄售');
+        $where['status'] = array('eq','售出');
+        $where['_logic'] = 'or';
+        $map['_complex'] = $where;
+        $tmpCount = $model->where($map)->count();
+        if($tmpCount > 0){
+            $this->mtReturn('寄售商品未售出时可取回');
+        }
+        // $data['id'] = $this->postData['id'];
+        // $tmpPro = $model->where(array('id' => $data['id']))->select();
+        // if($tmpPro[0]['status'] != '售出'){
+        //     $this->mtReturn('售出的商品才能取回');
+        // }
+        $data['id'] = array('in',implode(',', $ids));
         $data['status'] = '取回';
         if(false === $data = $model->create($data,$model::MODEL_UPDATE)){
             $this->mtReturn($model->getError());
@@ -243,7 +258,77 @@ class ProController extends CommonController
         if(!$model->save($data)){
             $this->mtReturn($model->getError());
         }
-        $this->mtReturn($this->dbname.' 取回成功! proid:'.$data["id"],200);
+        $this->mtReturn($this->dbname.' 取回成功! proid:'.implode('|', $ids),200);
+    }
+
+    // 售出商品可退货
+    public function tuihuo()
+    {
+        $model = D($this->dbname);
+        $ids = $this->postData['ids'];
+        if(empty($ids)){
+            $this->mtReturn("退货商品不能为空！");
+        }
+        $map['id'] = array('in',implode(',', $ids));
+        //$where['type'] = array('neq','寄售');
+        // $where['status'] = array('eq','售出');
+        // $where['_logic'] = 'or';
+        $map['status'] = array('neq','售出');
+        $tmpCount = $model->where($map)->count();
+        if($tmpCount > 0){
+            $this->mtReturn('售出的商品可退货');
+        }
+        $data['id'] = array('in',implode(',', $ids));
+        $data['status'] = '在库';
+        if(false === $data = $model->create($data,$model::MODEL_UPDATE)){
+            $this->mtReturn($model->getError());
+        }
+        if(!$model->save($data)){
+            $this->mtReturn($model->getError());
+        }
+        $this->mtReturn($this->dbname.' 退货成功! proid:'.implode('|', $ids),200);
+    }
+
+    // 寄售商品 售出但未打款 可打款
+    public function dakuan()
+    {
+        $model = D($this->dbname);
+        $ids = $this->postData['ids'];
+        if(empty($ids)){
+            $this->mtReturn("退货商品不能为空！");
+        }
+        $map['id'] = array('in',implode(',', $ids));
+        $map['type'] = array('neq','寄售');
+        $where['status'] = array('neq','售出');
+        $where['paystatus'] = array('neq','未打款');
+        $where['_logic'] = 'or';
+        $map['_complex'] = $where;
+        $tmpCount = $model->where($map)->count();
+        if($tmpCount > 0){
+            $this->mtReturn('寄售商品售出但未打款商品可打款');
+        }
+        $data['id'] = array('in',implode(',', $ids));
+        $data['paystatus'] = '已打款';
+        if(false === $data = $model->create($data,$model::MODEL_UPDATE)){
+            $this->mtReturn($model->getError());
+        }
+        if(!$model->save($data)){
+            $this->mtReturn($model->getError());
+        }
+        $this->mtReturn($this->dbname.' 打款成功! proid:'.implode('|', $ids),200);
+    }
+
+    public function gettypes()
+    {
+        $model = D($this->dbname);
+        $resData = array();        
+        $types =  $model->distinct(true)->field('fenlei')->select();
+        foreach ($types as  $type) {
+
+            array_push($resData, $type['fenlei']);
+        }
+
+        $this->mtReturn('Success',200,$resData);
     }
 
     public function autoUpdate($data)
@@ -273,56 +358,56 @@ class ProController extends CommonController
         $this->mtReturn("Success",200,$resData);
     }
 
-    public function bjlists()
-    {
-        // 寄售 到期前7天预警   售出2天后还未付款预警
-        $model = D($this->dbname);
-        $map = array();
-        if(strtoupper($this->postData['keys']) == 'JS'){
-            $map['`'.C('DB_PREFIX').'pro`.`code`'] = array('eq', '寄售');
-            $map['`'.C('DB_PREFIX').'pro`.`status`'] = array('neq','售出');
-            $map['_string'] = 'datediff(`'.C('DB_PREFIX').'pro`.`endtime`,NOW()) <= '.C('PRO_JS_WARN');
-        } else {
+    // public function bjlists()
+    // {
+    //     // 寄售 到期前7天预警   售出2天后还未付款预警
+    //     $model = D($this->dbname);
+    //     $map = array();
+    //     if(strtoupper($this->postData['keys']) == 'JS'){
+    //         $map['`'.C('DB_PREFIX').'pro`.`code`'] = array('eq', '寄售');
+    //         $map['`'.C('DB_PREFIX').'pro`.`status`'] = array('neq','售出');
+    //         $map['_string'] = 'datediff(`'.C('DB_PREFIX').'pro`.`endtime`,NOW()) <= '.C('PRO_JS_WARN');
+    //     } else {
             
-        }
+    //     }
 
-        //排序字段 默认为主键名
-        $order = '';
-        if (!empty($this->postData['order'])) {
-            $order = $this->postData['order'];
-        } else {
-            $order = $model->getPk();
-        }
+    //     //排序字段 默认为主键名
+    //     $order = '';
+    //     if (!empty($this->postData['order'])) {
+    //         $order = $this->postData['order'];
+    //     } else {
+    //         $order = $model->getPk();
+    //     }
 
-        //排序方式默认按照倒序排列
-        //接受 sost参数 0 表示倒序 非0都 表示正序
-        $sort = $asc ? 'asc' : 'desc';
-        if (!empty($this->postData['sort'])) {
-            $sort = $this->postData['sort'];
-        }
+    //     //排序方式默认按照倒序排列
+    //     //接受 sost参数 0 表示倒序 非0都 表示正序
+    //     $sort = $asc ? 'asc' : 'desc';
+    //     if (!empty($this->postData['sort'])) {
+    //         $sort = $this->postData['sort'];
+    //     }
 
-        $pageIndex = 1;
-        if (!empty($this->postData['pageIndex'])) {
-            $pageIndex = $this->postData['pageIndex'];
-        }
+    //     $pageIndex = 1;
+    //     if (!empty($this->postData['pageIndex'])) {
+    //         $pageIndex = $this->postData['pageIndex'];
+    //     }
 
-        $join = $this->_complex_join();
+    //     $join = $this->_complex_join();
 
-        //取得满足条件的记录数
-        $count = $model->join($join)->where($map)->count();
-        $resData = array();        
-        $pageSize = C('PERPAGE');
-        if ($count > 0) {
+    //     //取得满足条件的记录数
+    //     $count = $model->join($join)->where($map)->count();
+    //     $resData = array();        
+    //     $pageSize = C('PERPAGE');
+    //     if ($count > 0) {
 
-            $field = $this->_complex_field();
-            $voList = $model->join($join)->where($map)->field($field)->order("`" . $order . "` " . $sort)->limit($pageSize)->page($pageIndex . ',' . $pageSize . '')->select();
-            $resData['list'] = $voList;
-        }
-        $resData['totalCount'] = (int)$count; //数据总数
-        $resData['pageIndex'] = $pageIndex; //当前的页数，默认为1
-        $resData['pageSize'] = (int)$pageSize; //每页显示多少条
-        $this->mtReturn("Success",200,$resData);
-    }
+    //         $field = $this->_complex_field();
+    //         $voList = $model->join($join)->where($map)->field($field)->order("`" . $order . "` " . $sort)->limit($pageSize)->page($pageIndex . ',' . $pageSize . '')->select();
+    //         $resData['list'] = $voList;
+    //     }
+    //     $resData['totalCount'] = (int)$count; //数据总数
+    //     $resData['pageIndex'] = $pageIndex; //当前的页数，默认为1
+    //     $resData['pageSize'] = (int)$pageSize; //每页显示多少条
+    //     $this->mtReturn("Success",200,$resData);
+    // }
 
     public function tongji()
     {
