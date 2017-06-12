@@ -198,6 +198,15 @@ class ProController extends CommonController
             unset($data['endtime']);
             $data['starttime'] = null;
         }
+        $data['cname'] = $custData['name'];
+
+        // 更新供应商
+        $custData           = $this->postData['cust'];
+        $custData['juid']   = $data['juid'];
+        $custData['juname'] = $data['juname'];
+        $cust               = A('cust');
+        $custid             = $cust->autoUpdate($custData);
+
         return $data;
     }
 
