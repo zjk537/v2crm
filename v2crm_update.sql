@@ -243,13 +243,14 @@ DROP TABLE IF EXISTS `v2_files`;
 CREATE TABLE `v2_files` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `attid` int(11) NOT NULL,
-  `folder` varchar(50) NOT NULL DEFAULT '' COMMENT '保存目录',
+  -- `folder` varchar(50) NOT NULL DEFAULT '' COMMENT '保存目录',
   `filename` varchar(255) NOT NULL DEFAULT '' COMMENT '文件名',
-  `filetype` varchar(50) NOT NULL DEFAULT '' COMMENT '文件类型',
-  `filedesc` varchar(200) NOT NULL DEFAULT '' COMMENT '文件说明',
+  -- `filetype` varchar(50) NOT NULL DEFAULT '' COMMENT '文件类型',
+  -- `filedesc` varchar(200) NOT NULL DEFAULT '' COMMENT '文件说明',
   `uid` varchar(50) NOT NULL COMMENT '操作人Id',
+  `uname` varchar(50) NOT NULL COMMENT '操作人',
   `addtime` datetime NOT NULL COMMENT '添加时间',
-  `status` int(2) NOT NULL DEFAULT '1',
+  -- `status` int(2) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='系统附件表';
 

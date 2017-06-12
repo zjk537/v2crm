@@ -12,6 +12,13 @@ class UserController extends CommonController
         $this->dbname = CONTROLLER_NAME;
     }
 
+    public function _filter(&$map)
+    {
+        if(!in_array(getuserid(),C('ADMINISTRATOR'))){
+            $map['depname'] = getdepname();
+        }
+    }
+
     public function _befor_add()
     {
         $list = orgcateTree($pid = 0, $level = 0, $type = 0);

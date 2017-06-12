@@ -11,11 +11,11 @@ class Stream2Image {
     const ROOT_PATH = './';
     const FAIL_WRITE_DATA = '图片写入错误';
     //没有数据流
-    const NO_STREAM_DATA = '图片数据错误';
+    const NO_STREAM_DATA = '图片数据为空';
     //图片类型不正确
     const NOT_CORRECT_TYPE = '图片格式错误';
     //不能创建文件
-    const CAN_NOT_CREATE_FILE = '图片创建错误';
+    const CAN_NOT_CREATE_FILE = '图片创建失败';
     //上传图片名称
     public $image_name;
     //图片保存名称
@@ -25,7 +25,7 @@ class Stream2Image {
     //目录+图片完整路径
     public $save_fullpath;
     //打印的错误信息
-    public $print_errInfo='';
+    public $errorInfo='';
 
     /**
      * 构造函数
@@ -64,22 +64,21 @@ class Stream2Image {
                     $baseurl = $this->save_fullpath;
                     if ( $this->getimageInfo ( $baseurl )) {
                         //echo $baseurl;
-                        $this->print_errInfo = '';
+                        $this->errorInfo = '';
                         return true;
                     } else {
                         @unlink($this->save_fullpath);
-                        $this->print_errInfo = self::NOT_CORRECT_TYPE;
+                        $this->errorInfo = self::NOT_CORRECT_TYPE;
                     }
                 } else {
-                    $this->print_errInfo = self::NOT_CORRECT_TYPE;
+                    $this->errorInfo = self::FAIL_WRITE_DATA;
                 }
-            }else
-            {
-                $this->print_errInfo = self::NOT_CORRECT_TYPE;
+            }else {
+                $this->errorInfo = self::CAN_NOT_CREATE_FILE;
             }
         } else {
             //没有接收到数据流
-            $this->print_errInfo = self::NOT_CORRECT_TYPE;
+            $this->errorInfo = self::NO_STREAM_DATA;
         }
         return false;
     }

@@ -13,6 +13,8 @@ return array(
     'DB_FIELDS_CACHE'       =>  true,        // 启用字段缓存
     'DB_CHARSET'            =>  'utf8',      // 数据库编码默认采用utf8
 
+    //超级管理员id,拥有全部权限,只要用户uid在这个角色组里的,就跳出认证.可以设置多个值,如array('1','2','3')
+    'ADMINISTRATOR'=>array('1'),
     /* SESSION设置 */
     'SESSION_AUTO_START' => false, // 是否自动开启Session
     'SESSION_OPTIONS'    => array(), // session 配置数组 支持type name id path expire domain 等参数
@@ -28,6 +30,11 @@ return array(
     'URL_HTML_SUFFIX'   => '',
     'URL_PATHINFO_DEPR' => '/',
     'URL_ROUTER_ON'      => true,
+
+    //上传设置
+    'UPLOAD_MAXSIZE'=>31457280,
+    'UPLOAD_EXTS'=>array('jpg','gif','png','jpeg'),// 设置附件上传类型 
+    'UPLOAD_SAVEPATH'=>'./Uploads/',
 
     /*加密方式*/
     'DATA_CRYPT_TYPE'  => 'DES',

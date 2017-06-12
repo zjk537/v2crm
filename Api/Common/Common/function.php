@@ -55,6 +55,77 @@ function iseltnow($endtime){
     return NOW_TIME <= $end;
 }
 
+ /**
+ * 图片二进制存入物理地址
+ * @param $data base64加密图片流字符串
+ * @param $uid  用户ID
+ * @param $type 图片类型，默认gif
+ * @return 数组，booler 与 返回值
+ */
+function saveBase64Image($base64)
+{
+    if(empty($base64)){
+        $result = array(
+            'code' => 1,
+            'msg' => '图片内容不能为空!',
+            'url' => ''
+        );
+        return $result;
+    }
+    //post的数据里面，加号会被替换为空格，需要重新替换回来，如果不是post的数据，则注释掉这一行
+    $base64_image = str_replace(' ', '+', $base64);
+    if (preg_match('/^(data:\s*image\/(\w+);base64,)/', $base64_image, $result)){
+        // 图片后缀
+        $type = $result[2];
+        if(!in_array($type, C('UPLOAD_EXTS'))){
+            $result = array(
+                'code' => 3,
+                'msg' => '不支持的文件类型!',
+                'url' => ''
+            );
+            return $result;
+        }
+        $data = explode(',', $base64_image)[1];
+        if(strlen($data) > C('UPLOAD_MAXSIZE')){
+            $result = array(
+                'code' => 4,
+                'msg' => '文件太大!',
+                'url' => ''
+            );
+            return $result;
+        }
+
+        $name = uniqid().'.'.$type;
+        $dir = C('UPLOAD_SAVEPATH').date('Ym').'/';
+        $s2i = new \Common\Org\Stream2Image($name,$dir);// 实例化上传类
+        $re = $s2i->stream2Image(base64_decode($data));
+        if(true === $re){
+            @chmod('./'.$dir,0777);
+            @chmod('./'.$dir.$name,0777); 
+            $result = array(
+                'code' => 0,
+                'msg' => '',
+                'url' => $dir.$name
+            );
+            return $result;
+        }
+        $result = array(
+            'code' => 5,
+            'msg' => $s2i->print_errInfo,
+            'url' => ''
+        );
+        return $result;    
+        
+    }
+    $result = array(
+        'code' => 2,
+        'msg' => 'base64图片格式有误！',
+        'url' => ''
+    );
+    return $result;
+}
+
+
 /**
  * 浮点数舍去指定位数小数点部分。全舍不入
  * @param $n float浮点值
