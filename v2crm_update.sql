@@ -245,7 +245,7 @@ CREATE TABLE `v2_files` (
   `attid` int(11) NOT NULL,
   -- `folder` varchar(50) NOT NULL DEFAULT '' COMMENT '保存目录',
   `filename` varchar(255) NOT NULL DEFAULT '' COMMENT '文件名',
-  -- `filetype` varchar(50) NOT NULL DEFAULT '' COMMENT '文件类型',
+  `filetype` varchar(50) NOT NULL DEFAULT '' COMMENT '文件类型',
   -- `filedesc` varchar(200) NOT NULL DEFAULT '' COMMENT '文件说明',
   `uid` varchar(50) NOT NULL COMMENT '操作人Id',
   `uname` varchar(50) NOT NULL COMMENT '操作人',
@@ -399,8 +399,8 @@ CREATE TABLE `v2_proout` (
   `jpname` varchar(50) NOT NULL COMMENT '产品名称',
   `jpsjiage` int(11) NOT NULL COMMENT '销售价格',
   `paytype` varchar(50) NOT NULL COMMENT '付款方式', -- new
-  `custname` varchar(50) NOT NULL COMMENT '顾客姓名', -- new
-  `custphone` varchar(50) NOT NULL COMMENT '顾客联系方式', -- new
+  `custname` varchar(50) NULL COMMENT '顾客姓名', -- new
+  `custphone` varchar(50) NULL COMMENT '顾客联系方式', -- new
   -- `fee` int(11) NOT NULL DEFAULT 0 COMMENT '手续费', -- new
   -- `jpdanwei` varchar(20) NOT NULL COMMENT '计量单位',-- del
   -- `jpguige` varchar(50) NOT NULL COMMENT '产品规格',-- del

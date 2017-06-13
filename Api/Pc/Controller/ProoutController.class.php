@@ -105,4 +105,27 @@ class ProoutController extends CommonController
         $this->display();
     }
 
+    // 更新商品时自动更新出库信息
+    public function autoAdd($data)
+    {
+        $model = D('proout');
+
+        unset($data['id']);
+        if (false === $data = $model->create($data)) {
+            $this->mtReturn($model->getError());
+        }
+        if(!$model->add($data)){
+            $this->mtReturn($model->getError());
+        }
+
+        // $isSuccess = true;
+        // if(empty($data['id']) || $data['id'] == 0){
+        //     $isSuccess = $model->add($data);
+        // } else {
+        //     $isSuccess = $model->save($data);
+        // }
+        // if (!$isSuccess) {
+        //     $this->mtReturn("自动同步出库记录失败");
+        // }
+    }
 }

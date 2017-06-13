@@ -13,7 +13,7 @@ class ProoutModel extends Model{
 
 
     protected $_validate = array(
-        array('jpid','isproout','商品已售出或预定，不能重复售出！',1,'function'),
+        array('jpid','isproout','商品已售出，不能重复售出！',1,'function'),
     );
     
 		// 自动完成规则

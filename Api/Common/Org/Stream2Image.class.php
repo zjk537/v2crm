@@ -97,8 +97,8 @@ class Stream2Image {
         $imageInfo = getimagesize ( $imageName );
         if ($imageInfo !== false) {
             $imageType = strtolower ( substr ( image_type_to_extension ( $imageInfo [2] ), 1 ) );
-            $imageSize = filesize ( $imageInfo );
-            return $info = array ('width' => $imageInfo [0], 'height' => $imageInfo [1], 'type' => $imageType, 'size' => $imageSize, 'mine' => $imageInfo ['mine'] );
+            $imageSize = filesize ( $imageName );
+            return $info = array ('width' => $imageInfo [0], 'height' => $imageInfo [1], 'type' => $imageType, 'size' => $imageSize, 'mime' => $imageInfo ['mime'] );
         } else {
             //不是合法的图片
             return false;

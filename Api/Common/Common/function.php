@@ -27,8 +27,11 @@ function gettruename(){
     return S($_SERVER['HTTP_'.C('AUTH_TOKEN')])["truename"];
 }
 
-function getdepid($depname)
+function getdepid($depname='')
 {
+    if(empty($depname)){
+        $depname = getdepname();
+    }
     $depid = S($_SERVER['HTTP_'.C("AUTH_TOKEN")])["depid"];
     if($depid == ''){
         $dep = M('auth_group')->where(array('name'=>$depname))->limit(1)->select();
@@ -36,7 +39,7 @@ function getdepid($depname)
     }
     return $depid;
 }
-function getdepname($value='')
+function getdepname()
 {
     return S($_SERVER['HTTP_'.C("AUTH_TOKEN")])["depname"];
 }
@@ -47,7 +50,7 @@ function gettime(){
 function isproout($jpid){
     $model = M('pro');
     $tmpPro = $model->where( array('id' => $jpid ))->select();
-    return $tmpPro[0]["status"] == "在库" || $tmpPro[0]['status'] == '取回';
+    return $tmpPro[0]['status'] !== '售出'; // $tmpPro[0]["status"] == "预定" ||
 }
 // 寄售商品 结束时间不能小于当前时间
 function iseltnow($endtime){
@@ -68,7 +71,8 @@ function saveBase64Image($base64)
         $result = array(
             'code' => 1,
             'msg' => '图片内容不能为空!',
-            'url' => ''
+            'filename' => '',
+            'filetype' => $type
         );
         return $result;
     }
@@ -81,7 +85,8 @@ function saveBase64Image($base64)
             $result = array(
                 'code' => 3,
                 'msg' => '不支持的文件类型!',
-                'url' => ''
+                'filename' => '',
+                'filetype' => ''
             );
             return $result;
         }
@@ -90,7 +95,8 @@ function saveBase64Image($base64)
             $result = array(
                 'code' => 4,
                 'msg' => '文件太大!',
-                'url' => ''
+                'filename' => '',
+                'filetype' => ''
             );
             return $result;
         }
@@ -105,14 +111,16 @@ function saveBase64Image($base64)
             $result = array(
                 'code' => 0,
                 'msg' => '',
-                'url' => $dir.$name
+                'filename' => $dir.$name,
+                'filetype' => $type
             );
             return $result;
         }
         $result = array(
             'code' => 5,
-            'msg' => $s2i->print_errInfo,
-            'url' => ''
+            'msg' => $s2i->errInfo,
+            'filename' => '',
+            'filetype' => ''
         );
         return $result;    
         
@@ -120,7 +128,8 @@ function saveBase64Image($base64)
     $result = array(
         'code' => 2,
         'msg' => 'base64图片格式有误！',
-        'url' => ''
+        'filename' => '',
+        'filetype' => ''
     );
     return $result;
 }

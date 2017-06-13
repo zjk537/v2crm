@@ -167,8 +167,8 @@ class ProController extends CommonController
 
         // 更新供应商
         $custData           = $this->postData['cust'];
-        $custData['juid']   = $data['juid'];
-        $custData['juname'] = $data['juname'];
+        $custData['juid']   = $this->postData['juid'];
+        $custData['juname'] = $this->postData['juname'];
         $cust               = A('cust');
         $custid             = $cust->autoUpdate($custData);
 
@@ -179,14 +179,40 @@ class ProController extends CommonController
 
     public function _befor_edit()
     {
-        $model = D($this->dbname);
-        $info  = $model->find(I('get.id'));
-        $attid = $info['attid'];
-        $this->assign('attid', $attid);
+        // $model = D($this->dbname);
+        // $info  = $model->find(I('get.id'));
+        // $attid = $info['attid'];
+        // $this->assign('attid', $attid);
     }
 
     public function _befor_update($data)
     {
+        // 已售出的不能重复售出
+        $data = $this->postData;
+        $data['jpid']    = (int) $data['id'];
+        $data['jpname']  = $data['name'];
+        // 更新进货记录
+        if($data['status'] === '在库'){
+            $data['jpjiage'] = $data['jiage'];
+            //$data['remark']  = '';
+            $proin           = A('Proin');
+            $proin->autoAdd($data);
+        } elseif ($data['status'] === '预定' || $data['status'] === '售出'){
+            // 更新出库记录
+            $data['jpsjiage'] = $data['sjiage'];
+            $data['beizhu'] = $data['remark'];
+            $proout = A('proout');
+            $proout->autoAdd($data);
+        }
+
+        // 更新供应商
+        $custData           = $data['cust'];
+        $custData['juid']   = $data['juid'];
+        $custData['juname'] = $data['juname'];
+        $cust               = A('cust');
+        $custid             = $cust->autoUpdate($custData);
+
+        // 更新商品信息
         if ($data['type'] == '寄售') {
             $data['endtime'] = empty($data['endtime']) ? null : $data['endtime'];
             $model           = D($this->dbname);
@@ -199,19 +225,14 @@ class ProController extends CommonController
             $data['starttime'] = null;
         }
         $data['cname'] = $custData['name'];
-
-        // 更新供应商
-        $custData           = $this->postData['cust'];
-        $custData['juid']   = $data['juid'];
-        $custData['juname'] = $data['juname'];
-        $cust               = A('cust');
-        $custid             = $cust->autoUpdate($custData);
-
         return $data;
     }
 
     public function _after_edit($id)
     {
+
+
+        // 更新图片信息
         $this->saveImages($id);
     }
 
@@ -346,6 +367,7 @@ class ProController extends CommonController
         $this->mtReturn('Success', 200, $resData);
     }
 
+    // 商品售出后，自动更新商品售价信息等
     public function autoUpdate($data)
     {
         $model = D('pro');
@@ -404,14 +426,17 @@ class ProController extends CommonController
 
     }
 
-    public function base64Upload()
+    public function getimages()
     {
-        $base64 = $this->postData['base64'][0];
-        $result = saveBase64Image($base64);
-        if($result['code'] > 0){
-            $this->mtReturn($result['msg']);
+        $attid = $this->postData['attid'];
+        $resData = array();
+        $files = M('files')->where('attid='.$attid)->select();
+        foreach ($files as $file) {
+            $str = file_get_contents($file['filename']);
+            $base64Str = 'data:image/'.$file['filetype'].';base64,'.base64_encode($str);
+            array_push($resData,$base64Str);
         }
-        $this->mtReturn("Success",200,$result['url']);
+        $this->mtReturn('Success',200,$resData);
     }
 
     private function saveImages($id)
@@ -427,14 +452,15 @@ class ProController extends CommonController
 
         foreach ($images as $imgData) {
             $result = saveBase64Image($imgData);
-            if($result === 0){ // 0 保存成功  1 图片数据为空  >1 其他错误
-                $data['attid'] = (int)$attid;
-                $data['filename'] = $result['url'];
+            if($result['code'] === 0){ // 0 保存成功  1 图片数据为空  >1 其他错误
+                $data['attid'] = (int)$id;
+                $data['filename'] = $result['filename'];
+                $data['filetype'] = $result['filetype'];
                 $data['uid'] = getuserid();
-                $data['uname'] = getusername();
-                $date['addtime'] = gettime();
+                $data['uname'] = gettruename();
+                $data['addtime'] = gettime();
                 $model->data($data)->add();
-            } elseif ($result > 1) { 
+            } elseif ($result['code'] > 1) { 
                 // 图片保存失败 多个图片时，错误是怎么提示
             }
         }
