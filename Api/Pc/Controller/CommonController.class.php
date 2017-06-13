@@ -12,7 +12,7 @@ class CommonController extends ApiController
         $this->_name = CONTROLLER_NAME;
 
         $json = @file_get_contents("php://input");
-        $json = iconv('gbk2312', 'utf-8', $json);
+        $json = iconv('gb2312', 'utf-8', $json);
         $this->postData = json_decode($json,true);
         $config = S('DB_CONFIG_DATA');
         if (!$config) {
