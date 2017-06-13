@@ -96,7 +96,7 @@ class ProinController extends CommonController
     {
     	$model = D('proin');
     	if (false === $data = $model->create($data)) {
-            $this->mtReturn('自动同步入库记录失败，请检查值是否已经存在');
+            $this->mtReturn($model->getError());
         }
         $isSuccess = true;
         if(empty($data['id']) || $data['id'] == 0){
@@ -105,7 +105,7 @@ class ProinController extends CommonController
             $isSuccess = $model->save($data);
         }
         if (!$isSuccess) {
-            $this->mtReturn("自动同步入库记录失败");
+            $this->mtReturn($model->getError());
         }
     }
 

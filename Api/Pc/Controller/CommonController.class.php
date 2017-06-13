@@ -152,7 +152,7 @@ class CommonController extends ApiController
             $data = $this->postData;
             $id = $data['id'];
             if (false === $data = $model->create($data)) {
-                $this->mtReturn('失败，请检查值是否已经存在');
+                $this->mtReturn($model->getError());
             }
             if (method_exists($this, '_befor_update')) {
                 $data = $this->_befor_update($data);
