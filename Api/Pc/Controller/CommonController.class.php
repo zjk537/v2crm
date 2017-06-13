@@ -150,8 +150,10 @@ class CommonController extends ApiController
         $model = D($this->dbname);
         // if (IS_POST) {
             $data = $this->postData;
+            echo json_encode($data);
             $id = $data['id'];
             if (false === $data = $model->create($data)) {
+                echo json_encode($data);
                 $this->mtReturn($model->getError());
             }
             if (method_exists($this, '_befor_update')) {
@@ -177,7 +179,7 @@ class CommonController extends ApiController
     public function detail()
     {
         $model = D($this->dbname);
-        $keys = trim($this->postData['keys']);
+        $keys = trim($this->postData['keys']); 
         if(empty($keys)){
             $id    = $this->postData['id'];
             $vo    = $model->getById($id);
