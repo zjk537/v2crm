@@ -14,6 +14,7 @@ class CommonController extends ApiController
         $json = @file_get_contents("php://input");
         //编码识别转换
         $encode = mb_detect_encoding($json,array('UTF-8','GB2312'));
+        echo $encode;
         if($encode === 'GB2312'){
             $json = iconv('GB2312', 'utf-8', $json);
         }
