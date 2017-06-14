@@ -26,8 +26,11 @@ class PublicController extends ApiController
             $this->mtReturn('只支持POST请求');
         }
         $json = @file_get_contents("php://input");
-        echo json_encode($_REQUEST);
-        //$json = iconv('gb2312', 'utf-8', $json);
+        //编码识别转换
+        $encode = mb_detect_encoding($json,array('UTF-8','GB2312'));
+        if($encode === 'GB2312'){
+            $json = iconv('gb2312', 'utf-8', $json);
+        }
         $data = json_decode($json, true);
         if (!$this->existAccount($data['username'])) {
             $this->mtReturn('用户不存在');
