@@ -54,7 +54,7 @@ class ProoutController extends CommonController
         $data['zhekou'] = $postData['zhekou'];
         $data['paystatus'] = $postData['paystatus'];
         $data['outtime'] = gettime();
-        $data['status'] = '售出';
+        $data['status'] = $postData['status'];
     	$pro = A('pro');
     	$pro->autoUpdate($data);
     }

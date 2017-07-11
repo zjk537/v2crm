@@ -189,11 +189,13 @@
                     <tr>
                         <td colspan=2>
                             <label for='attid_input' class='control-label x85'>上传附件:</label>
-                            <div class="btn btn-default upload">
+                            <div class="btn">
                                 <input id="uploadfy" type="file"/>
-                                上传
                             </div>
                             <input type='hidden' id='attid' name='attid'  value='{$attid}'>
+                            <div>
+                                <img id="img1" src="">
+                            </div>
                         </td>
                     </tr>
                 </tbody>
@@ -218,20 +220,38 @@
 <block name="script">
 <script type="text/javascript">
         $("#uploadfy").uploadify({
-                'swf': '/Public/BJUI/plugins/uploadify/uploadify.swf',//uploadify.swf 文件的路径（绝对路径、相对路径都可以）
-                uploader: "{:U('Public/upload')}",//服务器响应地址
+                'swf': '/Public/BJUI/plugins/uploadify/scripts/uploadify.swf',//uploadify.swf 文件的路径（绝对路径、相对路径都可以）
+                uploader: "/index.php/Home/Public/upload",//服务器响应地址
                 // cancelImg: '/Scripts/uploadify/uploadify-cancel.png',//关闭按钮图片路径
                 // multi: true,//是否多文件
                 auto:true,//是否自动上传，true，选择文件后上传，false，点击上传开始上传，默认true
-                buttonText: "上传文件",//空间名称
+                buttonText: "上传",//空间名称
                 preventCaching: false,//是否缓存
                 fileSizeLimit: 1024 * 1024 * 10,//单个文件限制大小
                 fileTypeDesc: '*.jpg;*.png;*.doc;*.txt;*.zip;*.rar;',//文件后缀描述
                 fileTypeExts: '*.jpg;*.png;*.doc;*.txt;*.zip;*.rar;',//文件后缀限制
                 height: 20,//高度
-                onSelect:function() {
-                    alert(111);
-                }
+                onSelect:function(fileObj) {
+                    // debugger;
+                    // $('#img1').attr('src',fileObj.name);
+                },
+                onUploadSuccess:function(file,data,response){
+                    alert(11)
+                },
+                onSelectError:function(file, errorCode, errorMsg){
+                    alert(222);
+                    switch(errorCode) {
+                        case -110:
+                            alert("文件 ["+file.name+"] 大小超出系统限制的" + jQuery('#upload_org_code').uploadify('settings', 'fileSizeLimit') + "大小！");
+                            break;
+                        case -120:
+                            alert("文件 ["+file.name+"] 大小异常！");
+                            break;
+                        case -130:
+                            alert("文件 ["+file.name+"] 类型不正确！");
+                            break;
+                    }
+                },
             });
 </script>
 </block>
