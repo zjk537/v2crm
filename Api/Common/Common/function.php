@@ -102,7 +102,7 @@ function saveBase64Image($base64)
         }
 
         $name = uniqid().'.'.$type;
-        $dir = C('UPLOAD_SAVEPATH').date('Ym').'/';
+        $dir = C('UPLOAD_SAVEPATH').date('Y-m').'/';
         $s2i = new \Common\Org\Stream2Image($name,$dir);// 实例化上传类
         $re = $s2i->stream2Image(base64_decode($data));
         if(true === $re){

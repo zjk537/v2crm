@@ -61,7 +61,7 @@ class CommonController extends ApiController
         } 
         //取得满足条件的记录数
         $count = $model->join($join)->where($map)->count();
-        $pageSize = C('PERPAGE');
+        $pageSize = !empty($this->postData['pageIndex']) ? $this->postData['pageIndex'] : C('PERPAGE');
         $resData = array();        
         if ($count > 0) {
 
@@ -162,11 +162,10 @@ class CommonController extends ApiController
             if (method_exists($this, '_befor_update')) {
                 $data = $this->_befor_update($data);
             }
-            if ($model->save($data)) {
-                if (method_exists($this, '_after_edit')) {
+            $model->save($data);
+            if (method_exists($this, '_after_edit')) {
                     $this->_after_edit($id);
                 }
-            }
             $this->mtReturn($this->dbname." 编辑成功".$id,200);
         // }
         // if (method_exists($this, '_befor_edit')) {
@@ -181,17 +180,17 @@ class CommonController extends ApiController
 
     public function detail()
     {
-        $model = D($this->dbname);
-        $keys = trim($this->postData['keys']); 
-        if(empty($keys)){
+        // $model = D($this->dbname);
+        // $keys = trim($this->postData['keys']); 
+        // if(empty($keys)){
             $id    = $this->postData['id'];
             $vo    = $model->getById($id);
             $this->mtReturn('Success',200,$vo);
-        }
+        // }
 
-        $map = $this->_search();
-        $vo = $model->where($map)->limit(5)->select(); 
-        $this->mtReturn('Success',200,$vo);       
+        // $map = $this->_search();
+        // $vo = $model->where($map)->limit(5)->select(); 
+        // $this->mtReturn('Success',200,$vo);       
     }
 
     public function del()

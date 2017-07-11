@@ -47,7 +47,7 @@ class CustController extends CommonController
 
     public function _after_add($id)
     {
-
+        
     }
 
     public function _befor_insert($data)

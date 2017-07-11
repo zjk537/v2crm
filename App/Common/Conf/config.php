@@ -28,7 +28,7 @@ return array(
 	'UPLOAD_MAXSIZE'=>31457280,
 	'UPLOAD_EXTS'=>array('jpg','gif','png','jpeg'),// 设置附件上传类型 
 	//'UPLOAD_EXTS'=>array('jpg','gif','png','jpeg','txt','doc','docx','xls','xlsx','ppt','pptx','pdf','rar','zip','wps','wpt','dot','rtf','dps','dpt','pot','pps','et','ett','xlt'),// 设置附件上传类型 
-	'UPLOAD_SAVEPATH'=>'./Public/',
+	'UPLOAD_SAVEPATH'=>'./',
 
 
 );

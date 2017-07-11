@@ -229,7 +229,7 @@ class ProController extends CommonController
     }
 
     public function _after_edit($id)
-    {
+    {   
         // 更新图片信息
         $this->saveImages($id);
     }
@@ -445,7 +445,7 @@ class ProController extends CommonController
             return;
         }
         $model = M('files');
-        
+
         //清空所有数据 传一个空字符串
         $map['attid'] = array('eq',$id);
         $files = $model->where($map)->select();

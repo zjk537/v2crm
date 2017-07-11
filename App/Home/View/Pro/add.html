@@ -177,11 +177,23 @@
                             <label class="control-label x85" for="j_remark">
                                 详细说明:
                             </label>
-                            <div style="display: inline-block; vertical-align: middle;">
+                            <textarea id="j_remark" name="remark" cols='65' rows='3'>{$Rs.remark}</textarea>
+
+                            <!-- <div style="display: inline-block; vertical-align: middle;">
                                 <textarea data-items="fontname, fontsize, |, forecolor, hilitecolor, bold, italic, underline, removeformat, |, justifyleft, justifycenter, justifyright, insertorderedlist, insertunorderedlist, |, emoticons, image, link" data-minheight="150" data-toggle="kindeditor" name="remark">
                                     {$Rs.remark}
                                 </textarea>
+                            </div> -->
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan=2>
+                            <label for='attid_input' class='control-label x85'>上传附件:</label>
+                            <div class="btn btn-default upload">
+                                <input id="uploadfy" type="file"/>
+                                上传
                             </div>
+                            <input type='hidden' id='attid' name='attid'  value='{$attid}'>
                         </td>
                     </tr>
                 </tbody>
@@ -203,3 +215,23 @@
         </div>
     </form>
 </div>
+<block name="script">
+<script type="text/javascript">
+        $("#uploadfy").uploadify({
+                'swf': '/Public/BJUI/plugins/uploadify/uploadify.swf',//uploadify.swf 文件的路径（绝对路径、相对路径都可以）
+                uploader: "{:U('Public/upload')}",//服务器响应地址
+                // cancelImg: '/Scripts/uploadify/uploadify-cancel.png',//关闭按钮图片路径
+                // multi: true,//是否多文件
+                auto:true,//是否自动上传，true，选择文件后上传，false，点击上传开始上传，默认true
+                buttonText: "上传文件",//空间名称
+                preventCaching: false,//是否缓存
+                fileSizeLimit: 1024 * 1024 * 10,//单个文件限制大小
+                fileTypeDesc: '*.jpg;*.png;*.doc;*.txt;*.zip;*.rar;',//文件后缀描述
+                fileTypeExts: '*.jpg;*.png;*.doc;*.txt;*.zip;*.rar;',//文件后缀限制
+                height: 20,//高度
+                onSelect:function() {
+                    alert(111);
+                }
+            });
+</script>
+</block>

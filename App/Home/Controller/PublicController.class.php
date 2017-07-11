@@ -160,41 +160,49 @@ class PublicController extends Controller
 
     public function attfile()
     {
-        $attid = I('attid');
-        $this->assign('attid', $attid);
-        $this->display();
+        if(IS_POST){
+            $this->upload();
+        } else {
+            $attid = I('attid');
+            $this->assign('attid', $attid);
+            $this->display();
+        }
+        
     }
 
     public function upload()
     {
-        $upload           = new \Think\Upload();
+
+        $upload           = new \Think\Upload(array('subName' =>  array('date', 'Y-m'), ));
         $upload->maxSize  = C('UPLOAD_MAXSIZE');
         $upload->exts     = C('UPLOAD_EXTS');
         $upload->savePath = C('UPLOAD_SAVEPATH');
         $info             = $upload->upload();
         $gourl            = 'index.php/home/public/attfile/attid/' . I('attid') . '/';
         if (!$info) {
-            echo "<script language='javascript' type='text/javascript'>";
-            echo "alert('上传失败！$upload->getError()');";
-            echo "window.location.href='$gourl'";
-            echo "</script>";
+            // echo "<script language='javascript' type='text/javascript'>";
+            // echo "alert('上传失败！$upload->getError()');";
+            // echo "window.location.href='$gourl'";
+            // echo "</script>";
             //$this->error($upload->getError());
         } else {
             //dump($info);
-            $data['attid']    = I('attid');
-            $data['folder']   = 'Uploads/' . str_replace('./', '', $info["filename"]["savepath"]);
-            $data['filename'] = $info["filename"]["savename"];
-            $data['filetype'] = $info["filename"]["ext"];
-            $data['filedesc'] = $info["filename"]["name"];
-            $data['uid']      = session('uid');
-            $data['addtime']  = date("Y-m-d H:i:s", time());
-            //dump($data);
+            $data['attid'] = I('attid');
+            $data['filename'] = $info[0]["savename"];
+            $data['filetype'] = $info[0]["ext"];
+            $data['uid'] = session('uid');
+            $data['uname'] = session('truename');
+            $data['addtime'] = gettime();
+
             M('files')->data($data)->add();
-            $filename = $info["filename"]["name"];
-            echo "<script language='javascript' type='text/javascript'>";
-            echo "alert('文件$filename 上传成功');";
-            echo "window.location.href='$gourl'";
-            echo "</script>";
+            $filename = $info[0]["name"];
+            $this->mtReturn(200, "上传成功", null, true);
+            //$this->assign('filename',$filename);
+            //$this->display();
+            // echo "<script language='javascript' type='text/javascript'>";
+            // echo "alert('文件$filename 上传成功');";
+            // echo "window.location.href='$gourl'";
+            // echo "</script>";
         }
     }
 

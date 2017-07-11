@@ -40,14 +40,15 @@ class ProController extends CommonController
 
     public function _befor_add()
     {
+        // 附件临时id 在保存商品信息之后，更新这个id为商品的id
         $attid = time();
         $this->assign('attid', $attid);
 
     }
 
-    public function _after_add($id)
+    public function _after_added($id)
     {
-      // 更新进货记录
+      // 新增进货记录
       $data = I('post.');
       $data['jpid'] = (int)$id;
       $data['jpname'] = $data['name'];
@@ -55,6 +56,11 @@ class ProController extends CommonController
       $data['remark'] = '';
       $proin = A('Proin');
       $proin->autoAdd($data);
+
+      //更新附件attid
+      $map = array('attid' => $data['attid']);
+      $data['attid'] = $id;
+      M('files')->where($map)->save($data);
     }
 
     public function _befor_insert($data)
@@ -79,7 +85,7 @@ class ProController extends CommonController
     {
         $model = D($this->dbname);
         $info  = $model->find(I('get.id'));
-        $attid = $info['attid'];
+        $attid = $info['id'];
         $this->assign('attid', $attid);
     }
 

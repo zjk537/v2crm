@@ -110,7 +110,7 @@ class CommonController extends Controller
 
         if ($count > 0) {
 
-            $numPerPage = C('PERPAGE');
+            $numPerPage = isset($_REQUEST['numPerPage']) ? $_REQUEST['numPerPage'] : C('PERPAGE');
 
             $voList = $model->where($map)->order("`" . $order . "` " . $sort)->limit($numPerPage)->page($pageCurrent . ',' . $numPerPage . '')->select();
 
@@ -187,7 +187,7 @@ class CommonController extends Controller
                 $data = $this->_befor_insert($data);
             }
             if ($model->add($data)) {
-                if (method_exists($this, '_after_add')) {
+                if (method_exists($this, '_after_added')) {
                     $id = $model->getLastInsID();
                     $this->_after_add($id);
                 }

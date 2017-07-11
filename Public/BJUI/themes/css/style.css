@@ -436,6 +436,8 @@ th[align=right]{text-align:right;}
 .bjui-upload > .queue > .item > .preview > .img{display:block; width:190px; height:114px; overflow:hidden;}
 .bjui-upload > .queue > .item > .preview > .img > img{width:100%;}
 .bjui-upload > .queue > .item > .filesize{padding-left:5px;}
+.upload{width: 50px;overflow: hidden; position: relative;}
+.upload input{position: absolute;width: 200px;font-size: 0px;height: 100%; right: 0;background:transparent;}
 
 /* Other */
 .autosize{-webkit-transition:height 0.2s; -moz-transition:height 0.2s; transition:height 0.2s;}

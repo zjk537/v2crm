@@ -15,9 +15,11 @@ $php_url = dirname($_SERVER['PHP_SELF']) . '/';
 
 		
 //文件保存目录路径
-$save_path = $php_path . '../../../../../uploads/kindeditor/';
+// $save_path = $php_path . '../../../../../uploads/kindeditor/';
+$save_path = $php_path . '../../../../../Uploads/';
 //文件保存目录URL
-$save_url = $php_url . '../../../../../uploads/kindeditor/';
+// $save_url = $php_url . '../../../../../uploads/kindeditor/';
+$save_url = $php_url . '../../../../../Uploads/';
 //定义允许上传的文件扩展名
 $ext_arr = array(
 	'image' => array('gif', 'jpg', 'jpeg', 'png', 'bmp'),
