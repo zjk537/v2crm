@@ -61,7 +61,7 @@ class CommonController extends ApiController
         } 
         //取得满足条件的记录数
         $count = $model->join($join)->where($map)->count();
-        $pageSize = !empty($this->postData['pageIndex']) ? $this->postData['pageIndex'] : C('PERPAGE');
+        $pageSize = !empty($this->postData['pageSize']) ? $this->postData['pageSize'] : C('PERPAGE');
         $resData = array();        
         if ($count > 0) {
 

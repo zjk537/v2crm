@@ -99,7 +99,47 @@ class PublicController extends Controller
             $this->display();
         }
     }
+    protected function mtReturn($status, $info, $navTabId = "", $closeCurrent = true)
+    {
+        $udata['id']          = session('uid');
+        $udata['update_time'] = time();
+        $Rs                   = M("user")->save($udata);
+        $dat['username']      = session('username');
+        $dat['content']       = $info;
+        $dat['os']            = $_SERVER['HTTP_USER_AGENT'];
+        $dat['url']           = U();
+        $dat['addtime']       = date("Y-m-d H:i:s", time());
+        $dat['ip']            = get_client_ip();
+        M("log")->add($dat);
 
+        $result                   = array();
+        $result['statusCode']     = $status;
+        $result['message']        = $info;
+        $result['tabid']          = strtolower($navTabId) . '/index';
+        $result['forward']        = '';
+        $result['forwardConfirm'] = '';
+        $result['closeCurrent']   = $closeCurrent;
+
+        if (empty($type)) {
+            $type = C('DEFAULT_AJAX_RETURN');
+        }
+
+        if (strtoupper($type) == 'JSON') {
+            // 返回JSON数据格式到客户端 包含状态信息
+            header("Content-Type:text/html; charset=utf-8");
+            exit(json_encode($result));
+        } elseif (strtoupper($type) == 'XML') {
+            // 返回xml格式数据
+            header("Content-Type:text/xml; charset=utf-8");
+            exit(xml_encode($result));
+        } elseif (strtoupper($type) == 'EVAL') {
+            // 返回可执行的js脚本
+            header("Content-Type:text/html; charset=utf-8");
+            exit($data);
+        } else {
+            // TODO 增加其它格式
+        }
+    }
     protected function dwzajaxReturn($data, $type = '')
     {
 
@@ -172,7 +212,6 @@ class PublicController extends Controller
 
     public function upload()
     {
-
         $upload           = new \Think\Upload(array('subName' =>  array('date', 'Y-m'), ));
         $upload->maxSize  = C('UPLOAD_MAXSIZE');
         $upload->exts     = C('UPLOAD_EXTS');
@@ -187,16 +226,16 @@ class PublicController extends Controller
             //$this->error($upload->getError());
         } else {
             //dump($info);
-            $data['attid'] = I('attid');
-            $data['filename'] = $info[0]["savename"];
-            $data['filetype'] = $info[0]["ext"];
+            $fileData = $info["Filedata"];
+            $data['attid'] = $_REQUEST['attid'];
+            $data['filename'] = $fileData["savepath"].$fileData["savename"];
+            $data['filetype'] = $fileData["ext"];
             $data['uid'] = session('uid');
             $data['uname'] = session('truename');
             $data['addtime'] = gettime();
 
             M('files')->data($data)->add();
-            $filename = $info[0]["name"];
-            $this->mtReturn(200, "上传成功", null, true);
+            $this->mtReturn(200,$data);
             //$this->assign('filename',$filename);
             //$this->display();
             // echo "<script language='javascript' type='text/javascript'>";

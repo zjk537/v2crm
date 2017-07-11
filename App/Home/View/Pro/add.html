@@ -221,7 +221,8 @@
 <script type="text/javascript">
         $("#uploadfy").uploadify({
                 'swf': '/Public/BJUI/plugins/uploadify/scripts/uploadify.swf',//uploadify.swf 文件的路径（绝对路径、相对路径都可以）
-                uploader: "/index.php/Home/Public/upload",//服务器响应地址
+                uploader: "/index.php/Home/Public/upload?attid="+$('#attid').val(),//服务器响应地址
+                scriptData:{attid:$("#attid").val()},
                 // cancelImg: '/Scripts/uploadify/uploadify-cancel.png',//关闭按钮图片路径
                 // multi: true,//是否多文件
                 auto:true,//是否自动上传，true，选择文件后上传，false，点击上传开始上传，默认true
