@@ -52,7 +52,7 @@ class ProoutController extends CommonController
         $data['sjiage'] = $postData['jpsjiage'];
         $data['yufu'] = $postData['yufu'];
         $data['zhekou'] = $postData['zhekou'];
-        $data['paystatus'] = $postData['paystatus'];
+        //$data['paystatus'] = $postData['paystatus'];
         $data['outtime'] = gettime();
         $data['status'] = $postData['status'];
     	$pro = A('pro');
