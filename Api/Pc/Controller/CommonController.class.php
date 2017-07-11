@@ -180,7 +180,7 @@ class CommonController extends ApiController
 
     public function detail()
     {
-        // $model = D($this->dbname);
+        $model = D($this->dbname);
         // $keys = trim($this->postData['keys']); 
         // if(empty($keys)){
             $id    = $this->postData['id'];
