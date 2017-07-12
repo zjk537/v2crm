@@ -426,7 +426,7 @@ th[align=right]{text-align:right;}
 .bjui-upload > .queue > .item > .info > .up_confirm{position:absolute; top:6px; right:28px; font-size:16px; color:#0099ff; cursor:pointer; opacity:1; filter:alpha(opacity=100);}
 .bjui-upload > .queue > .item > .info > .up_pause{position:absolute; top:6px; right:28px; display:none; font-size:16px; color:#0099ff; cursor:pointer; opacity:1; filter:alpha(opacity=100);}
 .bjui-upload > .queue > .item > .info > .up_pause > span{font-size:16px;}
-.bjui-upload > .queue > .item > .info > .up_cancel{position:absolute; top:6px; right:10px; font-size:16px; color:red; cursor:pointer; opacity:1; filter:alpha(opacity=100);}
+.bjui-upload > .queue > .item > .info > .up_cancel{position:absolute; top:0px; right:10px; font-size:16px; color:red; cursor:pointer; opacity:1; filter:alpha(opacity=100);}
 .bjui-upload > .queue > .item > .info > .up_confirm:hover,
 .bjui-upload > .queue > .item > .info > .up_pause:hover,
 .bjui-upload > .queue > .item > .info > .up_cancel:hover{opacity:.7; filter:alpha(opacity=70);}
@@ -436,8 +436,6 @@ th[align=right]{text-align:right;}
 .bjui-upload > .queue > .item > .preview > .img{display:block; width:190px; height:114px; overflow:hidden;}
 .bjui-upload > .queue > .item > .preview > .img > img{width:100%;}
 .bjui-upload > .queue > .item > .filesize{padding-left:5px;}
-.upload{width: 50px;overflow: hidden; position: relative;}
-.upload input{position: absolute;width: 200px;font-size: 0px;height: 100%; right: 0;background:transparent;}
 
 /* Other */
 .autosize{-webkit-transition:height 0.2s; -moz-transition:height 0.2s; transition:height 0.2s;}
@@ -522,3 +520,7 @@ ul.ztree.zTreeDragUL{position:absolute; margin:0; padding:0; width:auto; height:
 .ztree .tree_del:hover{background-position:-265px -46px;}
 .ztree .diyBtn1{margin-left:2px;}
 .ztree_main *{font-size:14px;}
+
+
+.attfile .preview{display: inline-block;margin-right: 10px;}
+.attfile .preview img{width: 100px;height: 100px;}

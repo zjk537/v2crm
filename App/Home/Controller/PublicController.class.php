@@ -226,6 +226,7 @@ class PublicController extends Controller
             //$this->error($upload->getError());
         } else {
             //dump($info);
+            // echo json_encode($info);
             $fileData = $info["Filedata"];
             $data['attid'] = $_REQUEST['attid'];
             $data['filename'] = $fileData["savepath"].$fileData["savename"];
@@ -235,7 +236,8 @@ class PublicController extends Controller
             $data['addtime'] = gettime();
 
             M('files')->data($data)->add();
-            $this->mtReturn(200,$data);
+            echo 'Uploads/'.$data['filename'];
+            //$this->mtReturn(200,$data);
             //$this->assign('filename',$filename);
             //$this->display();
             // echo "<script language='javascript' type='text/javascript'>";

@@ -123,7 +123,7 @@ class ProController extends CommonController
     public function _complex_join()
     {
         $join = sprintf('LEFT JOIN `%1$sproin` ON `%1$spro`.`id` = `%1$sproin`.`jpid`
-            LEFT JOIN `%1$sproout` on `%1$spro`.`id` = `%1$sproout`.`jpid`
+            LEFT JOIN (select * from (select * from `%1$sproout` order by `addtime` desc) a group by `jpid`) as `%1$sproout` on `%1$spro`.`id` = `%1$sproout`.`jpid`
             LEFT JOIN `%1$scust` on `%1$spro`.`cid` = `%1$scust`.`id`', C('DB_PREFIX'));
         return $join;
     }
