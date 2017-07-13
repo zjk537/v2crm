@@ -201,6 +201,12 @@
                         <td colspan=2 style="position: relative;">
                             <label for='attid_input' class='control-label x85'>上传附件:</label>
                             <div id='attfiles' class="attfile">
+                                <volist id="f" name="files">
+                                <div class="item">
+                                    <i class="fa fa-times-circle" onclick="rmAttfile(this,'{$f.id}')"></i>
+                                    <img src="{$f.filename}"/>
+                                </div>
+                                </volist>
                             </div>
                             <input id="uploadfy" type="file"/>
                             <input type='hidden' id='attid' name='attid'  value='{$attid}'>

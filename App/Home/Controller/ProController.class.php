@@ -59,8 +59,8 @@ class ProController extends CommonController
 
       // 新增时 附件id 是时间戳，保存成功后更新附件attid为商品id
       $map = array('attid' => $data['attid']);
-      $data['attid'] = $id;
-      M('files')->where($map)->save($data);
+      $fileData['attid'] = $id;
+      M('files')->where($map)->save($fileData);
     }
 
     public function _befor_insert($data)
@@ -87,6 +87,15 @@ class ProController extends CommonController
         $info  = $model->find(I('get.id'));
         $attid = $info['id'];
         $this->assign('attid', $attid);
+
+        $files = M('files')->where(array('attid'=>I('get.id')))->select();
+        $this->assign('files',$files);
+
+    }
+    public function _befor_view()
+    {
+        $files = M('files')->where(array('attid'=>I('get.id')))->select();
+        $this->assign('files',$files);
     }
 
     public function _befor_update($data)

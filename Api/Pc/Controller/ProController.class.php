@@ -26,7 +26,9 @@ class ProController extends CommonController
             $map['depid'] = array('EQ', getdepid());
         }
         if (!empty($this->postData['stime']) && !empty($this->postData['etime'])) {
-            $map['`' . C('DB_PREFIX') . 'pro`.`addtime`'] = array(array('egt', $this->postData['stime']), array('elt', $this->postData['etime']));
+            $maptime['`' . C('DB_PREFIX') . 'pro`.`addtime`'] = array(array('egt', $this->postData['stime']), array('elt', $this->postData['etime']));
+            $maptime['`' . C('DB_PREFIX') . 'pro`.`outtime`'] = array(array('egt', $this->postData['stime']), array('elt', $this->postData['etime']));
+            $map['_complex'] = $maptime;
         }
         if (empty($this->postData['keys'])) {
             return;

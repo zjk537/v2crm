@@ -233,6 +233,9 @@ class CommonController extends Controller
 
     public function view()
    	{
+        if (method_exists($this, '_befor_view')) {
+            $this->_befor_view();
+        }
         $model = D($this->dbname);
         $id    = $_REQUEST[$model->getPk()];
         $vo    = $model->getById($id);
