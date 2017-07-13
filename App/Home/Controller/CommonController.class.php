@@ -189,7 +189,7 @@ class CommonController extends Controller
             if ($model->add($data)) {
                 if (method_exists($this, '_after_added')) {
                     $id = $model->getLastInsID();
-                    $this->_after_add($id);
+                    $this->_after_added($id);
                 }
                 //$id = $model->getLastInsID();
                 $this->mtReturn(200, "成功", $_REQUEST['navTabId'], true);

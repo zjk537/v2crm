@@ -275,16 +275,22 @@ function gettruename()
     return session("truename");
 }
 
-function getdepid($depname)
+function getdepid($depname='')
 {
-    $depid = session("depid");
-    if ($depid == '') {
-        $dep   = M('auth_group')->where(array('name' => $depname))->limit(1)->select();
-        $depid = $dep[0]['id'];
+    if(empty($depname)){
+        $depname = getdepname();
+    }
+    $depid = S($_SERVER['HTTP_'.C("AUTH_TOKEN")])["depid"];
+    if($depid == ''){
+        $dep = M('auth_group')->where(array('name'=>$depname))->limit(1)->select();
+        $depid =  $dep[0]['id'];
     }
     return $depid;
 }
-
+function getdepname()
+{
+    return session("depname");
+}
 function gettime()
 {
     return date('Y-m-d H:i:s', time());

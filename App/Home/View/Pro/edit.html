@@ -189,13 +189,23 @@
                                 <label class="control-label x85" for="j_remark">
                                     详细说明:
                                 </label>
-                                <div style="display: inline-block; vertical-align: middle;">
+                                <textarea id="j_remark" name="remark" cols='65' rows='3'>{$Rs.remark}</textarea>
+                                <!-- <div style="display: inline-block; vertical-align: middle;">
                                     <textarea data-items="fontname, fontsize, |, forecolor, hilitecolor, bold, italic, underline, removeformat, |, justifyleft, justifycenter, justifyright, insertorderedlist, insertunorderedlist, |, emoticons, image, link" data-minheight="150" data-toggle="kindeditor" name="remark">
                                         {$Rs.remark}
-                                    </textarea>
+                                    </textarea> -->
                                 </div>
                             </td>
                         </tr>
+                        <tr>
+                        <td colspan=2 style="position: relative;">
+                            <label for='attid_input' class='control-label x85'>上传附件:</label>
+                            <div id='attfiles' class="attfile">
+                            </div>
+                            <input id="uploadfy" type="file"/>
+                            <input type='hidden' id='attid' name='attid'  value='{$attid}'>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
@@ -216,3 +226,51 @@
         </input>
     </form>
 </div>
+<block name="script">
+<script type="text/javascript">
+        $("#uploadfy").uploadify({
+                'swf': '__PUBLIC__/BJUI/plugins/uploadify/scripts/uploadify.swf',//uploadify.swf 文件的路径（绝对路径、相对路径都可以）
+                uploader: "__MODULE__/Public/upload?attid="+$('#attid').val(),//服务器响应地址
+                scriptData:{attid:$("#attid").val()},
+                // cancelImg: '/Scripts/uploadify/uploadify-cancel.png',//关闭按钮图片路径
+                // multi: true,//是否多文件
+                auto:true,//是否自动上传，true，选择文件后上传，false，点击上传开始上传，默认true
+                buttonText: "上传",//空间名称
+                preventCaching: false,//是否缓存
+                fileSizeLimit: 1024 * 1024 * 10,//单个文件限制大小
+                fileTypeDesc: '*.jpg;*.png;*.jpeg;*.gif;',//文件后缀描述
+                fileTypeExts: '*.jpg;*.png;*.jpeg;*.gif;',//文件后缀限制
+                height: 25,//高度
+                onSelect:function(fileObj) {
+                },
+                onUploadSuccess:function(file,data,response){
+                    var arrData = data.split(':');
+                    $attfiles = $("#attfiles");
+                    $attfiles.append('<div class="item"><i class="fa fa-times-circle" onclick="rmAttfile(this,'+arrData[0]+')"></i><img src="'+arrData[1] +'"/>');
+                },
+                onSelectError:function(file, errorCode, errorMsg){
+                    switch(errorCode) {
+                        case -110:
+                            alert("文件 ["+file.name+"] 大小超出系统限制的" + $("#uploadfy").uploadify('settings', 'fileSizeLimit') + "大小！");
+                            break;
+                        case -120:
+                            alert("文件 ["+file.name+"] 大小异常！");
+                            break;
+                        case -130:
+                            alert("文件 ["+file.name+"] 类型不正确！");
+                            break;
+                    }
+                },
+            });
+
+        function rmAttfile(sender,fileId){
+            $.post("__MODULE__/Public/delFile",{id:fileId},function(result){
+                if(result === "0"){
+                    alert('图片删除失败');
+                } else {
+                    $(sender).parent('div').remove()
+                }
+            });
+        }
+</script>
+</block>

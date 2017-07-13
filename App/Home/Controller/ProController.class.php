@@ -57,7 +57,7 @@ class ProController extends CommonController
       $proin = A('Proin');
       $proin->autoAdd($data);
 
-      //更新附件attid
+      // 新增时 附件id 是时间戳，保存成功后更新附件attid为商品id
       $map = array('attid' => $data['attid']);
       $data['attid'] = $id;
       M('files')->where($map)->save($data);

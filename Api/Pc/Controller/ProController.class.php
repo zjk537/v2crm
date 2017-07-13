@@ -69,22 +69,22 @@ class ProController extends CommonController
             case 'jhweidakuan': // 进货商品已售出未打款
                 unset($map['_complex']);
                 // `type` = '' AND `status`  = '售出' AND `paystatus` = '未打款'
-                $map['`' . C('DB_PREFIX') . 'pro`.`type`']      = array('eq', '进货自有');
+                $map['`' . C('DB_PREFIX') . 'pro`.`type`']      = array('eq', '进货');
                 $map['`' . C('DB_PREFIX') . 'pro`.`status`']    = array('eq', '售出');
                 $map['`' . C('DB_PREFIX') . 'pro`.`paystatus`'] = array('eq', '未打款');
                 break;
             case 'jhchaoqi': // 自有商品 超时 默认 180天
                 unset($map['_complex']);
-                // `type` = '进货自有' AND `status` = '在库' AND  DATEDIFF(`updatetime`,NOW()) > %s
-                $map['`' . C('DB_PREFIX') . 'pro`.`type`']   = array('eq', '进货自有');
+                // `type` = '进货' AND `status` = '在库' AND  DATEDIFF(`updatetime`,NOW()) > %s
+                $map['`' . C('DB_PREFIX') . 'pro`.`type`']   = array('eq', '进货');
                 $map['`' . C('DB_PREFIX') . 'pro`.`status`'] = array('eq', '在库');
                 // $map['_string'] = 'datediff(`'.C('DB_PREFIX').'pro`.`updatetime`,NOW()) <= '.C('PRO_SC_WARN');
                 $map['_string'] = 'DATEDIFF(`' . C('DB_PREFIX') . 'pro`.`updatetime`,NOW()) > 180';
                 break;
             case 'jhkucun': // 自有商品 未售出库存
                 unset($map['_complex']);
-                //`type` = '进货自有' AND `status` = '在库'
-                $map['`' . C('DB_PREFIX') . 'pro`.`type`']   = array('eq', '进货自有');
+                //`type` = '进货' AND `status` = '在库'
+                $map['`' . C('DB_PREFIX') . 'pro`.`type`']   = array('eq', '进货');
                 $map['`' . C('DB_PREFIX') . 'pro`.`status`'] = array('neq', '在库');
                 break;
             default:
@@ -405,11 +405,11 @@ class ProController extends CommonController
                 SUM(CASE WHEN `type` = '寄售' AND `status` = '售出' AND `paystatus` = '未打款' THEN 1 ELSE 0 END) AS JSWeiDaKuan, -- 寄售 已售 未打款 数
                 SUM(CASE WHEN `type` = '寄售' AND `status` = '在库' AND  `endtime` < NOW() THEN 1 ELSE 0 END) AS JSChaoQi, -- 寄售到期
                 SUM(CASE WHEN `type` = '寄售' AND `status` = '在库' THEN 1 ELSE 0 END) AS JSKuCun, -- 寄售未售出数
-                SUM(CASE WHEN `type` = '进货自有' AND `status`  = '售出' AND `paystatus` = '未打款' THEN 1 ELSE 0 END) AS JHWeiDaKuan, -- 自有 已售 未打款 数
-                SUM(CASE WHEN `type` = '进货自有' AND `status` = '在库' AND  DATEDIFF(`updatetime`,NOW()) > %s THEN 1 ELSE 0 END) AS JHChaoQi, -- 自有超过180天没有数据更新
-                SUM(CASE WHEN `type` = '进货自有' AND `status` = '在库' THEN 1 ELSE 0 END) AS JHKuCun, -- 自有未售出数
+                SUM(CASE WHEN `type` = '进货' AND `status`  = '售出' AND `paystatus` = '未打款' THEN 1 ELSE 0 END) AS JHWeiDaKuan, -- 自有 已售 未打款 数
+                SUM(CASE WHEN `type` = '进货' AND `status` = '在库' AND  DATEDIFF(`updatetime`,NOW()) > %s THEN 1 ELSE 0 END) AS JHChaoQi, -- 自有超过180天没有数据更新
+                SUM(CASE WHEN `type` = '进货' AND `status` = '在库' THEN 1 ELSE 0 END) AS JHKuCun, -- 自有未售出数
                 COUNT(`addtime`) AS JinHuoLiang, -- 进货量 包含寄售 自有
-                SUM(CASE WHEN ISNULL(`outtime`) then 0 ELSE 1 end) AS XiaoShouLiang -- 销售量
+                SUM(CASE WHEN `status` = '预定' OR `status` = '售出' then 1 ELSE 0 end) AS XiaoShouLiang -- 销售量
             FROM `v2_pro` WHERE 1 = 1", $dayspan);
 
         if (!in_array(getuserid(), C('ADMINISTRATOR'))) {
