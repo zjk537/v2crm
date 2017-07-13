@@ -61,7 +61,11 @@ class ProoutController extends CommonController
 
     public function _befor_insert($data)
     {
-        
+        $model = D('pro');
+        $proInfo = $model->getById($data['id']);
+        if($proInfo['status'] == '取回'){
+            $this->mtReturn("取回商品售出！");
+        }
     }
 
     public function _befor_edit()

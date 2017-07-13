@@ -310,6 +310,10 @@ class ProController extends CommonController
             $this->mtReturn('只有售出的商品才可退货');
         }
         $data['id']     = array('in', implode(',', $ids));
+        $data['sjiage'] = 0;
+        $data['yufu'] = 0;
+        $data['zhekou'] = 0;
+        $data['outtime'] = '';
         $data['status'] = '在库';
         if (false === $data = $model->create($data, $model::MODEL_UPDATE)) {
             $this->mtReturn($model->getError());
