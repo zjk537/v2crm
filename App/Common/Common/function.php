@@ -280,12 +280,24 @@ function getdepid($depname='')
     if(empty($depname)){
         $depname = getdepname();
     }
-    $depid = S($_SERVER['HTTP_'.C("AUTH_TOKEN")])["depid"];
+    $depid = session("depid");
     if($depid == ''){
         $dep = M('auth_group')->where(array('name'=>$depname))->limit(1)->select();
         $depid =  $dep[0]['id'];
     }
     return $depid;
+}
+function getdepphone($depname='')
+{
+    if(empty($depname)){
+        $depname = getdepname();
+    }
+    $depphone = session("depphone");
+    if($depphone == ''){
+        $dep = M('auth_group')->where(array('name'=>$depname))->limit(1)->select();
+        $depphone =  $dep[0]['phone'];
+    }
+    return $depphone;
 }
 function getdepname()
 {

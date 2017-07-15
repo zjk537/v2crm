@@ -315,6 +315,7 @@ CREATE TABLE `v2_pro` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `depid` int(11) NOT NULL COMMENT '店面Id',
   `depname` varchar(50) NOT NULL COMMENT '店面名称',
+  `depphone` varchar(20) NOT NULL DEFAULT '' COMMENT '店面电话',
   `name` varchar(50) NOT NULL COMMENT '产品名称',
   `fenlei` varchar(20) NOT NULL COMMENT '产品分类',
   `code` varchar(20) NOT NULL DEFAULT '' COMMENT '产品编码',-- new

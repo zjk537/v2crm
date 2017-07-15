@@ -39,6 +39,18 @@ function getdepid($depname='')
     }
     return $depid;
 }
+function getdepphone($depname='')
+{
+    if(empty($depname)){
+        $depname = getdepname();
+    }
+    $depphone = S($_SERVER['HTTP_'.C("AUTH_TOKEN")])["depphone"];
+    if($depphone == ''){
+        $dep = M('auth_group')->where(array('name'=>$depname))->limit(1)->select();
+        $depphone =  $dep[0]['phone'];
+    }
+    return $depphone;
+}
 function getdepname()
 {
     return S($_SERVER['HTTP_'.C("AUTH_TOKEN")])["depname"];
