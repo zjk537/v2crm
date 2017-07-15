@@ -214,6 +214,7 @@
         </div>
     </form>
 </div>
+<div id="preview"></div>
 <block name="script">
 <script type="text/javascript">
         $("#uploadfy").uploadify({
@@ -259,6 +260,9 @@
                     $(sender).parent('div').remove()
                 }
             });
+        }
+        function imgPreview(sender) {
+            $('#preview').empty().append("<img src='"+ $(sender).attr('src') +"'");
         }
 </script>
 </block>

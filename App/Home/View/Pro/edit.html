@@ -204,7 +204,7 @@
                                 <volist id="f" name="files">
                                 <div class="item">
                                     <i class="fa fa-times-circle" onclick="rmAttfile(this,'{$f.id}')"></i>
-                                    <img src="{$f.filename}"/>
+                                    <img src="{$f.filename}" onclick="imgPreview(this)"/>
                                 </div>
                                 </volist>
                             </div>
@@ -232,6 +232,7 @@
         </input>
     </form>
 </div>
+<div id="preview" class="preview" style="display: none;"></div>
 <block name="script">
 <script type="text/javascript">
         $("#uploadfy").uploadify({
@@ -252,7 +253,7 @@
                 onUploadSuccess:function(file,data,response){
                     var arrData = data.split(':');
                     $attfiles = $("#attfiles");
-                    $attfiles.append('<div class="item"><i class="fa fa-times-circle" onclick="rmAttfile(this,'+arrData[0]+')"></i><img src="'+arrData[1] +'"/>');
+                    $attfiles.append('<div class="item"><i class="fa fa-times-circle" onclick="rmAttfile(this,'+arrData[0]+')"></i><img src="'+arrData[1] +'" onclick="imgPreview(this)"/>');
                 },
                 onSelectError:function(file, errorCode, errorMsg){
                     switch(errorCode) {
@@ -278,5 +279,11 @@
                 }
             });
         }
+        function imgPreview(sender) {
+            $('#preview').empty().append("<img src='"+ $(sender).attr('src') +"' />").show();
+        }
+        $('#preview').click(function(){
+            $(this).hide();
+        });
 </script>
 </block>

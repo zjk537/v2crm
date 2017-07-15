@@ -527,3 +527,6 @@ ul.ztree.zTreeDragUL{position:absolute; margin:0; padding:0; width:auto; height:
 .attfile .item{position: relative; display: inline-block;margin-right: 10px;}
 .attfile .item .fa{position: absolute;right: 0;font-size: 20px;}
 .attfile .item img{width: 100px;height: 100px;}
+
+.preview{position: fixed;top: 0;left: 0;right: 0;bottom: 0;background:rgba(0,0,0,0.7); text-align: center;}
+.preview img{position: absolute; top: 50%;left: 50%;margin-left: -20%; margin-top: -20%;}

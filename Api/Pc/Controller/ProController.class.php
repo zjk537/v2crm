@@ -313,7 +313,7 @@ class ProController extends CommonController
         $data['sjiage'] = 0;
         $data['yufu'] = 0;
         $data['zhekou'] = 0;
-        $data['outtime'] = '';
+        $data['outtime'] = null;
         $data['status'] = '在库';
         if (false === $data = $model->create($data, $model::MODEL_UPDATE)) {
             $this->mtReturn($model->getError());

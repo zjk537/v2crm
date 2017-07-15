@@ -20,6 +20,7 @@
             <th width="30" height="30"></th>
             <th>编号</th>
 			<th>店面名称</th>
+            <th>联系方式</th>
 			<th <php>echo display(CONTROLLER_NAME.'/edit');</php> >操作</th>
 			<th width="30"></th>
             </tr>
@@ -32,6 +33,7 @@
 		<switch name="v.level">  <case value="0">+<B>{$v.name}</b></case> <case value="1">+--{$v.name}</case><case value="2">+------{$v.name}</case><default /></switch>
 	    {$v.sort} <if condition="$v.status EQ 1 "><else/><img src="__PUBLIC__/images/locked.gif" border="0"/></if>
 	    </td>
+        <td>{$v.phone}</td>
 		<td <php>echo display(CONTROLLER_NAME.'/edit');</php> > <a href="__URL__/edit/id/{$v['id']}/type/0/navTabId/{:CONTROLLER_NAME}"   class="btn btn-green btn-sm" data-toggle="dialog" data-width="600" data-height="300" data-id="dialog-mask" data-mask="true" >编辑</a>
 		    <!-- <a href="__URL__/EditRule/id/{$v['id']}/type/0/navTabId/{:CONTROLLER_NAME}"   class="btn btn-green btn-sm" data-toggle="dialog" data-width="950" data-height="500" data-id="dialog-mask" data-mask="true" >权限</a> -->
 		</td>

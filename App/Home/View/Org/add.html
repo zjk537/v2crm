@@ -19,7 +19,12 @@
                 <label for="j_name" class="control-label x85"><if condition="$type EQ 0 ">店面<else/>职位</if>名称：</label>
                 <input type="text" data-rule="required" size="30" name="name" id="j_name" value="{$Rs['name']}" >
              </td></tr>
-            
+            <if condition="$type EQ 0 ">
+              <tr><td>
+                <label for="j_phone" class="control-label x85">联系电话：</label>
+                <input type="text" data-rule="required" size="30" name="phone" id="j_phone" value="{$Rs['phone']}" >
+             </td></tr>
+            <else/></if>
             <if condition="$id EQ '' ">
 			<else/>
             <tr><td>
