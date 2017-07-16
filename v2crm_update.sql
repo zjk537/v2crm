@@ -66,14 +66,14 @@ CREATE TABLE `v2_auth_rule` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
   `level` int(11) NOT NULL COMMENT '级别',
   `pid` int(11) NOT NULL COMMENT '父级Id',
-  `action` char(80) NOT NULL DEFAULT '' COMMENT '操作名称',-- update name
-  `name` char(20) NOT NULL DEFAULT '' COMMENT '名称',-- update title
+  `name` char(80) NOT NULL DEFAULT '' COMMENT '操作名称',
+  `title` char(20) NOT NULL DEFAULT '' COMMENT '名称',
   `type` tinyint(1) NOT NULL DEFAULT '1',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态',
   `condition` char(100) NOT NULL DEFAULT '',
   `sort` tinyint(4) NOT NULL COMMENT '排序',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `action` (`action`)
+  UNIQUE KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='菜单功能表';
 
 -- ----------------------------
@@ -426,7 +426,7 @@ CREATE TABLE `v2_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL DEFAULT '',
   `password` char(32) NOT NULL DEFAULT '',
-  `memo` varchar(50) NOT NULL,
+  `memo` varchar(50) NOT NULL DEFAULT '',
   `depname` varchar(50) NOT NULL,
   `posname` varchar(50) NOT NULL,
   `truename` varchar(50) NOT NULL,
@@ -435,7 +435,7 @@ CREATE TABLE `v2_user` (
   `phone` char(11) NOT NULL,
   `neixian` varchar(50) NOT NULL DEFAULT '',
   `email` varchar(200) NOT NULL DEFAULT '',
-  `qq` varchar(20) NOT NULL,
+  `qq` varchar(20) NOT NULL DEFAULT '',
   `logintime` datetime DEFAULT NULL,
   `loginip` char(15) DEFAULT NULL,
   `logins` int(11) NOT NULL DEFAULT '0',
@@ -450,10 +450,7 @@ CREATE TABLE `v2_user` (
 -- ----------------------------
 BEGIN;
 INSERT INTO `v2_user` VALUES 
-('1', 'admin', '14e1b600b1fd579f47433b88e8d85291', '74870e1114ddb042052b11710f2e1316', '系统运维', '管理员', 'zjk537', '男', '8552646', '13812349563', '6535665', 'pinkecn@qq.com', '1612985', '2017-04-26 21:34:12', '127.0.0.1', '364', '1', '1493213652', '去采购办公用品，纸张，墨盒\r\n客户资料整理分析\r\n开总结会'), 
-('2', 'lintao11', '14e1b600b1fd579f47433b88e8d85291', 'a48dfea1c806d4a03b850f67542363fb', '建外SOHO', '店长', '林涛', '男', '52', '5', '', '2', '2', '2017-04-25 21:41:49', '127.0.0.1', '4', '1', '1493127709', ''), 
-('3', 'lintao22', '14e1b600b1fd579f47433b88e8d85291', 'a48dfea1c806d4a03b850f67542363fb', '建外SOHO', '店员', '张三', '男', '552', '525', '', 'pinkecn@qq.com', '16212', '2015-03-13 10:02:44', '61.139.126.203', '46', '1', '1426212164', '51212ssss'), 
-('4', 'lintao33', '14e1b600b1fd579f47433b88e8d85291', 'a48dfea1c806d4a03b850f67542363fb', '三里屯', '店长', '李四', '女', '135121', '11212', '', '1212', '1212121', '2015-03-09 11:03:29', '118.123.16.120', '5', '1', '1425870296', '1521');
+('1', 'admin', '14e1b600b1fd579f47433b88e8d85291', '', '系统运维', '管理员', 'admin', '男', '8552646', '13812349563', '6535665', 'pinkecn@qq.com', '1612985', '2017-04-26 21:34:12', '127.0.0.1', '364', '1', '1493213652', ''), 
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

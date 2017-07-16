@@ -184,7 +184,7 @@ function MainMenuClick(event, treeId, treeNode) {
        
 			    <php> $cate=M('menu')->where('level=0')->order('sort')->select();</php>
                 <foreach name="cate" item="c">
-                 <if condition="authcheck('Home/'.$c[alink],session('uid'))">
+                 <if condition="authcheck('Home/'.$c['alink'],session('uid'))">
 			      <if condition="$c.sort EQ 0 ">
                 <div class="panel panel-default">
                     <div class="panel-heading panelContent">
@@ -213,7 +213,7 @@ function MainMenuClick(event, treeId, treeNode) {
 								     </if>
 								  <php> $cate2=M('menu')->where('level=2 and pid='.$v['id'])->order('sort')->select();</php>
 							      <foreach name="cate2" item="vv">
-							       <if condition="authcheck('Home/'.$vv[alink],session('uid'))">
+							       <if condition="authcheck('Home/'.$vv['alink'],session('uid'))">
                                    <li data-id="{$vv.id}" data-pid="{$v.id}" data-url="index.php/home/{$vv.alink}" data-tabid="{$vv.alink}">{$vv.catename}</li>
 								  </if>
                                   </foreach>
@@ -265,40 +265,7 @@ function MainMenuClick(event, treeId, treeNode) {
                         </div>
                     </div>
                     <div class="bjui-pageFormContent" data-layout-h="150">
-                      <!--//--> 
-                      <div class="col-md-6">
-                        <div class="panel panel-default">
-                          <div class="panel-heading"><h3 class="panel-title"><i class="fa fa-phone-square"></i>  客户跟踪 <a href="{:U('cust/daoqi')}" data-toggle="navtab" data-id="{:U('cust/daoqi')}" data-title="客户跟踪">详细</a></h3></div>
-                            <div style="min-height:185px">
-							<table class="table table-bordered table-striped table-hover">
-                             <thead>
-                              <tr>
-                              <th height=30>客户名称</th>
-							  <th>进展</th>
-							  <th>联系人</th>
-							  <th>手机号码</th>
-                              <th>下次联系</th>
-							  <th>最后更新</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-							<php>$list=M('cust')->where(array("uid"=>array('EQ', session("uid")),"juid"=>array('like','%'.session("uid").'%'),"_logic"=>"or"))->order('updatetime desc')->limit(5)->select();</php>
-						    <volist id="v" name="list">
-                            <tr>
-                              <td>{$v.title|msubstr=###,0,20}</td>
-							  <td>{$v.fenlei}</td>
-							  <td>{$v.xingming}</td>
-							  <td>{$v.phone}</td>
-                              <td>{$v.xcrq|substr=###,0,10}</td>
-							  <td>{$v.updatetime|substr=###,0,10}</td>
-                            </tr>
-							</volist>
-                           </tbody>
-                          </table>
-						  </div>
-                        </div>
-                      </div>
-                      <!--//-->  					  
+                      					  
 						
 						
                     </div>

@@ -6,7 +6,7 @@ use Think\Model;
 class UserModel extends Model{
     protected $_validate = array(
 
-        array('username','','µÇÂ½ÕËºÅÒÑ¾­´æÔÚ£¡',0,'unique',1),
+        array('username','','ç™»é™†è´¦å·å·²ç»å­˜åœ¨ï¼',0,'unique',1),
     );
 
 

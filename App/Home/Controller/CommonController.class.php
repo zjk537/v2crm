@@ -136,6 +136,7 @@ class CommonController extends Controller
 
     public function index()
     {
+        
         $model = D($this->dbname);
         $map   = $this->_search();
         if (method_exists($this, '_filter')) {
