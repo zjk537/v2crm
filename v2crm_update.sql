@@ -260,10 +260,10 @@ CREATE TABLE `v2_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `addtime` datetime NOT NULL,
   `username` char(20) NOT NULL,
-  `content` char(100) NOT NULL,
-  `os` varchar(300) NOT NULL,
-  `url` char(100) NOT NULL,
-  `ip` char(20) NOT NULL,
+  `content` char(100) NOT NULL DEFAULT '',
+  `os` varchar(300) NOT NULL DEFAULT '',
+  `url` char(100) NOT NULL DEFAULT '',
+  `ip` char(20) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='操作日志';
 

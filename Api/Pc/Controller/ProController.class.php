@@ -268,19 +268,15 @@ class ProController extends CommonController
             $map['depid'] = array('EQ', getdepid());
         }
         $map['id']       = array('in', implode(',', $ids));
-        $where['type']   = array('neq', '寄售');
-        $where['status'] = array('eq', '售出');
+        $map['type']   = array('eq', '寄售');
+        $where['status'] = array('neq', '售出');
+        $where['status'] = array('neq', '预定');
         $where['_logic'] = 'or';
         $map['_complex'] = $where;
         $tmpCount        = $model->where($map)->count();
         if ($tmpCount > 0) {
-            $this->mtReturn('寄售商品未售出时可取回');
+            $this->mtReturn('【寄售】商品【未售出】【未预定】时可取回');
         }
-        // $data['id'] = $this->postData['id'];
-        // $tmpPro = $model->where(array('id' => $data['id']))->select();
-        // if($tmpPro[0]['status'] != '售出'){
-        //     $this->mtReturn('售出的商品才能取回');
-        // }
         $data['id']     = array('in', implode(',', $ids));
         $data['status'] = '取回';
         if (false === $data = $model->create($data, $model::MODEL_UPDATE)) {
@@ -337,14 +333,14 @@ class ProController extends CommonController
             $map['depid'] = array('EQ', getdepid());
         }
         $map['id']          = array('in', implode(',', $ids));
-        $map['type']        = array('neq', '寄售');
+        $where['type']        = array('neq', '寄售');
         $where['status']    = array('neq', '售出');
         $where['paystatus'] = array('neq', '未打款');
         $where['_logic']    = 'or';
         $map['_complex']    = $where;
         $tmpCount           = $model->where($map)->count();
         if ($tmpCount > 0) {
-            $this->mtReturn('寄售商品售出但未打款才需打款');
+            $this->mtReturn('【寄售】商品【售出】但【未打款】才需打款');
         }
         $data['id']        = array('in', implode(',', $ids));
         $data['paystatus'] = '已打款';

@@ -24,9 +24,9 @@ class ProController extends CommonController
 
     public function _filter(&$map)
     {
-        // if(!in_array(session('uid'),C('ADMINISTRATOR'))){
-        //     $map['id'] = array('EQ', session("uid"));
-        // }
+        if(!in_array(session('uid'),C('ADMINISTRATOR'))){
+            $map['depid'] = array('EQ', getdepid());
+        }
 
         if(IS_POST && isset($_REQUEST['stime']) && $_REQUEST['stime'] != ''&&isset($_REQUEST['etime']) && $_REQUEST['etime'] != ''){
          $map['addtime'] =array(array('egt',I('stime')),array('elt',I('etime'))) ;
@@ -166,4 +166,115 @@ class ProController extends CommonController
             $this->mtReturn(300, "自动同步库存记录失败", $_REQUEST['navTabId'], true);
         }
     }
+
+
+    // 寄售商品未售出未预定 可取回
+    public function quhui()
+    {
+        if(!IS_POST){
+            $this->mtReturn(300,'只支持post请求');
+        }
+        $model = D($this->dbname);
+        $ids   = $_REQUEST['ids'];
+        if (empty($ids)) {
+            $this->mtReturn(300,"取回商品不能为空！");
+        }
+        if (!in_array(getuserid(), C('ADMINISTRATOR'))) {
+            $map['depid'] = array('EQ', getdepid());
+        }
+        $map['id']       = array('in', $ids);
+        $map['type']   = array('eq', '寄售');
+        $where['status'] = array('neq', '售出');
+        $where['status'] = array('neq', '预定');
+        $where['_logic'] = 'or';
+        $map['_complex'] = $where;
+        $tmpCount        = $model->where($map)->count();
+        if ($tmpCount > 0) {
+            $this->mtReturn(300,'寄售商品【未售出】【未预定】时可取回');
+        }
+        
+        $data['id']     = array('in', $ids);
+        $data['status'] = '取回';
+        if (false === $data = $model->create($data, $model::MODEL_UPDATE)) {
+            $this->mtReturn(300,$model->getError());
+        }
+        if (!$model->save($data)) {
+            $this->mtReturn(300,$model->getError());
+        }
+        $info = $this->dbname . ' 取回成功! proid:' . implode('|', $ids);
+        $this->mtReturn(200,$info, $_REQUEST['navTabId'], false);
+    }
+
+    // 售出商品可退货
+    public function tuihuo()
+    {
+        if(!IS_POST){
+            $this->mtReturn(300,'只支持post请求');
+        }
+        $model = D($this->dbname);
+        $ids   = $_REQUEST['ids'];
+        if (empty($ids)) {
+            $this->mtReturn(300,"退货商品不能为空！");
+        }
+        if (!in_array(getuserid(), C('ADMINISTRATOR'))) {
+            $map['depid'] = array('EQ', getdepid());
+        }
+        $map['id']     = array('in', $ids);
+        $map['status'] = array('neq', '售出');
+        $tmpCount      = $model->where($map)->count();
+        if ($tmpCount > 0) {
+            $this->mtReturn(300,'只有【售出】的商品才可【退货】');
+        }
+        $data['id']     = array('in', $ids);
+        $data['sjiage'] = 0;
+        $data['yufu'] = 0;
+        $data['zhekou'] = 0;
+        $data['outtime'] = null;
+        $data['status'] = '在库';
+        if (false === $data = $model->create($data, $model::MODEL_UPDATE)) {
+            $this->mtReturn(300,$model->getError());
+        }
+        if (!$model->save($data)) {
+            $this->mtReturn(300,$model->getError());
+        }
+        $this->mtReturn(200,$this->dbname . ' 退货成功! proid:' . implode('|', $ids), $_REQUEST['navTabId'],false);
+    }
+
+    // 寄售商品 售出但未打款 可打款
+    public function dakuan()
+    {
+        if(!IS_POST){
+            $this->mtReturn(300,'只支持post请求');
+        }
+        $model = D($this->dbname);
+        $ids   = $_REQUEST['ids'];
+
+        if (empty($ids)) {
+            $this->mtReturn(300,"需打款商品不能为空！");
+        }
+
+        if (!in_array(getuserid(), C('ADMINISTRATOR'))) {
+            $map['depid'] = array('EQ', getdepid());
+        }
+        $map['id']          = array('in', $ids); //implode(',', $ids)
+        $where['type']        = array('neq', '寄售');
+        $where['status']    = array('neq', '售出');
+        $where['paystatus'] = array('neq', '未打款');
+        $where['_logic']    = 'or';
+        $map['_complex']    = $where;
+        $tmpCount           = $model->where($map)->count();
+        if ($tmpCount > 0) {
+            $this->mtReturn(300,'【寄售】商品【售出】但【未打款】才需打款');
+        }
+        $data['id']        = array('in', $ids);// implode(',', $ids)
+        $data['paystatus'] = '已打款';
+        if (false === $data = $model->create($data, $model::MODEL_UPDATE)) {
+            $this->mtReturn(300,$model->getError());
+        }
+        if (!$model->save($data)) {
+            $this->mtReturn(300,$model->getError());
+        }
+        $this->mtReturn(200, $this->dbname . ' 打款成功! proid:' . $ids,$_REQUEST['navTabId'],false);
+    }
+
 }

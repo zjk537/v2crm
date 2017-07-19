@@ -212,22 +212,16 @@
                                 <label class="control-label x85">
                                     详细说明:
                                 </label>
-                                <textarea id="j_remark" name="remark" cols='65' rows='3'>{$Rs.remark}</textarea>
-
-                                <!-- <div style="display: inline-block; vertical-align: middle;">
-                                    <textarea data-items="fontname, fontsize, |, forecolor, hilitecolor, bold, italic, underline, removeformat, |, justifyleft, justifycenter, justifyright, insertorderedlist, insertunorderedlist, |, emoticons, image, link" data-minheight="150" data-toggle="kindeditor" name="remark">
-                                        {$Rs.remark}
-                                    </textarea>
-                                </div> -->
+                                {$Rs.remark}
                             </td>
                         </tr>
                         <tr>
                         <td colspan=2 style="position: relative;">
-                            <label for='attid_input' class='control-label x85'>上传附件:</label>
+                            <label for='attid_input' class='control-label x85'>附件:</label>
                             <div id='attfiles' class="attfile">
                                 <volist id="f" name="files">
                                 <div class="item">
-                                    <img src="{$f.filename}"/>
+                                    <img src="{$f.filename}" onclick="imgPreview(this)"/>
                                 </div>
                                 </volist>
                             </div>
@@ -410,3 +404,14 @@
         </ul>
     </div>
 </div>
+<div id="preview" class="preview" style="display: none;"></div>
+<block name="script">
+<script type="text/javascript">
+        function imgPreview(sender) {
+            $('#preview').empty().append("<img src='"+ $(sender).attr('src') +"' />").show();
+        }
+        $('#preview').click(function(){
+            $(this).hide();
+        });
+</script>
+</block>

@@ -37,8 +37,8 @@ class ProoutController extends CommonController
 
     public function _befor_add()
     {
-        // $attid=time();
-        // $this->assign('attid',$attid);
+        $files = M('files')->where(array('attid'=>I('get.id')))->select();
+        $this->assign('files',$files);
 
         $model = D('pro');
         $id    = I('get.id');
