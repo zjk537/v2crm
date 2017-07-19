@@ -190,7 +190,7 @@ class ProController extends CommonController
         $map['_complex'] = $where;
         $tmpCount        = $model->where($map)->count();
         if ($tmpCount > 0) {
-            $this->mtReturn(300,'寄售商品【未售出】【未预定】时可取回');
+            $this->mtReturn(300,'【寄售】商品【未售出】【未预定】时可取回');
         }
         
         $data['id']     = array('in', $ids);
