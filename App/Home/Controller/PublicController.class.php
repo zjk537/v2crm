@@ -197,13 +197,16 @@ class PublicController extends Controller
         $upload->exts     = C('UPLOAD_EXTS');
         $upload->savePath = C('UPLOAD_SAVEPATH');
         $info             = $upload->upload();
-        $gourl            = 'index.php/home/public/attfile/attid/' . I('attid') . '/';
+        //$gourl            = 'index.php/home/public/attfile/attid/' . I('attid') . '/';
         if (!$info) {
             // echo "<script language='javascript' type='text/javascript'>";
             // echo "alert('上传失败！$upload->getError()');";
             // echo "window.location.href='$gourl'";
             // echo "</script>";
             //$this->error($upload->getError());
+            $resData['code'] = 300;
+            $resData['data'] = '上传失败！$upload->getError()';
+            echo json_encode($resData);
         } else {
             //dump($info);
             // echo json_encode($info);
@@ -218,7 +221,12 @@ class PublicController extends Controller
             $model = M('files');
             $model->data($data)->add();
             $id = $model->getLastInsID();
-            echo $id.':'.$data['filename'];
+            $resData['code'] = 200;
+
+            $resData['data']['id'] = $id;
+            $resData['data']['filename'] = $data['filename'];
+            echo json_encode($resData);exit;
+            //echo $id.':'.$data['filename'];
             //$this->mtReturn(200,$data);
             //$this->assign('filename',$filename);
             //$this->display();
@@ -252,7 +260,7 @@ class PublicController extends Controller
 
     public function procate()
     {
-        $list = M("pro")->distinct('fenlei')->field('fenlei')->select();
+        $list = M("pro")->distinct('pinpai')->field('pinpai')->select();
         $this->assign('list', $list);
         $this->display();
     }

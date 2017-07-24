@@ -70,6 +70,9 @@
                 <th>
                     商品名称
                 </th>
+                <th>
+                    商品品牌
+                </th>
                 <th data-order-direction="desc" data-order-field="type">
                     来源
                 </th>
@@ -97,7 +100,7 @@
                 <th>
                     详细
                 </th>
-                <th <php>echo display(MODULE.'/proout/add');</php> >
+                <th <php>echo display(MODULE_NAME.'/proout/add');</php> >
                     售出
                 </th>
                 <th <php>echo display(CONTROLLER_NAME.'/edit');</php> >
@@ -115,6 +118,9 @@
                     </td>
                     <td>
                         {$v.name|msubstr=###,0,20}
+                    </td>
+                    <td>
+                        {$v.pinpai}
                     </td>
                     <td>
                         {$v.type}
@@ -145,7 +151,7 @@
                             详细
                         </a>
                     </td>
-                    <td <php>echo display(MODULE.'/proout/add');</php> >
+                    <td <php>echo display(MODULE_NAME.'/proout/add');</php> >
                         <if condition=" $v.status EQ '在库' or $v.status EQ '预定' ">
                             <a class="btn btn-green btn-sm" data-height="500" data-id="dialog-mask" data-mask="true" data-toggle="dialog" data-width="900" href="__MODULE__/proout/add/id/{$v['id']}/navTabId/{:CONTROLLER_NAME}">
                                 出售
@@ -156,9 +162,6 @@
                         
                         <a class="btn btn-green btn-sm" data-height="500" data-id="dialog-mask" data-mask="true" data-toggle="dialog" data-width="900" href="__URL__/edit/id/{$v['id']}/navTabId/{:CONTROLLER_NAME}">
                             编辑
-                        </a>
-                        <a class="btn btn-red" data-confirm-msg="确定要删除吗？" data-icon="remove" data-toggle="doajax" href="__URL__/del/navTabId/{:CONTROLLER_NAME}">
-                            删除
                         </a>
                     </td>
                 </tr>

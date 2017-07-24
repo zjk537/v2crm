@@ -35,7 +35,7 @@ class ProController extends CommonController
 
     public function _befor_index()
     {
-
+        
     }
 
     public function _befor_add()
@@ -88,7 +88,7 @@ class ProController extends CommonController
         $attid = $info['id'];
         $this->assign('attid', $attid);
 
-        $files = M('files')->where(array('attid'=>I('get.id')))->select();
+        $files = M('files')->where(array('attid'=>$attid))->select();
         $this->assign('files',$files);
 
     }
@@ -116,13 +116,25 @@ class ProController extends CommonController
 
     public function _after_edit($id)
     {
-      // $postData = I('post.');
-      // $data['jpid'] = $postData['id'];
-      // $data['jpname'] = $postData['name'];
-      // $data['jpjiage'] = $postData['jiage'];
-      // $data['remark'] = '[系统] 更新商品信息';
-      // $proin = A('Proin');
-      // $proin->autoUpdate($data);
+        $postData = I('post.');
+        // 更新fileid
+        $model = M('files');
+        $map['id'] = array('in', implode(',', $postData['fileids']));
+        $data['attid'] = $id;
+        $model->where($map)->save($data);
+        // 删除移除的图片
+        $where['id'] = array('not in', implode(',', $postData['fileids']));
+        $where['ABS(attid)'] = $id;
+        // $where['attid'] = array('eq', -$id);
+        // $where['_logic'] = 'or';
+        // $map['_complex'] = $where;
+        $files = $model->where($where)->select();
+        if($files){
+            foreach ($files as $file) {
+                @unlink($file['filename']);
+            }
+        }
+        $model->where($where)->delete();
     }
 
     public function _befor_del($id)

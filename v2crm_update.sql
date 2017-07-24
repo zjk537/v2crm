@@ -318,6 +318,7 @@ CREATE TABLE `v2_pro` (
   `depphone` varchar(20) NOT NULL DEFAULT '' COMMENT '店面电话',
   `name` varchar(50) NOT NULL COMMENT '产品名称',
   `fenlei` varchar(20) NOT NULL COMMENT '产品分类',
+  `pinpai` varchar(20) NOT NULL DEFAULT '' COMMENT '产品品牌',
   `code` varchar(20) NOT NULL DEFAULT '' COMMENT '产品编码',-- new
   `jcode` varchar(20) NOT NULL COMMENT '原始编码',-- new
   `cid` int(11) NOT NULL DEFAULT 0 COMMENT '寄售人或供应商id',-- new

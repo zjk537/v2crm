@@ -15,7 +15,17 @@
                                 <label class="control-label x85" for="j_fenlei">
                                     商品分类:
                                 </label>
-                                <input data-rule="required;" data-toggle="lookup" data-url="__MODULE__/public/procate/navTabId/{:CONTROLLER_NAME}" id="j_fenlei" name="fenlei" size="20" type="text" value="{$Rs.fenlei}"/>
+                                <select id="selFenlei" data-rule="required;" data-toggle="selectpicker" name="fenlei">
+                                <option value="">
+                                    请选择
+                                </option>
+                                <volist id="fenlei" name="Think.config.PRO_FENLEI">
+                                    <option value="{$fenlei}" <if condition=" $fenlei EQ $Rs['fenlei'] " >selected</if> >
+                                        {$fenlei}
+                                    </option>
+                                </volist>
+                            </select>
+                            <input data-rule="required;" data-toggle="lookup" data-url="__MODULE__/public/procate/navTabId/{:CONTROLLER_NAME}" id="j_pinpai" name="pinpai" size="20" type="text" value="{$Rs.pinpai}"/>
                             </td>
                         </tr>
                         <tr>
@@ -127,7 +137,7 @@
                                 <input id="j_chengse" name="chengse" size="20" type="text" value="{$Rs.chengse}"/>
                             </td>
                         </tr>
-                        <tr>
+                        <tr class="flyf" <if condition="'衣服' NEQ $Rs['fenlei']">style="display: none;" </if> >
                             <td>
                                 <label class="control-label x85" for="j_chima">
                                     尺码:
@@ -141,7 +151,7 @@
                                 <input id="j_jiankuan" name="jiankuan" size="20" type="text" value="{$Rs.jiankuan}"/>
                             </td>
                         </tr>
-                        <tr>
+                        <tr class="flyf" <if condition="'衣服' NEQ $Rs['fenlei']"> style="display: none;" </if> >
                             <td>
                                 <label class="control-label x85" for="j_yaowei">
                                     腰围:
@@ -155,7 +165,7 @@
                                 <input id="j_xiongwei" name="xiongwei" size="20" type="text" value="{$Rs.xiongwei}"/>
                             </td>
                         </tr>
-                        <tr>
+                        <tr class="flyf" <if condition="'衣服' NEQ $Rs['fenlei']"> style="display: none;" </if> >
                             <td>
                                 <label class="control-label x85" for="j_tunwei">
                                     臀围:
@@ -169,7 +179,7 @@
                                 <input id="j_yichang" name="yichang" size="20" type="text" value="{$Rs.yichang}"/>
                             </td>
                         </tr>
-                        <tr>
+                        <tr class="flyf" <if condition="'衣服' NEQ $Rs['fenlei']"> style="display: none;" </if> >
                             <td>
                                 <label class="control-label x85" for="j_kuchang">
                                     裤长:
@@ -204,11 +214,12 @@
                                 <div class="item">
                                     <i class="fa fa-times-circle" onclick="rmAttfile(this,'{$f.id}')"></i>
                                     <img src="{$f.filename}" onclick="imgPreview(this)"/>
+                                    <input type='hidden' name='fileids[]'  value='{$f.id}'>
                                 </div>
                                 </volist>
                             </div>
                             <input id="uploadfy" type="file"/>
-                            <input type='hidden' id='attid' name='attid'  value='{$attid}'>
+                            <input type='hidden' id='attid' name='attid'  value='-{$attid}'>
                         </td>
                     </tr>
                     </tbody>
@@ -234,6 +245,16 @@
 <div id="preview" class="preview" style="display: none;"></div>
 <block name="script">
 <script type="text/javascript">
+        $("#selFenlei").on('change',function(e){
+            var fenlei = $(this).val();
+            if(fenlei == "衣服"){
+                $('.flyf').show();
+            } else {
+                $('.flyf').hide();
+            }
+
+            // $("#j_pinpai").attr('data-data',fenlei);
+        });
         $("#uploadfy").uploadify({
                 'swf': '__PUBLIC__/BJUI/plugins/uploadify/scripts/uploadify.swf',//uploadify.swf 文件的路径（绝对路径、相对路径都可以）
                 uploader: "__MODULE__/Public/upload?attid="+$('#attid').val(),//服务器响应地址
@@ -250,9 +271,13 @@
                 onSelect:function(fileObj) {
                 },
                 onUploadSuccess:function(file,data,response){
-                    var arrData = data.split(':');
                     $attfiles = $("#attfiles");
-                    $attfiles.append('<div class="item"><i class="fa fa-times-circle" onclick="rmAttfile(this,'+arrData[0]+')"></i><img src="'+arrData[1] +'" onclick="imgPreview(this)"/>');
+                    var resData = eval('(' + data + ')'); 
+                    if(resData.code === 300){
+                        $attfiles.alertmsg('error', resData.data);
+                        return;
+                    }
+                    $attfiles.append('<div class="item"><i class="fa fa-times-circle" onclick="rmAttfile(this,'+resData.data.id+')"></i><img src="'+resData.data.filename +'"/><input type="hidden" name="fileids[]"  value="'+ resData.data.id +'">');
                 },
                 onSelectError:function(file, errorCode, errorMsg){
                     switch(errorCode) {
@@ -270,13 +295,7 @@
             });
 
         function rmAttfile(sender,fileId){
-            $.post("__MODULE__/Public/delFile",{id:fileId},function(result){
-                if(result === "0"){
-                    alert('图片删除失败');
-                } else {
-                    $(sender).parent('div').remove()
-                }
-            });
+            $(sender).parent('div').remove()
         }
         function imgPreview(sender) {
             $('#preview').empty().append("<img src='"+ $(sender).attr('src') +"' />").show();
