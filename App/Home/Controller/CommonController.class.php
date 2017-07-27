@@ -153,10 +153,17 @@ class CommonController extends Controller
 
     protected function _search($dbname = '')
     {
+        // $map['id']       = array('in', $ids);
+        // $map['type']   = array('eq', '寄售');
+        // $where['status'] = array('neq', '售出');
+        // $where['status'] = array('neq', '预定');
+        // $where['_logic'] = 'or';
+        // $map['_complex'] = $where;
 
         $dbname = $dbname ? $dbname : $this->dbname;
         $model  = D($dbname);
         $map    = array();
+
         foreach ($model->getDbFields() as $key => $val) {
             if (isset($_REQUEST['keys']) && $_REQUEST['keys'] != '') {
                 if (in_array($val, C('SEARCHKEY'))) {
@@ -167,8 +174,8 @@ class CommonController extends Controller
 
             }
         }
-        $map['_logic'] = 'or';
         if ((IS_POST) && isset($_REQUEST['keys']) && $_REQUEST['keys'] != '') {
+            $map['_logic'] = 'or';
             $where['_complex'] = $map;
             return $where;
         } else {

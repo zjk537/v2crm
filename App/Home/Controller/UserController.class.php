@@ -15,7 +15,7 @@ class UserController extends CommonController
     public function _filter(&$map)
     {
         if(!in_array(session('uid'),C('ADMINISTRATOR'))){
-            $map['depid'] = array('EQ', getdepid());
+            $map['depname'] = array('EQ', getdepname());
             $map['id'] = array('NEQ',1);
         }
 

@@ -6,7 +6,8 @@
           <table class="table table-condensed table-hover" width="100%">
            <tbody>
 			<tr><td>
-                <label for="j_name" class="control-label x85">所属店面：</label><select  name="pid" data-toggle="selectpicker" data-rule="required">
+                <label for="j_name" class="control-label x85">所属店面：</label>
+                <select  name="pid" data-toggle="selectpicker" data-rule="required" <php>echo disabled();</php>>
                <option  value="0">顶级</option>
 	          <foreach name="list" item="v">
 	          <option <if condition="$v.id EQ $Rs['pid'] ">selected value="{$Rs['pid']}" <else/>value="{$v.id}"</if> >

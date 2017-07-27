@@ -28,11 +28,19 @@ function authcheck($name, $uid, $type = 1, $mode = 'url', $relation = 'or')
 function display($name)
 {
     $name = 'Home/' . $name;
-    $uid  = session('uid');
+    $uid  = getuserid();
     if (!in_array($uid, C('ADMINISTRATOR'))) {
         if (!authcheck($name, $uid, $type = 1, $mode = 'url', $relation = 'or')) {
             return "style='display:none'";
         }
+    }
+}
+
+function disabled($uid)
+{
+    $uid = getuserid();
+    if (!in_array($uid, C('ADMINISTRATOR'))) {
+        return "disabled";
     }
 }
 

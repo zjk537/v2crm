@@ -11,18 +11,17 @@ class DepController extends CommonController
         parent::_initialize();
         $this->dbname = 'auth_group';
     }
-    public function _filter(&$map)
-    {
-        if (!in_array(session('uid'), C('ADMINISTRATOR'))) {
-            $map['pid'] = array('EQ', getdepid());
-        }
-    }
+    
     public function index()
     {
+        $map = array('b.`type`' => 1);
+        if (!in_array(session('uid'), C('ADMINISTRATOR'))) {
+            $map['a.`name`'] = array('EQ', getdepname());
+        }
         $list = M($this->dbname)->alias('a')
             ->join(C('DB_PREFIX') . $this->dbname . ' b on a.id = b.pid')
             ->field('b.id, a.`name` as pname,b.`name`,b.`status`,b.sort')
-            ->where(array('b.`type`' => 1))
+            ->where($map)
             ->select();
         $this->assign('list', $list);
         $this->display();
@@ -30,8 +29,16 @@ class DepController extends CommonController
 
     public function _befor_add()
     {
-        $list = orgcateTree($pid = 0, $level = 0, $type = 0);
+        $list = array();
+        if (!in_array(session('uid'), C('ADMINISTRATOR'))) {
+            $map['name'] = array('EQ', getdepname());
+            $map['type'] = array('EQ', 0);
+            $list = M($this->dbname)->where($map)->order("sort")->select();
+        } else {
+            $list = orgcateTree($pid = 0, $level = 0, $type = 0);
+        }
         $this->assign('type', I('get.type'));
+        $this->assign('depid', getdepid());
         $this->assign('list', $list);
     }
 
@@ -50,7 +57,14 @@ class DepController extends CommonController
 
     public function _befor_edit()
     {
-        $list = orgcateTree($pid = 0, $level = 0, $type = 0);
+        $list = array();
+        if (!in_array(session('uid'), C('ADMINISTRATOR'))) {
+            $map['name'] = array('EQ', getdepname());
+            $map['type'] = array('EQ', 0);
+            $list = M($this->dbname)->where($map)->order("sort")->select();
+        } else {
+            $list = orgcateTree($pid = 0, $level = 0, $type = 0);
+        }
         $this->assign('type', I('get.type'));
         $this->assign('list', $list);
     }
