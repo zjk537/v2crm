@@ -296,7 +296,6 @@ class CommonController extends Controller
             $this->_filter($map);
         }
         $list = $model->where($map)->distinct($this->fd)->field($this->fd)->select();
-        echo $model->getlastsql();
         foreach ($list as $key => $vo) {
             $info  = $info . "," . $vo[$this->fd];
             $co    = $model->where(array($this->fd => $vo[$this->fd]))->where($map)->count('id');

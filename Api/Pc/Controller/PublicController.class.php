@@ -47,10 +47,10 @@ class PublicController extends ApiController
         $resData['uid']      = $account['id'];
         $resData['username'] = $account['username'];
         $resData['truename'] = $account['truename'];
-        $resData['depid']    = getdepid($account['depname']);
-        $resData['depphone'] = getdepphone($account['depname']);
         $resData['depname']  = $account['depname'];
         $resData['posname']  = $account['posname'];
+        $resData['depid']    = getdepid($account['depname']);
+        $resData['depphone'] = getdepphone($account['depname']);
         $resData['token']    = $token;
         S($token, $resData);
 

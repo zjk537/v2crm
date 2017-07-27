@@ -27,7 +27,6 @@ function CheckAll(form)
     	<tr>
         <td height=25></td><Td>
 	   <input type="checkbox" name="rules[]" <if condition="in_array($v[id],$rs)">checked="checked"</if> value="{$v.id}">  {$v.title}
-        
 	    </td>
 		<td>
 		<Table width="100%">
@@ -40,10 +39,10 @@ function CheckAll(form)
 		
 		<php>$list2 = M('auth_rule')->where('level=2 and pid='.$v['id'])->order('sort')->select();</php>
 		<foreach name="list2" item="v">
-        <span style="width:150px;">
-	    <input type="checkbox" name="rules[]" <if condition="in_array($v[id],$rs)">checked="checked"</if> value="{$v.id}">  {$v.title}
+            <span style="width:150px;">
+    	    <input type="checkbox" name="rules[]" <if condition="in_array($v[id],$rs)">checked="checked"</if> value="{$v.id}">  {$v.title}
+            </span>
         </foreach> 
-	
 		</td>
 		</tr>
         </foreach> 

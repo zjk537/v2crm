@@ -24,9 +24,9 @@ class ProoutController extends CommonController
 
     public function _filter(&$map)
     {
-        //if(!in_array(session('uid'),C('ADMINISTRATOR'))){
-        //$map['id'] = array('EQ', session("uid"));
-        //}
+        if(!in_array(session('uid'),C('ADMINISTRATOR'))){
+            $map['depid'] = array('EQ', getdepid());
+        }
 
     }
 

@@ -63,6 +63,7 @@ function orgcateTree($pid = 0, $level = 0, $type = 0)
     $tmp   = $cate->where(array('pid' => $pid, 'type' => $type))->order("sort")->select();
     if (is_array($tmp)) {
         foreach ($tmp as $v) {
+            if($v['id'] == 1) continue;
             $v['level'] = $level;
             //$v['pid']>0;
             $array[count($array)] = $v;

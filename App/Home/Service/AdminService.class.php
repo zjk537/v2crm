@@ -21,10 +21,10 @@ class AdminService extends CommonService {
        session('uid',$account['id']);
 	   session('username',$account['username']);
 	   session("truename",$account['truename']);
+       session('depname',$account['depname']);
+       session('posname',$account['posname']);
        session('depid', getdepid($account['depname']));
        session('depphone',getdepphone($account['depname']));
-	   session('depname',$account['depname']);
-	   session('posname',$account['posname']);
 	   session('loginip',get_client_ip());
 	   session('logintime',gettime());
 	   session('logins',$account['logins']);

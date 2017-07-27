@@ -12,6 +12,15 @@ class UserController extends CommonController
         $this->dbname = CONTROLLER_NAME;
     }
 
+    public function _filter(&$map)
+    {
+        if(!in_array(session('uid'),C('ADMINISTRATOR'))){
+            $map['depid'] = array('EQ', getdepid());
+            $map['id'] = array('NEQ',1);
+        }
+
+    }
+
     public function _befor_add()
     {
         $list = orgcateTree($pid = 0, $level = 0, $type = 0);
@@ -39,8 +48,17 @@ class UserController extends CommonController
             $data['password'] = $password;
         }
         unset($data['pwd']);
-        // 更新用户权限
-        $gcId = M('auth_group')->where(array("name" => $data['posname']))->getField('id');
+        // 更新用户权限 $data['depname']
+        $map['b.`name`'] = array('EQ',$data['posname']);
+        $map['b.`status`'] = array('EQ',1);
+        $map['a.`name`'] = array('EQ',$data['depname']);
+        //$gcId = M('auth_group')->where($map)->getField('id');
+
+        $gcId = M('auth_group')->alias('a')
+            ->join(C('DB_PREFIX') .'auth_group b on a.id = b.pid')
+            //->field('b.id, a.`name` as pname,b.`name`,b.`status`,b.sort')
+            ->where($map)
+            ->getField('b.id');
         M('auth_group_access')->where('uid=' . $data['id'] . '')->setField('group_id', $gcId);
         return $data;
     }

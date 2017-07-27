@@ -204,8 +204,8 @@ function MainMenuClick(event, treeId, treeNode) {
 				 </if>
 							<php> $cate1=M('menu')->where('level=1 and pid='.$c['id'])->order('sort')->select();</php>
 							  <foreach name="cate1" item="v">
-							    <if condition="authcheck('Home/'.$v[alink],session('uid'))">
-								   <php>$count1=M('menu')->where('level=2 and pid='.$v['id'])->count(id);</php>
+							    <if condition="authcheck('Home/'.$v['alink'],session('uid'))">
+								   <php>$count1=M('menu')->where('level=2 and pid='.$v['id'])->count('id');</php>
 								    <if condition="$count1 EQ 0 ">
                                      <li data-id="{$v.id}" data-pid="{$c.id}" data-url="index.php/home/{$v.alink}" data-tabid="{$v.alink}">{$v.catename}</li>
 								     <else/>
@@ -213,9 +213,9 @@ function MainMenuClick(event, treeId, treeNode) {
 								     </if>
 								  <php> $cate2=M('menu')->where('level=2 and pid='.$v['id'])->order('sort')->select();</php>
 							      <foreach name="cate2" item="vv">
-							       <if condition="authcheck('Home/'.$vv['alink'],session('uid'))">
-                                   <li data-id="{$vv.id}" data-pid="{$v.id}" data-url="index.php/home/{$vv.alink}" data-tabid="{$vv.alink}">{$vv.catename}</li>
-								  </if>
+    							       <if condition="authcheck('Home/'.$vv['alink'],session('uid'))">
+                                       <li data-id="{$vv.id}" data-pid="{$v.id}" data-url="index.php/home/{$vv.alink}" data-tabid="{$vv.alink}">{$vv.catename}</li>
+    								  </if>
                                   </foreach>
 								</if>
                             </foreach>

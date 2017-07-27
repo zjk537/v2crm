@@ -8,11 +8,11 @@
 			<tr><td>
                 <label for="j_name" class="control-label x85">所属店面：</label><select  name="pid" data-toggle="selectpicker" data-rule="required">
                <option  value="0">顶级</option>
-	          <foreach name="list" item="v">
-	          <option <if condition="$v.id EQ $Rs['pid'] ">selected value="{$Rs['pid']}" <else/>value="{$v.id}"</if> >
-	          <switch name="v.level">  <case value="0">+</case> <case value="1">+--</case><case value="2">+------</case><default /></switch>
-	            {$v.name} <if condition="$v.status EQ 1 "><else/><font color=red>[未启用]</font></if>
-              </foreach>
+    	          <foreach name="list" item="v">
+    	          <option <if condition="$v.id EQ $Rs['pid'] ">selected value="{$Rs['pid']}" <else/>value="{$v.id}"</if> >
+    	          <switch name="v.level">  <case value="0">+</case> <case value="1">+--</case><case value="2">+------</case><default /></switch>
+    	            {$v.name} <if condition="$v.status EQ 1 "><else/><font color=red>[未启用]</font></if>
+                  </foreach>
              </select>
             </td></tr>
             <tr><td>
@@ -22,7 +22,7 @@
             <if condition="$type EQ 0 ">
               <tr><td>
                 <label for="j_phone" class="control-label x85">联系电话：</label>
-                <input type="text" data-rule="required" size="30" name="phone" id="j_phone" value="{$Rs['phone']}" >
+                <input type="text" size="30" name="phone" id="j_phone" value="{$Rs['phone']}" >
              </td></tr>
             <else/></if>
             <if condition="$id EQ '' ">
