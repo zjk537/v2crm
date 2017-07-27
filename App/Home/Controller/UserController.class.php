@@ -76,10 +76,12 @@ class UserController extends CommonController
             $depname = urldecode(I('get.depname'));
             $posname = urldecode(I('get.posname'));
             $gcdata['uid']      = $uid;
-            $gcdata['group_id']=M('auth_group')->where(array("name"=>$depname))->getField('id');
+            $gcdata['group_id'] = M('auth_group')->where(array("name"=>$depname))->getField('id');
             $model->data($gcdata)->add();
             
-            $gcdata['group_id']=M('auth_group')->where(array("name"=>$posname))->getField('id');
+            $gcdata['group_id'] = M('auth_group')
+                                ->where(array("name"=>$posname, "pid"=> $gcdata['group_id']))
+                                ->getField('id');
             $model->data($gcdata)->add();
         }
         $this->mtReturn(200, "设置成功" . $id, $_REQUEST['navTabId'], false);

@@ -204,7 +204,14 @@ class Auth{
                 }
             } else {
                 //只要存在就记录
-                $authList[] = strtolower($rule['name']);
+                if(strpos($rule['name'],',')){
+                    $arr = explode(',', strtolower($rule['name']));
+                    foreach ($arr as $item) {
+                        $authList[] = $item;
+                    }
+                } else {
+                    $authList[] = strtolower($rule['name']);
+                }
             }
         }
         $_authList[$uid.$t] = $authList;

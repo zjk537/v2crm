@@ -23,32 +23,34 @@ function CheckAll(form)
             </tr>
         </thead>
         <tbody>
-       <foreach name="list" item="v">
-    	<tr>
-        <td height=25></td><Td>
-	   <input type="checkbox" name="rules[]" <if condition="in_array($v[id],$rs)">checked="checked"</if> value="{$v.id}">  {$v.title}
-	    </td>
-		<td>
-		<Table width="100%">
-		<php>$list1 = M('auth_rule')->where('level=1 and pid='.$v['id'])->order('sort')->select();</php>
-		<foreach name="list1" item="v">
-    	<Tr><Td height=30 width=200>
-        <input type="checkbox" name="rules[]" <if condition="in_array($v[id],$rs)">checked="checked"</if> value="{$v.id}">  {$v.title}
-	    </td>
-		<td>
+        <foreach name="list" item="v">
+    	   <tr>
+              <td height=25></td>
+              <Td>
+                <input type="checkbox" name="rules[]" <if condition="in_array($v[id],$rs)">checked="checked"</if> value="{$v.id}">  {$v.title}
+              </td>
+		      <td>
+		          <Table width="100%">
+		          <php>$list1 = M('auth_rule')->where('level=1 and pid='.$v['id'])->order('sort')->select();</php>
+		          <foreach name="list1" item="v">
+    	            <Tr>
+                      <Td height=30 width=200>
+                        <input type="checkbox" name="rules[]" <if condition="in_array($v[id],$rs)">checked="checked"</if> value="{$v.id}">  {$v.title}
+                      </td>
+		              <td>
 		
-		<php>$list2 = M('auth_rule')->where('level=2 and pid='.$v['id'])->order('sort')->select();</php>
-		<foreach name="list2" item="v">
-            <span style="width:150px;">
-    	    <input type="checkbox" name="rules[]" <if condition="in_array($v[id],$rs)">checked="checked"</if> value="{$v.id}">  {$v.title}
-            </span>
-        </foreach> 
-		</td>
-		</tr>
-        </foreach> 
-		</table>
-		</td>
-        </tr>
+		              <php>$list2 = M('auth_rule')->where('level=2 and pid='.$v['id'])->order('sort')->select();</php>
+		              <foreach name="list2" item="v">
+                        <span style="width:150px;">
+    	                   <input type="checkbox" name="rules[]" <if condition="in_array($v[id],$rs)">checked="checked"</if> value="{$v.id}">  {$v.title}
+                        </span>
+                      </foreach> 
+		            </td>
+		          </tr>
+                  </foreach> 
+		      </table>
+		    </td>
+            </tr>
         </foreach>
         </tbody>
     </table>

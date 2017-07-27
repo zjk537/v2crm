@@ -10,6 +10,7 @@
  */
 function authcheck($name, $uid, $type = 1, $mode = 'url', $relation = 'or')
 {
+    
     if (!in_array($uid, C('ADMINISTRATOR'))) {
         $auth = new \Think\Auth();
         return $auth->check($name, $uid, $type, $mode, $relation) ? true : false;
