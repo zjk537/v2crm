@@ -198,4 +198,10 @@ class CustController extends CommonController
         $this->display("index");
     }
 
+    public function recent(){
+        $model = D($this->dbname);
+        $map = array('uid'=>getuserid());
+        $cust = $model->where($map)->order('`updatetime` desc,`addtime` desc')->find();
+        $this->mtReturn('成功',200,$cust);
+    }
 }
