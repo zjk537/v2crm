@@ -23,7 +23,7 @@ class ProController extends CommonController
     public function _filter(&$map)
     {
         if (!in_array(getuserid(), C('ADMINISTRATOR'))) {
-            $map['depid'] = array('EQ', getdepid());
+            $map['`' . C('DB_PREFIX') . 'pro`.`depid`'] = array('EQ', getdepid());
         }
         if (!empty($this->postData['stime']) && !empty($this->postData['etime'])) {
             $map['`' . C('DB_PREFIX') . 'pro`.`addtime`'] = array(array('egt', $this->postData['stime']), array('elt', $this->postData['etime']));
@@ -126,7 +126,7 @@ class ProController extends CommonController
     public function _complex_join()
     {
         $join = sprintf('LEFT JOIN `%1$sproin` ON `%1$spro`.`id` = `%1$sproin`.`jpid`
-            LEFT JOIN (select * from (select * from `%1$sproout` order by `addtime` desc) a group by `jpid`) as `%1$sproout` on `%1$spro`.`id` = `%1$sproout`.`jpid`
+            LEFT JOIN (select * from `%1$sproout` where `id` in (SELECT max(`id`) from `%1$sproout` group by `jpid`)) as `%1$sproout` on `%1$spro`.`id` = `%1$sproout`.`jpid`
             LEFT JOIN `%1$scust` on `%1$spro`.`cid` = `%1$scust`.`id`', C('DB_PREFIX'));
         return $join;
     }
