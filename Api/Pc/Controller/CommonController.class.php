@@ -121,8 +121,8 @@ class CommonController extends ApiController
 
             }
         }
-        $map['_logic'] = 'or';
         if ((IS_POST) && !empty(trim($this->postData['keys']))) {
+            $map['_logic'] = 'or';
             $where['_complex'] = $map;
             return $where;
         } else {
