@@ -26,10 +26,15 @@ class ProController extends CommonController
             $map['`' . C('DB_PREFIX') . 'pro`.`depid`'] = array('EQ', getdepid());
         }
         if (!empty($this->postData['stime']) && !empty($this->postData['etime'])) {
-            $map['`' . C('DB_PREFIX') . 'pro`.`addtime`'] = array(array('egt', $this->postData['stime']), array('elt', $this->postData['etime']));
+            $stime = date("Y-m-d 00:00:00",strtotime($this->postData['stime']));
+            $etime = date("Y-m-d 24:00:00",strtotime($this->postData['etime']));
+
+            $map['`' . C('DB_PREFIX') . 'pro`.`addtime`'] = array(array('egt', $stime), array('elt', $etime));
         }
         if (!empty($this->postData['ostime']) && !empty($this->postData['oetime'])) {
-            $map['`' . C('DB_PREFIX') . 'pro`.`outtime`'] = array(array('egt', $this->postData['ostime']), array('elt', $this->postData['oetime']));
+            $ostime = date("Y-m-d 00:00:00",strtotime($this->postData['ostime']));
+            $oetime = date("Y-m-d 24:00:00",strtotime($this->postData['oetime']));
+            $map['`' . C('DB_PREFIX') . 'pro`.`outtime`'] = array(array('egt', $ostime), array('elt', $oetime));
         }
         if (empty($this->postData['keys'])) {
             return;
