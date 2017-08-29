@@ -100,7 +100,7 @@
                 <th>
                     详细
                 </th>
-                <th <php>echo display(MODULE_NAME.'/proout/add');</php> >
+                <th <php>echo display('proout/add');</php> >
                     售出
                 </th>
                 <th <php>echo display(CONTROLLER_NAME.'/edit');</php> >
@@ -151,7 +151,7 @@
                             详细
                         </a>
                     </td>
-                    <td <php>echo display(MODULE_NAME.'/proout/add');</php> >
+                    <td <php>echo display('proout/add');</php> >
                         <if condition=" $v.status EQ '在库' or $v.status EQ '预定' ">
                             <a class="btn btn-green btn-sm" data-height="500" data-id="dialog-mask" data-mask="true" data-toggle="dialog" data-width="900" href="__MODULE__/proout/add/id/{$v['id']}/navTabId/{:CONTROLLER_NAME}">
                                 出售
