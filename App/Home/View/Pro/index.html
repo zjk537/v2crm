@@ -110,7 +110,7 @@
         </thead>
         <tbody>
             <volist id="v" name="list">
-                <tr data-id="{$v.id}">
+                <tr data-id="{$v.id}" class="{$v.status|className=###}">
                     <td>
                     </td>
                     <td>
@@ -168,6 +168,11 @@
             </volist>
         </tbody>
     </table>
+    <style type="text/css">
+        .shouchu > td{ color: red; }
+        .yuding > td{ color: blue; }
+        .quhui > td{ color: green; }
+    </style>
     <div class="bjui-footBar">
         <div class="pages">
             <span>

@@ -1,6 +1,6 @@
 <?php
 
-// Ğ£ÑéÑéÖ¤Âë    @return boolean
+// æ ¡éªŒéªŒè¯ç     @return boolean
 function checkVerify()
 {
     $verify = new \Think\Verify();
@@ -8,12 +8,12 @@ function checkVerify()
 }
 
 /**
- * ¼ì²éÈ¨ÏŞ
- * @param name string|array  ĞèÒªÑéÖ¤µÄ¹æÔòÁĞ±í,Ö§³Ö¶ººÅ·Ö¸ôµÄÈ¨ÏŞ¹æÔò»òË÷ÒıÊı×é
- * @param uid  int           ÈÏÖ¤ÓÃ»§µÄid
- * @param string mode        Ö´ĞĞcheckµÄÄ£Ê½
- * @param relation string    Èç¹ûÎª 'or' ±íÊ¾Âú×ãÈÎÒ»Ìõ¹æÔò¼´Í¨¹ıÑéÖ¤;Èç¹ûÎª 'and'Ôò±íÊ¾ĞèÂú×ãËùÓĞ¹æÔò²ÅÄÜÍ¨¹ıÑéÖ¤
- * @return boolean           Í¨¹ıÑéÖ¤·µ»Øtrue;Ê§°Ü·µ»Øfalse
+ * æ£€æŸ¥æƒé™
+ * @param name string|array  éœ€è¦éªŒè¯çš„è§„åˆ™åˆ—è¡¨,æ”¯æŒé€—å·åˆ†éš”çš„æƒé™è§„åˆ™æˆ–ç´¢å¼•æ•°ç»„
+ * @param uid  int           è®¤è¯ç”¨æˆ·çš„id
+ * @param string mode        æ‰§è¡Œcheckçš„æ¨¡å¼
+ * @param relation string    å¦‚æœä¸º 'or' è¡¨ç¤ºæ»¡è¶³ä»»ä¸€æ¡è§„åˆ™å³é€šè¿‡éªŒè¯;å¦‚æœä¸º 'and'åˆ™è¡¨ç¤ºéœ€æ»¡è¶³æ‰€æœ‰è§„åˆ™æ‰èƒ½é€šè¿‡éªŒè¯
+ * @return boolean           é€šè¿‡éªŒè¯è¿”å›true;å¤±è´¥è¿”å›false
  */
 function authcheck($name, $uid, $type = 1, $mode = 'url', $relation = 'or')
 {
@@ -34,6 +34,25 @@ function display($name)
             return "style='display:none'";
         }
     }
+}
+
+function className($status){
+    $class = '';
+    switch (trim($status)) {
+        case 'é¢„å®š':
+            $class='yuding';
+            break;
+        case 'å”®å‡º':
+            $class='shouchu';
+            break;
+        case 'å–å›':
+            $class='quhui';
+            break;
+        default:
+            break;
+    }
+   
+   return $class;
 }
 
 function disabled($uid)
@@ -106,11 +125,11 @@ function cateTreed($pid = 0, $level = 0)
 }
 
 /**
- * ¸ñÊ½»¯×Ö½Ú´óĞ¡
- * @param  number $size      ×Ö½ÚÊı
- * @param  string $delimiter Êı×ÖºÍµ¥Î»·Ö¸ô·û
- * @return string            ¸ñÊ½»¯ºóµÄ´øµ¥Î»µÄ´óĞ¡
- * @author Âóµ±Ãç¶ù <zuojiazi@vip.qq.com>
+ * æ ¼å¼åŒ–å­—èŠ‚å¤§å°
+ * @param  number $size      å­—èŠ‚æ•°
+ * @param  string $delimiter æ•°å­—å’Œå•ä½åˆ†éš”ç¬¦
+ * @return string            æ ¼å¼åŒ–åçš„å¸¦å•ä½çš„å¤§å°
+ * @author éº¦å½“è‹—å„¿ <zuojiazi@vip.qq.com>
  */
 function format_bytes($size, $delimiter = '')
 {
@@ -123,11 +142,11 @@ function format_bytes($size, $delimiter = '')
 }
 
 /**
- * µ÷ÓÃÏµÍ³µÄAPI½Ó¿Ú·½·¨£¨¾²Ì¬·½·¨£©
- * api('User/getName','id=5'); µ÷ÓÃ¹«¹²Ä£¿éµÄUser½Ó¿ÚµÄgetName·½·¨
- * api('Admin/User/getName','id=5');  µ÷ÓÃAdminÄ£¿éµÄUser½Ó¿Ú
- * @param  string  $name ¸ñÊ½ [Ä£¿éÃû]/½Ó¿ÚÃû/·½·¨Ãû
- * @param  array|string  $vars ²ÎÊı
+ * è°ƒç”¨ç³»ç»Ÿçš„APIæ¥å£æ–¹æ³•ï¼ˆé™æ€æ–¹æ³•ï¼‰
+ * api('User/getName','id=5'); è°ƒç”¨å…¬å…±æ¨¡å—çš„Useræ¥å£çš„getNameæ–¹æ³•
+ * api('Admin/User/getName','id=5');  è°ƒç”¨Adminæ¨¡å—çš„Useræ¥å£
+ * @param  string  $name æ ¼å¼ [æ¨¡å—å]/æ¥å£å/æ–¹æ³•å
+ * @param  array|string  $vars å‚æ•°
  */
 function api($name, $vars = array())
 {
@@ -147,22 +166,22 @@ function check_table_exist($tableName)
     $tableName = C('DB_PREFIX') . strtolower($tableName);
     $tables    = M()->query('show tables');
     if (empty($tables)) {
-        exit('Êı¾İ¿âÖĞÃ»ÓĞ±í');
+        exit('æ•°æ®åº“ä¸­æ²¡æœ‰è¡¨');
     }
     foreach ($tables as $v) {
         if ($v['tables_in_test'] == $tableName) {
             return true;
         }
     }
-    exit('Êı¾İ¿âÖĞÃ»ÓĞ ' . $tableName . ' ±í£¬Çë´´½¨');
+    exit('æ•°æ®åº“ä¸­æ²¡æœ‰ ' . $tableName . ' è¡¨ï¼Œè¯·åˆ›å»º');
 }
 
 /**
- * ¸ù¾İÌõ¼ş×Ö¶Î»ñÈ¡Ö¸¶¨±íµÄÊı¾İ
- * @param mixed $value Ìõ¼ş£¬¿ÉÓÃ³£Á¿»òÕßÊı×é
- * @param string $condition Ìõ¼ş×Ö¶Î
- * @param string $field ĞèÒª·µ»ØµÄ×Ö¶Î£¬²»´«Ôò·µ»ØÕû¸öÊı¾İ
- * @param string $table ĞèÒª²éÑ¯µÄ±í
+ * æ ¹æ®æ¡ä»¶å­—æ®µè·å–æŒ‡å®šè¡¨çš„æ•°æ®
+ * @param mixed $value æ¡ä»¶ï¼Œå¯ç”¨å¸¸é‡æˆ–è€…æ•°ç»„
+ * @param string $condition æ¡ä»¶å­—æ®µ
+ * @param string $field éœ€è¦è¿”å›çš„å­—æ®µï¼Œä¸ä¼ åˆ™è¿”å›æ•´ä¸ªæ•°æ®
+ * @param string $table éœ€è¦æŸ¥è¯¢çš„è¡¨
  * @author huajie <banhuajie@163.com>
  */
 function get_table_field($value = null, $condition = 'id', $field = null, $table = null)
@@ -171,7 +190,7 @@ function get_table_field($value = null, $condition = 'id', $field = null, $table
         return false;
     }
 
-    //Æ´½Ó²ÎÊı
+    //æ‹¼æ¥å‚æ•°
     $map[$condition] = $value;
     $info            = M(ucfirst($table))->where($map);
     if (empty($field)) {
@@ -218,11 +237,11 @@ function Hex($indata)
 }
 
 /**
- * ×Ö·û´®×ª»»ÎªÊı×é£¬Ö÷ÒªÓÃÓÚ°Ñ·Ö¸ô·ûµ÷Õûµ½µÚ¶ş¸ö²ÎÊı
- * @param  string $str  Òª·Ö¸îµÄ×Ö·û´®
- * @param  string $glue ·Ö¸î·û
+ * å­—ç¬¦ä¸²è½¬æ¢ä¸ºæ•°ç»„ï¼Œä¸»è¦ç”¨äºæŠŠåˆ†éš”ç¬¦è°ƒæ•´åˆ°ç¬¬äºŒä¸ªå‚æ•°
+ * @param  string $str  è¦åˆ†å‰²çš„å­—ç¬¦ä¸²
+ * @param  string $glue åˆ†å‰²ç¬¦
  * @return array
- * @author Âóµ±Ãç¶ù <zuojiazi@vip.qq.com>
+ * @author éº¦å½“è‹—å„¿ <zuojiazi@vip.qq.com>
  */
 function str2arr($str, $glue = ',')
 {
@@ -230,11 +249,11 @@ function str2arr($str, $glue = ',')
 }
 
 /**
- * Êı×é×ª»»Îª×Ö·û´®£¬Ö÷ÒªÓÃÓÚ°Ñ·Ö¸ô·ûµ÷Õûµ½µÚ¶ş¸ö²ÎÊı
- * @param  array  $arr  ÒªÁ¬½ÓµÄÊı×é
- * @param  string $glue ·Ö¸î·û
+ * æ•°ç»„è½¬æ¢ä¸ºå­—ç¬¦ä¸²ï¼Œä¸»è¦ç”¨äºæŠŠåˆ†éš”ç¬¦è°ƒæ•´åˆ°ç¬¬äºŒä¸ªå‚æ•°
+ * @param  array  $arr  è¦è¿æ¥çš„æ•°ç»„
+ * @param  string $glue åˆ†å‰²ç¬¦
  * @return string
- * @author Âóµ±Ãç¶ù <zuojiazi@vip.qq.com>
+ * @author éº¦å½“è‹—å„¿ <zuojiazi@vip.qq.com>
  */
 function arr2str($arr, $glue = ',')
 {
@@ -242,14 +261,14 @@ function arr2str($arr, $glue = ',')
 }
 
 /**
- * ×Ö·û´®½ØÈ¡£¬Ö§³ÖÖĞÎÄºÍÆäËû±àÂë
+ * å­—ç¬¦ä¸²æˆªå–ï¼Œæ”¯æŒä¸­æ–‡å’Œå…¶ä»–ç¼–ç 
  * @static
  * @access public
- * @param string $str ĞèÒª×ª»»µÄ×Ö·û´®
- * @param string $start ¿ªÊ¼Î»ÖÃ
- * @param string $length ½ØÈ¡³¤¶È
- * @param string $charset ±àÂë¸ñÊ½
- * @param string $suffix ½Ø¶ÏÏÔÊ¾×Ö·û
+ * @param string $str éœ€è¦è½¬æ¢çš„å­—ç¬¦ä¸²
+ * @param string $start å¼€å§‹ä½ç½®
+ * @param string $length æˆªå–é•¿åº¦
+ * @param string $charset ç¼–ç æ ¼å¼
+ * @param string $suffix æˆªæ–­æ˜¾ç¤ºå­—ç¬¦
  * @return string
  */
 function msubstr($str, $start = 0, $length)
@@ -323,7 +342,7 @@ function encrypt($data)
     return md5(md5($data));
 }
 
-//html´úÂëÊä³ö
+//htmlä»£ç è¾“å‡º
 function html_out($str)
 {
     if (function_exists('htmlspecialchars_decode')) {
