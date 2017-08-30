@@ -117,6 +117,10 @@ class ProController extends CommonController
     public function _after_edit($id)
     {
         $postData = I('post.');
+        if(!isset($postData['fileids'])){
+            return;
+        }
+
         // 更新fileid
         $model = M('files');
         $map['id'] = array('in', implode(',', $postData['fileids']));
