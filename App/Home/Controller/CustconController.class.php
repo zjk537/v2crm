@@ -43,7 +43,7 @@ class CustconController extends CommonController{
     
   }
 	
-   public function _after_add($id){
+   public function _after_added($id){
     
    }
 

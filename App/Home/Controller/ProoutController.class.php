@@ -47,7 +47,7 @@ class ProoutController extends CommonController
 
     }
 
-    public function _after_add($id)
+    public function _after_added($id)
     {
         $postData  = I('post.');
         $data['id'] = $postData['jpid'];
