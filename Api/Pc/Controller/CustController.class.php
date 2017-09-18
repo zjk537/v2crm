@@ -82,12 +82,13 @@ class CustController extends CommonController
     {
     	$model = D('Cust');
         $tmpCust = $model->where(array('phone' => $data['phone']))->limit(1)->select();
-    	if(empty($data['id']) || $data['id'] == 0){
-    		$data['id'] = $tmpCust[0]['id'];
-    	} elseif ( $tmpCust && $tmpCust[0]['id'] != $data['id']) {
-            $this->mtReturn('手机号码已被占用!');
-        } 
-    	$id = $data['id'];
+    	// if(empty($data['id']) || $data['id'] == 0){
+    	// 	$data['id'] = $tmpCust[0]['id'];
+    	// } elseif ( $tmpCust && $tmpCust[0]['id'] != $data['id']) {
+     //        $this->mtReturn('手机号码已被占用!');
+     //    } 
+
+    	$id = $data['id'] = $tmpCust[0]['id'];
         $isSuccess = true;
         
     	if (false === $data = $model->create($data)) {
