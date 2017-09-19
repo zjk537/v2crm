@@ -233,6 +233,7 @@ class ProController extends CommonController
             $data['starttime'] = null;
         }
         $data['cname'] = $custData['name'];
+        $data['cid'] = $custid;
         return $data;
     }
 
