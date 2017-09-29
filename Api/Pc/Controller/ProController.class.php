@@ -122,7 +122,13 @@ class ProController extends CommonController
         $proinFields  = $this->fieldMap('proin', M('proin')->getDbFields());
         $prooutFields = $this->fieldMap('proout', M('proout')->getDbFields());
         $custFields   = $this->fieldMap('cust', M('cust')->getDbFields());
+        $depFields = array();
+        array_push($depFields, '`' . C('DB_PREFIX') . 'auth_group`.`name` as `prodepname`');
+        array_push($depFields, '`' . C('DB_PREFIX') . 'auth_group`.`name` as `prodepphone`');
+
+
         $field        = implode(',', $proFields) . ','
+        . implode(',', $depFields) . ','
         . implode(',', $proinFields) . ','
         . implode(',', $prooutFields) . ','
         . implode(',', $custFields);
@@ -131,6 +137,7 @@ class ProController extends CommonController
     public function _complex_join()
     {
         $join = sprintf('LEFT JOIN `%1$sproin` ON `%1$spro`.`id` = `%1$sproin`.`jpid`
+            LEFT JOIN `%1$sauth_group` on `%1$spro`.`depid` = `%1$sauth_group`.`id`
             LEFT JOIN (select * from `%1$sproout` where `id` in (SELECT max(`id`) from `%1$sproout` group by `jpid`)) as `%1$sproout` on `%1$spro`.`id` = `%1$sproout`.`jpid`
             LEFT JOIN `%1$scust` on `%1$spro`.`cid` = `%1$scust`.`id`', C('DB_PREFIX'));
         return $join;

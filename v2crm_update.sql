@@ -327,8 +327,8 @@ DROP TABLE IF EXISTS `v2_pro`;
 CREATE TABLE `v2_pro` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `depid` int(11) NOT NULL COMMENT '店面Id',
-  `depname` varchar(50) NOT NULL COMMENT '店面名称',
-  `depphone` varchar(20) NOT NULL DEFAULT '' COMMENT '店面电话',
+  -- `depname` varchar(50) NOT NULL COMMENT '店面名称',
+  -- `depphone` varchar(20) NOT NULL DEFAULT '' COMMENT '店面电话',
   `name` varchar(50) NOT NULL COMMENT '产品名称',
   `fenlei` varchar(20) NOT NULL COMMENT '产品分类',
   `pinpai` varchar(20) NOT NULL DEFAULT '' COMMENT '产品品牌',
@@ -379,11 +379,11 @@ CREATE TABLE `v2_pro` (
 --  Records of `v2_pro`
 -- ----------------------------
 BEGIN;
-INSERT INTO `v2_pro` VALUES ('1', '2', '建外SOHO', '', 'GUCCI', '包', 'GUCCI', 'JS20170716002', '1122', '2', '林涛', '寄售', null, null, null, null, null, null, null, null, null, null, null, '3000', '3500', '0', '0', '0', '在库', '未打款', null, '2017-07-16 16:49:40', '2017-07-20 00:00:00', null, '2', '林涛', '2017-07-16 16:49:40', null, null, null),
- ('2', '2', '建外SOHO', '', 'HERMES', '包', 'HERMES', 'JS20170716003', '1125', '2', '林涛', '寄售', null, null, null, null, null, null, null, null, null, null, null, '1000', '1500', '0', '0', '0', '在库', '未打款', null, '2017-07-16 16:55:08', '2017-07-18 00:00:00', null, '2', '林涛', '2017-07-16 16:55:08', null, null, null),
- ('3', '2', '建外SOHO', '', 'HERMES-01', '包', 'HERMES', 'ZY20170716004', '21510', '2', '林涛', '进货', null, null, null, null, null, null, null, null, null, null, null, '10000', '10000', '0', '0', '0', '在库', '已打款', null, null, null, null, '2', '林涛', '2017-07-16 16:56:49', null, null, null),
- ('4', '2', '建外SOHO', '', '戈雅 白色中号竹节包', '包', 'LV', 'JS20170716005', '010101010', '0', '林涛', '寄售', '', '', '', '', '', '', '', '', '', '', '', '5000', '6000', '0', '0', '0', '在库', null, ' 无附件', '2017-07-16 20:33:59', '2017-09-16 20:31:06', null, '2', '林涛', '2017-07-16 20:33:59', null, null, null),
- ('5', '3', '红街店', '010-47228827', 'birkin30 T5/10 磨砂金扣 X刻 epsom vip马蹄印', '包', 'LV', 'JS20170716006', '', '0', '贺菲菲', '寄售', 'T5拼10', '全新', '防尘袋 钥匙 锁 ', '30', '', '', '', '', '', '', '', '135000', '145000', '0', '0', '0', '在库', null, '测试', '2017-07-16 21:14:20', null, null, '4', '小崔', '2017-07-16 21:14:20', null, null, null);
+INSERT INTO `v2_pro` VALUES ('1', '2', 'GUCCI', '包', 'GUCCI', 'JS20170716002', '1122', '2', '林涛', '寄售', null, null, null, null, null, null, null, null, null, null, null, '3000', '3500', '0', '0', '0', '在库', '未打款', null, '2017-07-16 16:49:40', '2017-07-20 00:00:00', null, '2', '林涛', '2017-07-16 16:49:40', null, null, null),
+ ('2', '2', 'HERMES', '包', 'HERMES', 'JS20170716003', '1125', '2', '林涛', '寄售', null, null, null, null, null, null, null, null, null, null, null, '1000', '1500', '0', '0', '0', '在库', '未打款', null, '2017-07-16 16:55:08', '2017-07-18 00:00:00', null, '2', '林涛', '2017-07-16 16:55:08', null, null, null),
+ ('3', '2', 'HERMES-01', '包', 'HERMES', 'ZY20170716004', '21510', '2', '林涛', '进货', null, null, null, null, null, null, null, null, null, null, null, '10000', '10000', '0', '0', '0', '在库', '已打款', null, null, null, null, '2', '林涛', '2017-07-16 16:56:49', null, null, null),
+ ('4', '2', '戈雅 白色中号竹节包', '包', 'LV', 'JS20170716005', '010101010', '0', '林涛', '寄售', '', '', '', '', '', '', '', '', '', '', '', '5000', '6000', '0', '0', '0', '在库', null, ' 无附件', '2017-07-16 20:33:59', '2017-09-16 20:31:06', null, '2', '林涛', '2017-07-16 20:33:59', null, null, null),
+ ('5', '3', 'birkin30 T5/10 磨砂金扣 X刻 epsom vip马蹄印', '包', 'LV', 'JS20170716006', '', '0', '贺菲菲', '寄售', 'T5拼10', '全新', '防尘袋 钥匙 锁 ', '30', '', '', '', '', '', '', '', '135000', '145000', '0', '0', '0', '在库', null, '测试', '2017-07-16 21:14:20', null, null, '4', '小崔', '2017-07-16 21:14:20', null, null, null);
 COMMIT;
 
 -- ----------------------------
