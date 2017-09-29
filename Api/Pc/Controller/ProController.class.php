@@ -124,7 +124,7 @@ class ProController extends CommonController
         $custFields   = $this->fieldMap('cust', M('cust')->getDbFields());
         $depFields = array();
         array_push($depFields, '`' . C('DB_PREFIX') . 'auth_group`.`name` as `prodepname`');
-        array_push($depFields, '`' . C('DB_PREFIX') . 'auth_group`.`name` as `prodepphone`');
+        array_push($depFields, '`' . C('DB_PREFIX') . 'auth_group`.`phone` as `prodepphone`');
 
 
         $field        = implode(',', $proFields) . ','
