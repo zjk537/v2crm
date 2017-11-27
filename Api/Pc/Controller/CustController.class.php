@@ -81,7 +81,7 @@ class CustController extends CommonController
     public function autoUpdate($data)
     {
     	$model = D('Cust');
-        $tmpCust = $model->where(array('phone' => $data['phone']))->limit(1)->select();
+        $tmpCust = $model->where(array('phone' => $data['phone'], 'depid' => getdepid()))->limit(1)->select();
     	// if(empty($data['id']) || $data['id'] == 0){
     	// 	$data['id'] = $tmpCust[0]['id'];
     	// } elseif ( $tmpCust && $tmpCust[0]['id'] != $data['id']) {
