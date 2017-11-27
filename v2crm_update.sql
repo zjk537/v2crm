@@ -209,11 +209,11 @@ DROP TABLE IF EXISTS `v2_cust`;
 CREATE TABLE `v2_cust` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL COMMENT '联系人',-- update xingming
-  `phone` varchar(11) NOT NULL COMMENT '手机号',
+  `phone` varchar(50) NOT NULL COMMENT '手机号',--  -- 11->50
   `status` tinyint(1) NOT NULL DEFAULT '1',
   `remark` varchar(200) NOT NULL DEFAULT '' COMMENT '备注',-- update beizhu
   -- `title` varchar(50) NOT NULL DEFAULT '' COMMENT '公司名称',-- del
-  `dizhi` varchar(200) NOT NULL DEFAULT '' COMMENT '地址',
+  `dizhi` varchar(200) NULL DEFAULT '' COMMENT '地址',
   -- `email` varchar(200) NOT NULL DEFAULT '' COMMENT '电子邮件',-- del
   -- `qq` varchar(50) NOT NULL DEFAULT '' COMMENT 'QQ' ,-- del
   `sex` varchar(2) NOT NULL DEFAULT '' COMMENT '性别',
