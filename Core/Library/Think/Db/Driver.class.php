@@ -140,7 +140,7 @@ abstract class Driver {
         $this->initConnect(false);
         if ( !$this->_linkID ) return false;
         $this->queryStr     =   $str;
-        echo $str;
+        // echo $str;
         if(!empty($this->bind)){
             $that   =   $this;
             $this->queryStr =   strtr($this->queryStr,array_map(function($val) use($that){ return '\''.$that->escapeString($val).'\''; },$this->bind));
