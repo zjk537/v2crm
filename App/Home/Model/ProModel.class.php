@@ -28,6 +28,7 @@ class ProModel extends Model{
         array('depname','getdepname',1,'function'),	
         array('depphone','getdepphone',1,'function'),
 	    array('addtime','gettime',1,'function'), 
+	    array('updatetime','gettime',1,'function'), 
 		array('uuid','getuserid',2,'function'),
         array('uuname','gettruename',2,'function'), 		
 	    array('updatetime','gettime',2,'function'), 

@@ -27,6 +27,7 @@ class ProModel extends Model{
 		array('uid','getuserid',1,'function'),
         array('uname','gettruename',1,'function'), 		
 	    array('addtime','gettime',1,'function'), 
+	    array('updatetime','gettime',1,'function'), 
 		array('uuid','getuserid',2,'function'),
         array('uuname','gettruename',2,'function'), 		
 	    array('updatetime','gettime',2,'function'), 
