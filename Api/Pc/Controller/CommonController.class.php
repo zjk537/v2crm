@@ -2,6 +2,7 @@
 namespace Pc\Controller;
 
 use Common\Controller\ApiController;
+use Think\Log;
 
 class CommonController extends ApiController
 {
@@ -12,8 +13,10 @@ class CommonController extends ApiController
         $this->_name = CONTROLLER_NAME;
 
         $json = @file_get_contents("php://input");
+        E($json);
         //编码识别转换
         $encode = mb_detect_encoding($json,array('UTF-8','GB2312'));
+        E($encode);
         if ($encode != 'UTF-8'){
             $json = iconv('GB2312', 'utf-8', $json);
         }

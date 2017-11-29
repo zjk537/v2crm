@@ -29,7 +29,7 @@ class ProController extends CommonController
             $stime = date("Y-m-d 00:00:00",strtotime($this->postData['stime']));
             $etime = date("Y-m-d 24:00:00",strtotime($this->postData['etime']));
 
-            $map['`' . C('DB_PREFIX') . 'pro`.`addtime`'] = array(array('egt', $stime), array('elt', $etime));
+            $map['`' . C('DB_PREFIX') . 'pro`.`updatetime`'] = array(array('egt', $stime), array('elt', $etime));
         }
         if (!empty($this->postData['ostime']) && !empty($this->postData['oetime'])) {
             $ostime = date("Y-m-d 00:00:00",strtotime($this->postData['ostime']));
@@ -432,7 +432,7 @@ class ProController extends CommonController
             $sql .= ' AND depid = ' . getdepid();
         }
         if (!empty($this->postData['stime']) && !empty($this->postData['etime'])) {
-            $sql .= " AND `addtime` BETWEEN " . $this->postData['stime'] . " AND " . $this->postData['etime'];
+            $sql .= " AND `updatetime` BETWEEN " . $this->postData['stime'] . " AND " . $this->postData['etime'];
         }
         $resData = $model->query($sql);
 
