@@ -22,7 +22,7 @@ class CustController extends CommonController
 
     public function _filter(&$map)
     {
-        if (!in_array(session('uid'), C('ADMINISTRATOR'))) {
+        if (!in_array(getdepid(), C('ADMINISTRATOR'))) {
             // $map[] = array("uid" => array('EQ', session("uid")), "juid" => array('like', '%' . session("uid") . '%'), "_logic" => "or");
             $map[] = array('depid' => getdepid());
         }
