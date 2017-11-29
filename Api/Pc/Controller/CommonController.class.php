@@ -13,12 +13,26 @@ class CommonController extends ApiController
 
         $json = @file_get_contents("php://input");
         //编码识别转换
-        $encode = mb_detect_encoding($json,array('UTF-8','GB2312','GBK'));
-        if($encode == 'GBK'){
-            $json = iconv('GBK', 'utf-8', $json);
-        } elseif ($encode != 'UTF-8'){
-            $json = iconv('GB2312', 'utf-8', $json);
+        // $encode = mb_detect_encoding($json,array('UTF-8','GB2312'));
+        $encode = mb_detect_encoding($json,array('ASCII','GB2312','GBK','UTF-8'));
+        switch ($encode) {
+            case 'ASCII':
+                $json = iconv('ASCII', 'utf-8', $json);
+                break;
+            case 'GB2312':
+                $json = iconv('GB2312', 'utf-8', $json);
+                break;
+            case 'GBK':
+                $json = iconv('GBK', 'utf-8', $json);
+                break;
+            default:
+                break;
         }
+        // if($encode == 'GBK'){
+        //     $json = iconv('GBK', 'utf-8', $json);
+        // } elseif ($encode != 'UTF-8'){
+        //     $json = iconv('GB2312', 'utf-8', $json);
+        // }
         $this->postData = json_decode($json,true);
         $config = S('DB_CONFIG_DATA');
         if (!$config) {
