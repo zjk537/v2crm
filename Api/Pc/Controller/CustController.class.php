@@ -23,8 +23,7 @@ class CustController extends CommonController
     public function _filter(&$map)
     {
         if (!in_array(session('uid'), C('ADMINISTRATOR'))) {
-            $map[] = array("uid" => array('EQ', getuserid()), "juid" => array('like', '%' . getuserid() . '%'), "_logic" => "or");
-            $map[]  = array('depid' =>  array('EQ' => getdepid() ));
+            $map[] = array("uid" => array('EQ', session("uid")), "juid" => array('like', '%' . session("uid") . '%'), "_logic" => "or");
         }
         if (IS_POST && isset($_REQUEST['time1']) && $_REQUEST['time1'] != '' && isset($_REQUEST['time2']) && $_REQUEST['time2'] != '') {
             $map['addtime'] = array(array('egt', I('time1')), array('elt', I('time2')));
