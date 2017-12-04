@@ -373,9 +373,9 @@ class ProController extends CommonController
             $map['depid'] = array('EQ', getdepid());
         }
         $resData = array();
-        $types   = $model->distinct(true)->where($map)->field('fenlei')->select();
+        $types   = $model->distinct(true)->where($map)->field('pinpai')->select();
         foreach ($types as $type) {
-            array_push($resData, $type['fenlei']);
+            array_push($resData, $type['pinpai']);
         }
 
         $this->mtReturn('Success', 200, $resData);
