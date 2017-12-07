@@ -102,6 +102,7 @@ class ProinController extends CommonController
         if(empty($data['id']) || $data['id'] == 0){
             $isSuccess = $model->add($data);
         } else {
+            unset($data['id']);
             $isSuccess = $model->where(array("jpid" => $data['id']))->save($data);
         }
         if (!$isSuccess) {
