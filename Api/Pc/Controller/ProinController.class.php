@@ -99,10 +99,10 @@ class ProinController extends CommonController
             $this->mtReturn($model->getError());
         }
         $isSuccess = true;
-        if(empty($data['proinid']) || $data['proinid'] == 0){
+        if(empty($data['id']) || $data['id'] == 0){
             $isSuccess = $model->add($data);
         } else {
-            $isSuccess = $model->save($data);
+            $isSuccess = $model->where(array("jpid" => $data['id']))->save($data);
         }
         if (!$isSuccess) {
             $this->mtReturn($model->getError());
