@@ -100,7 +100,7 @@ class ProinController extends CommonController
         }
         $proin = $model->where(array("jpid" => $data['jpid']))->select();
         $isSuccess = true;
-        if(empty($proin['id']) || $proin['id'] == 0){
+        if(empty($proin[0]['id']) || $proin[0]['id'] == 0){
             $isSuccess = $model->add($data);
         } else {
             $isSuccess = $model->where(array("jpid" => $data['jpid']))->save($data);
