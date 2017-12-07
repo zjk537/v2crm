@@ -98,12 +98,12 @@ class ProinController extends CommonController
     	if (false === $data = $model->create($data)) {
             $this->mtReturn($model->getError());
         }
+        $proin = $model->where(array("jpid" => $data['jpid']))->select();
         $isSuccess = true;
-        if(empty($data['id']) || $data['id'] == 0){
+        if(empty($proin['id']) || $proin['id'] == 0){
             $isSuccess = $model->add($data);
         } else {
-            unset($data['id']);
-            $isSuccess = $model->where(array("jpid" => $data['id']))->save($data);
+            $isSuccess = $model->where(array("jpid" => $data['jpid']))->save($data);
         }
         if (!$isSuccess) {
             $this->mtReturn($model->getError());

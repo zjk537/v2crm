@@ -206,6 +206,7 @@ class ProController extends CommonController
         $data = $this->postData;
         $data['jpid']    = (int) $data['id'];
         $data['jpname']  = $data['name'];
+        unset($data['id']);
         // 更新进货记录
         if($data['status'] === '在库'){
             $data['jpjiage'] = $data['jiage'];
