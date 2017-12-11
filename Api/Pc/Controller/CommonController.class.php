@@ -108,6 +108,7 @@ class CommonController extends ApiController
 
     public function lists()
     {
+        $start = time();
         $model = D($this->dbname);
         $map   = $this->_search();
         $resData = array();
@@ -120,6 +121,8 @@ class CommonController extends ApiController
         // if (method_exists($this, '_before_response')) {
         //     $this->_before_response();
         // }
+        $end = time();
+        $resData['diff'] = $end - $start;
         $this->mtReturn('数据查询成功，pageIndex:'.$resData['pageIndex'],200,$resData);
     }
 
