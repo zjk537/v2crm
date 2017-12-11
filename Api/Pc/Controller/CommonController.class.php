@@ -122,7 +122,8 @@ class CommonController extends ApiController
         //     $this->_before_response();
         // }
         $end = time();
-        $resData['diff'] = $end - $start;
+        $diff = $end - $start;
+        Log::write('执行时间：'.$diff);
         $this->mtReturn('数据查询成功，pageIndex:'.$resData['pageIndex'],200,$resData);
     }
 
