@@ -56,7 +56,7 @@ class ProoutController extends CommonController
         . implode(',', $custFields);
         return $field;
     }
-    
+
     private function complex_join()
     {
         $join = sprintf('LEFT JOIN `%1$sproin` ON `%1$spro`.`id` = `%1$sproin`.`jpid`
@@ -96,7 +96,7 @@ class ProoutController extends CommonController
     	$pro = A('pro');
     	$pro->autoUpdate($data);
 
-        $model = D($this->dbname);
+        $model = D('pro');
         $map = array();
         $map['`' . C('DB_PREFIX') . 'pro`.`id`'] = array('EQ', $data['id']);
         $join = $this->complex_join();
