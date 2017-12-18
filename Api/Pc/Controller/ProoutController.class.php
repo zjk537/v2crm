@@ -28,7 +28,17 @@ class ProoutController extends CommonController
 
     }
 
-    public function complex_field()
+    private function fieldMap($prefix, $array)
+    {
+        $tmpArr = array();
+        foreach ($array as $value) {
+            $newValue = '`' . C('DB_PREFIX') . $prefix . '`.`' . $value . '` as `' . $prefix . $value . '`';
+            array_push($tmpArr, $newValue);
+        }
+        return $tmpArr;
+    }
+
+    private function complex_field()
     {
         $proFields    = $this->fieldMap('pro', M('pro')->getDbFields());
         $proinFields  = $this->fieldMap('proin', M('proin')->getDbFields());
@@ -46,7 +56,8 @@ class ProoutController extends CommonController
         . implode(',', $custFields);
         return $field;
     }
-    public function complex_join()
+    
+    private function complex_join()
     {
         $join = sprintf('LEFT JOIN `%1$sproin` ON `%1$spro`.`id` = `%1$sproin`.`jpid`
             LEFT JOIN `%1$sauth_group` on `%1$spro`.`depid` = `%1$sauth_group`.`id`
