@@ -28,6 +28,33 @@ class ProoutController extends CommonController
 
     }
 
+    public function complex_field()
+    {
+        $proFields    = $this->fieldMap('pro', M('pro')->getDbFields());
+        $proinFields  = $this->fieldMap('proin', M('proin')->getDbFields());
+        $prooutFields = $this->fieldMap('proout', M('proout')->getDbFields());
+        $custFields   = $this->fieldMap('cust', M('cust')->getDbFields());
+        $depFields = array();
+        array_push($depFields, '`' . C('DB_PREFIX') . 'auth_group`.`name` as `prodepname`');
+        array_push($depFields, '`' . C('DB_PREFIX') . 'auth_group`.`phone` as `prodepphone`');
+
+
+        $field        = implode(',', $proFields) . ','
+        . implode(',', $depFields) . ','
+        . implode(',', $proinFields) . ','
+        . implode(',', $prooutFields) . ','
+        . implode(',', $custFields);
+        return $field;
+    }
+    public function complex_join()
+    {
+        $join = sprintf('LEFT JOIN `%1$sproin` ON `%1$spro`.`id` = `%1$sproin`.`jpid`
+            LEFT JOIN `%1$sauth_group` on `%1$spro`.`depid` = `%1$sauth_group`.`id`
+            LEFT JOIN (SELECT a.* FROM `%1$sproout` as a INNER JOIN (SELECT max(`id`) as id FROM `%1$sproout` group by `jpid`) as b on a.id = b.id) as `%1$sproout` on `%1$spro`.`id` = `%1$sproout`.`jpid`
+            LEFT JOIN `%1$scust` on `%1$spro`.`cid` = `%1$scust`.`id`', C('DB_PREFIX'));
+        return $join;
+    }
+
     public function _befor_index()
     {
 
@@ -57,6 +84,14 @@ class ProoutController extends CommonController
         $data['status'] = $postData['status'];
     	$pro = A('pro');
     	$pro->autoUpdate($data);
+
+        $model = D($this->dbname);
+        $map = array();
+        $map['`' . C('DB_PREFIX') . 'pro`.`id`'] = array('EQ', $data['id']);
+        $join = $this->complex_join();
+        $field = $this->complex_field();
+        $voList = $model->join($join)->where($map)->field($field)->select();
+        return $voList;
     }
 
     public function _befor_insert($data)
