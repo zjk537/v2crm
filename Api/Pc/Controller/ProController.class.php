@@ -162,6 +162,12 @@ class ProController extends CommonController
 
         // 保存图片
         $this->saveImages($id);
+
+        $map = array('proid' => $id );
+        $join = $this->_complex_join();
+        $field = $this->_complex_field();
+        $voList = $model->join($join)->where($map)->field($field)->select();
+        return $voList[0];
     }
 
     public function _befor_insert($data)
@@ -248,6 +254,12 @@ class ProController extends CommonController
     {   
         // 更新图片信息
         $this->saveImages($id);
+
+        $map = array('proid' => $id );
+        $join = $this->_complex_join();
+        $field = $this->_complex_field();
+        $voList = $model->join($join)->where($map)->field($field)->select();
+        return $voList[0];
     }
 
     public function _befor_del($id)

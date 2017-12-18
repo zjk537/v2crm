@@ -162,11 +162,13 @@ class CommonController extends ApiController
             $data = $this->_befor_insert($data);
         }
         if ($model->add($data)) {
+            $resData = '';
             if (method_exists($this, '_after_add')) {
                 $id = $model->getLastInsID();
-                $this->_after_add($id);
+               $resData = $this->_after_add($id);
             }
-            $this->mtReturn( $this->dbname." 操作成功", 200);
+
+            $this->mtReturn( $this->dbname." 操作成功", 200, $resData);
         }
         
     }
@@ -184,10 +186,11 @@ class CommonController extends ApiController
                 $data = $this->_befor_update($data);
             }
             $model->save($data);
+            $resData = '';
             if (method_exists($this, '_after_edit')) {
-                    $this->_after_edit($id);
-                }
-            $this->mtReturn($this->dbname." 编辑成功".$id,200);
+               $resData = $this->_after_edit($id);
+            }
+            $this->mtReturn($this->dbname." 编辑成功".$id,200, $resData);
         // }
         // if (method_exists($this, '_befor_edit')) {
         //     $this->_befor_edit();
