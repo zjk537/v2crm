@@ -108,7 +108,6 @@ class CommonController extends ApiController
 
     public function lists()
     {
-        $start = time();
         $model = D($this->dbname);
         $map   = $this->_search();
         $resData = array();
@@ -121,9 +120,6 @@ class CommonController extends ApiController
         // if (method_exists($this, '_before_response')) {
         //     $this->_before_response();
         // }
-        $end = time();
-        $diff = $end - $start;
-        Log::write('执行时间：'.$diff);
         $this->mtReturn('数据查询成功，pageIndex:'.$resData['pageIndex'],200,$resData);
     }
 
@@ -162,10 +158,13 @@ class CommonController extends ApiController
             $data = $this->_befor_insert($data);
         }
         if ($model->add($data)) {
-            $resData = '';
+            $resData = array();
+            $resData['totalCount'] = 1; //数据总数
+            $resData['pageIndex'] = 1; //当前的页数，默认为1
+            $resData['pageSize'] = 1; //每页显示多少条
             if (method_exists($this, '_after_add')) {
                 $id = $model->getLastInsID();
-               $resData = $this->_after_add($id);
+               $resData['list'] = $this->_after_add($id);
             }
 
             $this->mtReturn( $this->dbname." 操作成功", 200, $resData);
@@ -186,9 +185,12 @@ class CommonController extends ApiController
                 $data = $this->_befor_update($data);
             }
             $model->save($data);
-            $resData = '';
+            $resData = array();
+            $resData['totalCount'] = 1; //数据总数
+            $resData['pageIndex'] = 1; //当前的页数，默认为1
+            $resData['pageSize'] = 1; //每页显示多少条
             if (method_exists($this, '_after_edit')) {
-               $resData = $this->_after_edit($id);
+               $resData['list'] = $this->_after_edit($id);
             }
             $this->mtReturn($this->dbname." 编辑成功".$id,200, $resData);
         // }
