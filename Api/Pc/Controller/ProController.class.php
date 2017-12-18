@@ -164,7 +164,8 @@ class ProController extends CommonController
         $this->saveImages($id);
 
         $model = D($this->dbname);
-        $map = array('proid' => $id );
+        $map = array();
+        $map['`' . C('DB_PREFIX') . 'pro`.`id`'] = array('EQ', $id);
         $join = $this->_complex_join();
         $field = $this->_complex_field();
         $voList = $model->join($join)->where($map)->field($field)->select();
@@ -257,7 +258,8 @@ class ProController extends CommonController
         $this->saveImages($id);
 
         $model = D($this->dbname);
-        $map = array('proid' => $id );
+        $map = array();
+        $map['`' . C('DB_PREFIX') . 'pro`.`id`'] = array('EQ', $id);
         $join = $this->_complex_join();
         $field = $this->_complex_field();
         $voList = $model->join($join)->where($map)->field($field)->select();
