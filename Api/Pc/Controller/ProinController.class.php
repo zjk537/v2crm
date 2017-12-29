@@ -103,11 +103,9 @@ class ProinController extends CommonController
         $isSuccess = true;
         $id = $proin[0]['id'];
         if(empty($id) || $id == 0){
-            Log::write('1111','notice');
             $isSuccess = $model->add($data);
         } else {
-
-            Log::write(json_encode($data),'notice');
+            // Log::write(json_encode($data),'notice');
             unset($data['id']);
             $isSuccess = $model->where(array("id" => $id))->save($data);
         }
