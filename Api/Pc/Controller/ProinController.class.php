@@ -108,7 +108,7 @@ class ProinController extends CommonController
         } else {
 
             Log::write(json_encode($data),'notice');
-
+            unset($data['id']);
             $isSuccess = $model->where(array("id" => $id))->save($data);
         }
         if (!$isSuccess) {
