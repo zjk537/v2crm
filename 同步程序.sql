@@ -32,7 +32,7 @@ SET Goods.cname = Supplier.`Name`, Goods.Phone = Supplier.Phone;
 -- 更新商品类型
 UPDATE Goods
 SET type = (CASE SourceType WHEN 1 THEN '寄售' ELSE '进货' END),
-status1 = (CASE `Status` WHEN 1 THEN '在库' WHEN 2 THEN '预定' WHEN 3 THEN '售出' ELSE '取回' END),
+status1 = (CASE `Status` WHEN 1 THEN '在库' WHEN 2 THEN '预订' WHEN 3 THEN '售出' ELSE '取回' END),
 paystatus = (CASE Paid WHEN 1 THEN '已打款' ELSE '未打款' END),
 Image = (CASE Image WHEN '' THEN NULL ELSE Image END);
 

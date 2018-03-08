@@ -156,7 +156,7 @@ class CommonController extends Controller
         // $map['id']       = array('in', $ids);
         // $map['type']   = array('eq', '寄售');
         // $where['status'] = array('neq', '售出');
-        // $where['status'] = array('neq', '预定');
+        // $where['status'] = array('neq', '预订');
         // $where['_logic'] = 'or';
         // $map['_complex'] = $where;
 

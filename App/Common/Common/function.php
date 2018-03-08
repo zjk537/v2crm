@@ -39,7 +39,7 @@ function display($name)
 function className($status){
     $class = '';
     switch (trim($status)) {
-        case '预定':
+        case '预订':
             $class='yuding';
             break;
         case '售出':

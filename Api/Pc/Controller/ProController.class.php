@@ -220,7 +220,7 @@ class ProController extends CommonController
             //$data['remark']  = '';
             $proin           = A('Proin');
             $proin->autoAdd($data);
-        } elseif ($data['status'] === '预定' || $data['status'] === '售出'){
+        } elseif ($data['status'] === '预订' || $data['status'] === '售出'){
             // 更新出库记录
             $data['jpsjiage'] = $data['sjiage'];
             $data['beizhu'] = $data['remark'];
@@ -299,12 +299,12 @@ class ProController extends CommonController
         $map['id']       = array('in', implode(',', $ids));
         $map['type']   = array('eq', '寄售');
         $where['status'] = array('neq', '售出');
-        $where['status'] = array('neq', '预定');
+        $where['status'] = array('neq', '预订');
         $where['_logic'] = 'or';
         $map['_complex'] = $where;
         $tmpCount        = $model->where($map)->count();
         if ($tmpCount > 0) {
-            $this->mtReturn('【寄售】商品【未售出】【未预定】时可取回');
+            $this->mtReturn('【寄售】商品【未售出】【未预订】时可取回');
         }
         $data['id']     = array('in', implode(',', $ids));
         $data['status'] = '取回';
@@ -441,7 +441,7 @@ class ProController extends CommonController
                 SUM(CASE WHEN `type` = '进货' AND `status` = '在库' AND  DATEDIFF(`updatetime`,NOW()) > %s THEN 1 ELSE 0 END) AS JHChaoQi, -- 自有超过180天没有数据更新
                 SUM(CASE WHEN `type` = '进货' AND `status` = '在库' THEN 1 ELSE 0 END) AS JHKuCun, -- 自有未售出数
                 COUNT(`addtime`) AS JinHuoLiang, -- 进货量 包含寄售 自有
-                SUM(CASE WHEN `status` = '预定' OR `status` = '售出' then 1 ELSE 0 end) AS XiaoShouLiang -- 销售量
+                SUM(CASE WHEN `status` = '预订' OR `status` = '售出' then 1 ELSE 0 end) AS XiaoShouLiang -- 销售量
             FROM `v2_pro` WHERE 1 = 1", $dayspan);
 
         if (!in_array(getuserid(), C('ADMINISTRATOR'))) {

@@ -63,7 +63,7 @@ function gettime(){
 function isproout($jpid){
     $model = M('pro');
     $tmpPro = $model->where( array('id' => $jpid ))->select();
-    return $tmpPro[0]['status'] !== '售出'; // $tmpPro[0]["status"] == "预定" ||
+    return $tmpPro[0]['status'] !== '售出'; // $tmpPro[0]["status"] == "预订" ||
 }
 // 寄售商品 结束时间不能小于当前时间
 function iseltnow($endtime){

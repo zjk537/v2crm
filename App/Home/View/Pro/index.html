@@ -152,7 +152,7 @@
                         </a>
                     </td>
                     <td <php>echo display('proout/add');</php> >
-                        <if condition=" $v.status EQ '在库' or $v.status EQ '预定' ">
+                        <if condition=" $v.status EQ '在库' or $v.status EQ '预订' ">
                             <a class="btn btn-green btn-sm" data-height="500" data-id="dialog-mask" data-mask="true" data-toggle="dialog" data-width="900" href="__MODULE__/proout/add/id/{$v['id']}/navTabId/{:CONTROLLER_NAME}">
                                 出售
                             </a>

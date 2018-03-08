@@ -184,7 +184,7 @@ class ProController extends CommonController
     }
 
 
-    // 寄售商品未售出未预定 可取回
+    // 寄售商品未售出未预订 可取回
     public function quhui()
     {
         if(!IS_POST){
@@ -201,12 +201,12 @@ class ProController extends CommonController
         $map['id']       = array('in', $ids);
         $map['type']   = array('eq', '寄售');
         $where['status'] = array('neq', '售出');
-        $where['status'] = array('neq', '预定');
+        $where['status'] = array('neq', '预订');
         $where['_logic'] = 'or';
         $map['_complex'] = $where;
         $tmpCount        = $model->where($map)->count();
         if ($tmpCount > 0) {
-            $this->mtReturn(300,'【寄售】商品【未售出】【未预定】时可取回');
+            $this->mtReturn(300,'【寄售】商品【未售出】【未预订】时可取回');
         }
         
         $data['id']     = array('in', $ids);
