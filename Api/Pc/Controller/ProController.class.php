@@ -24,17 +24,18 @@ class ProController extends CommonController
         $data            = $this->postData;
         $dir = C('UPLOAD_SAVEPATH').$data['dir'];
         $dir_list = scandir($dir);
-        $i = 0;   
+        $i = 0; $start = $data['start']; $end = $start + 51;
         foreach($dir_list as $file){  
             $i++;
-            if($i > $data['start'] && $file != '..' && $file != '.' && $file != '.DS_Store'){
+            if($i > $start && $i < $end ){
                 // 直接压缩
                 // $this->mtReturn('操作成功',200, $dir.'/'.$file);
-
-                thumb_img('./'.$dir.'/'.$file);  
+                if($file != '..' && $file != '.' && $file != '.DS_Store'){
+                    thumb_img('./'.$dir.'/'.$file);  
+                }
             }   
         }
-        $this->mtReturn('操作成功',200);
+        $this->mtReturn('操作成功',200, $i);
     }
 
     public function _filter(&$map)
