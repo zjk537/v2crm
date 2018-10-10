@@ -21,7 +21,9 @@ class ProController extends CommonController
     }
 
     public function thumbImg(){
-        $this -> read_dir(C('UPLOAD_SAVEPATH'));
+        $data            = $this->postData;
+
+        $this -> read_dir(C('UPLOAD_SAVEPATH').$data['dir']);
         $this->mtReturn('操作成功',200, $files);
     }
 
