@@ -29,10 +29,12 @@ class ProController extends CommonController
             $i++;
             if($i > $data['start'] && $file != '..' && $file != '.' && $file != '.DS_Store'){
                 // 直接压缩
-                thumb_img('./'.$dir.'/'.$file);  
+                $this->mtReturn('操作成功',200, $dir.'/'.$file);
+
+                //thumb_img('./'.$dir.'/'.$file);  
             }   
         }
-        $this->mtReturn('操作成功',200, $files);
+        $this->mtReturn('操作成功',200);
     }
 
     public function _filter(&$map)
