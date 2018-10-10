@@ -22,26 +22,18 @@ class ProController extends CommonController
 
     public function thumbImg(){
         $data            = $this->postData;
-
-        $this -> read_dir(C('UPLOAD_SAVEPATH').$data['dir']);
-        $this->mtReturn('操作成功',200, $files);
-    }
-
-    private function read_dir($dir){    
-        $dir_list = scandir($dir);    
-        foreach($dir_list as $file){        
-            if($file != '..' && $file != '.' && $file != '.DS_Store'){          
-                if(is_dir($dir.'/'.$file)){             
-                    $this -> read_dir($dir.'/'.$file);          
-                } else {
-                    // 直接压缩
-                    thumb_img('./'.$dir.'/'.$file);   
-                }
+        $dir = C('UPLOAD_SAVEPATH').$data['dir'];
+        $dir_list = scandir($dir);
+        $i = 0;   
+        foreach($dir_list as $file){  
+            $i++;
+            if($i > $data['start'] && $file != '..' && $file != '.' && $file != '.DS_Store'){
+                // 直接压缩
+                thumb_img('./'.$dir.'/'.$file);  
             }   
         }
+        $this->mtReturn('操作成功',200, $files);
     }
-
-
 
     public function _filter(&$map)
     {
