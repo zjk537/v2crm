@@ -117,7 +117,11 @@ function saveBase64Image($base64)
         $name = uniqid().'.'.$type;
         $dir = C('UPLOAD_SAVEPATH').date('Y-m').'/';
         $s2i = new \Common\Org\Stream2Image($name,$dir);// 实例化上传类
-        $re = $s2i->stream2Image(base64_decode($data));
+        $re = $s2i -> stream2Image(base64_decode($data));
+
+        // 压缩图片 宽度为500，高度自适应
+        thumb_img('./'.$dir.$name);
+
         if(true === $re){
             @chmod('./'.$dir,0777);
             @chmod('./'.$dir.$name,0777); 
@@ -147,6 +151,21 @@ function saveBase64Image($base64)
     return $result;
 }
 
+// function thumb_img($img_path, $thumb_w, $save_path, $is_del = true){
+function thumb_img($img_path, $thumb_w = 500){
+    $image = new \Think\Image(); 
+    $image -> open($img_path);
+    $width = $image -> width(); // 返回图片的宽度
+    if($width < $thumb_w){
+        return;
+    }
+    // 压缩图片
+    $width = $width / $thumb_w; //取得图片的长宽比
+    $height = $image -> height();
+    $thumb_h = ceil($height / $width);
+    $image -> thumb($thumb_w, $thumb_h) -> save($img_path);
+    // if($is_del) @unlink($img_path); //删除源文件
+}
 
 /**
  * 浮点数舍去指定位数小数点部分。全舍不入
