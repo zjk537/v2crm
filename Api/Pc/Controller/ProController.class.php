@@ -20,6 +20,27 @@ class ProController extends CommonController
         $this->dbname = CONTROLLER_NAME;
     }
 
+    public function thumbImg(){
+        $this -> read_dir(C('UPLOAD_SAVEPATH'));
+        $this->mtReturn('操作成功',200, $files);
+    }
+
+    private function read_dir($dir){    
+        $dir_list = scandir($dir);    
+        foreach($dir_list as $file){        
+            if($file != '..' && $file != '.' && $file != '.DS_Store'){          
+                if(is_dir($dir.'/'.$file)){             
+                    $this -> read_dir($dir.'/'.$file);          
+                } else {
+                    // 直接压缩
+                    thumb_img('./'.$dir.'/'.$file);   
+                }
+            }   
+        }
+    }
+
+
+
     public function _filter(&$map)
     {
         if (!in_array(getuserid(), C('ADMINISTRATOR'))) {
