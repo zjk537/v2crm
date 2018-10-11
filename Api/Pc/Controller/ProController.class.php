@@ -24,7 +24,7 @@ class ProController extends CommonController
         $data            = $this->postData;
         $dir = C('UPLOAD_SAVEPATH').$data['dir'];
         $dir_list = scandir($dir);
-        $i = 0; $start = $data['start']; $end = $start + 51;
+        $i = 0; $start = $data['start']; $end = $start + $data['size'];
         foreach($dir_list as $file){  
             $i++;
             if($i > $start && $i < $end ){
