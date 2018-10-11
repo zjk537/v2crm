@@ -40,10 +40,10 @@ class ProController extends CommonController
             }
         }
         $res = array(
-            'page' => $data['page'] , 
+            'page' => $data['page'], 
             'size' => $data['size'], 
-            'current' => $i; 
-            'total' => count($dir_list)
+            'current' => $i,
+            'total' => count($dir_list),
         );
         $this->mtReturn('操作成功',200, $res);
     }
