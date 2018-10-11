@@ -24,7 +24,7 @@ class ProController extends CommonController
         $data            = $this->postData;
         $dir = C('UPLOAD_SAVEPATH').$data['dir'];
         $dir_list = scandir($dir);
-        $i = 0; $start = $data['start']; $end = $start + $data['size'];
+        $i = 0; $start = $data['page'] * $data['size']; $end = $start + $data['size'];
         foreach($dir_list as $file){
 
             if($file == '..' || $file == '.' || $file == '.DS_Store'){
@@ -39,7 +39,13 @@ class ProController extends CommonController
                 thumb_img('./'.$dir.'/'.$file);  
             }
         }
-        $this->mtReturn('操作成功',200, $i);
+        $res = array(
+            'page' => $data['page'] , 
+            'size' => $data['size'], 
+            'current' => $i; 
+            'total' => count($dir_list)
+        );
+        $this->mtReturn('操作成功',200, $res);
     }
 
     public function _filter(&$map)
