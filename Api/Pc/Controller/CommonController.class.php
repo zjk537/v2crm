@@ -82,6 +82,9 @@ class CommonController extends ApiController
         $resData = array();        
         if ($count > 0) {
 
+            if(method_exists($this, '_after_count')){
+                $this->_after_count($map);
+            } 
             $field = "";
             if(method_exists($this, '_complex_field')){
                 $field = $this->_complex_field();

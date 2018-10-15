@@ -164,11 +164,20 @@ class ProController extends CommonController
     }
     public function _complex_join()
     {
+        // $join = sprintf('LEFT JOIN `%1$sproin` ON `%1$spro`.`id` = `%1$sproin`.`jpid`
+        //     LEFT JOIN `%1$sauth_group` on `%1$spro`.`depid` = `%1$sauth_group`.`id`
+        //     LEFT JOIN (SELECT a.* FROM `%1$sproout` as a INNER JOIN (SELECT max(`id`) as id FROM `%1$sproout` group by `jpid`) as b on a.id = b.id) as `%1$sproout` on `%1$spro`.`id` = `%1$sproout`.`jpid`
+        //     LEFT JOIN `%1$scust` on `%1$spro`.`cid` = `%1$scust`.`id`', C('DB_PREFIX'));
+
         $join = sprintf('LEFT JOIN `%1$sproin` ON `%1$spro`.`id` = `%1$sproin`.`jpid`
             LEFT JOIN `%1$sauth_group` on `%1$spro`.`depid` = `%1$sauth_group`.`id`
-            LEFT JOIN (SELECT a.* FROM `%1$sproout` as a INNER JOIN (SELECT max(`id`) as id FROM `%1$sproout` group by `jpid`) as b on a.id = b.id) as `%1$sproout` on `%1$spro`.`id` = `%1$sproout`.`jpid`
+            LEFT JOIN `%1$sproout` on `%1$sproout`.`jpid` = `%1$spro`.`id`
+            LEFT JOIN `%1$sproout` tmp_out on tmp_out.`jpid` = `%1$sproout`.`jpid` and tmp_out.`id` > `%1$sproout`.`id`
             LEFT JOIN `%1$scust` on `%1$spro`.`cid` = `%1$scust`.`id`', C('DB_PREFIX'));
         return $join;
+    }
+    public function _after_count(&$map){
+        $map['`tmp_out`.`id`'] = array('exp', 'is null'); // tmp_out 在_complex_join 为 v2_proout 起的别名
     }
 
     public function _befor_add()
