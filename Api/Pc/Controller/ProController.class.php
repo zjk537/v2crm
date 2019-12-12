@@ -158,10 +158,8 @@ class ProController extends CommonController
         $posArrName = array('超管', '店长');
         if (!in_array($this->curUser['uid'], C('ADMINISTRATOR')) || !in_array(trim($this->curUser['posname']), $posArrName)
         {
-            $key1 = array_search('`' . C('DB_PREFIX') .'pro`.`jiage` as `projiage`', $proFields);
-            $key2 = array_search('`' . C('DB_PREFIX') .'proin`.`jpjiage` as `proinjpjiage`', $proinFields);
-            unset($proFields[$key1]);
-            unset($proinFields[$key2]);
+            $key = array_search('`' . C('DB_PREFIX') .'pro`.`jiage` as `projiage`', $proFields);
+            unset($proFields[$key]);
         }
 
         $field        = implode(',', $proFields) . ','
@@ -257,12 +255,15 @@ class ProController extends CommonController
     public function _befor_update($data)
     {
         // 已售出的不能重复售出
-        $data = $this->postData;
+        // $data = $this->postData;
         $data['jpid']    = (int) $data['id'];
         $data['jpname']  = $data['name'];
         // 更新进货记录
         if($data['status'] === '在库'){
-            $data['jpjiage'] = $data['jiage'];
+            if(isset($data['jiage'])) {
+                $data['jpjiage'] = $data['jiage'];
+            }
+            // $data['jpjiage'] = $data['jiage'];
             //$data['remark']  = '';
             $proin           = A('Proin');
             $proin->autoAdd($data);
