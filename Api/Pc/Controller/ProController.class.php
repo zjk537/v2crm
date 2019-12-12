@@ -154,6 +154,15 @@ class ProController extends CommonController
         array_push($depFields, '`' . C('DB_PREFIX') . 'auth_group`.`name` as `prodepname`');
         array_push($depFields, '`' . C('DB_PREFIX') . 'auth_group`.`phone` as `prodepphone`');
 
+        // 超管 店长可查看进价
+        $posArrName = array('超管', '店长');
+        if (!in_array($this->curUser['uid'], C('ADMINISTRATOR')) || !in_array(trim($this->curUser['posname']), $posArrName)
+        {
+            $key1 = array_search('`' . C('DB_PREFIX') .'pro`.`jiage` as `projiage`', $proFields);
+            $key2 = array_search('`' . C('DB_PREFIX') .'proin`.`jpjiage` as `proinjpjiage`', $proinFields);
+            unset($proFields[$key1]);
+            unset($proinFields[$key2]);
+        }
 
         $field        = implode(',', $proFields) . ','
         . implode(',', $depFields) . ','
