@@ -262,9 +262,9 @@ class ProController extends CommonController
         if($data['status'] === '在库'){
             // 超管 店长可查看进价
             $posArrName = array('超管', '店长');
-            if (!in_array($this->curUser['uid'], C('ADMINISTRATOR')) && in_array(trim($this->curUser['posname']), $posArrName))
+            if (!in_array($this->curUser['uid'], C('ADMINISTRATOR')) && !in_array(trim($this->curUser['posname']), $posArrName))
             {
-                unset($data['jpjiage'])
+                unset($data["jiage"]);
             }
             //$data['remark']  = '';
             $proin           = A('Proin');
