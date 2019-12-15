@@ -260,10 +260,10 @@ class ProController extends CommonController
         $data['jpname']  = $data['name'];
         // 更新进货记录
         if($data['status'] === '在库'){
-            // if(isset($data['jiage'])) {
-            //     $data['jpjiage'] = $data['jiage'];
-            // }
-            $data['jpjiage'] = $data['jiage'];
+            if(isset($data['jiage'])) {
+                $data['jpjiage'] = $data['jiage'];
+            }
+            // $data['jpjiage'] = $data['jiage'];
             //$data['remark']  = '';
             $proin           = A('Proin');
             $proin->autoAdd($data);
