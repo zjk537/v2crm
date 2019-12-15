@@ -180,19 +180,18 @@ class CommonController extends ApiController
         $model = D($this->dbname);
         // if (IS_POST) {
             $data = $this->postData;
-            // 超管 店长可查看进价
-            $posArrName = array('超管', '店长');
-            if (!in_array($this->curUser['uid'], C('ADMINISTRATOR')) && !in_array(trim($this->curUser['posname']), $posArrName))
-            {
-                unset($data["jiage"]);
-            }
-
             $id = $data['id'];
             if (false === $data = $model->create($data)) {
                 $this->mtReturn($model->getError());
             }
             if (method_exists($this, '_befor_update')) {
                 $data = $this->_befor_update($data);
+            }
+            // 超管 店长可查看进价
+            $posArrName = array('超管', '店长');
+            if (!in_array($this->curUser['uid'], C('ADMINISTRATOR')) && !in_array(trim($this->curUser['posname']), $posArrName))
+            {
+                unset($data["jiage"]);
             }
             $model->save($data);
             $resData = array();
