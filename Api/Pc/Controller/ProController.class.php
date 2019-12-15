@@ -255,15 +255,16 @@ class ProController extends CommonController
     public function _befor_update($data)
     {
         // 已售出的不能重复售出
-        // $data = $this->postData;
+        $data = $this->postData;
         $data['jpid']    = (int) $data['id'];
         $data['jpname']  = $data['name'];
         // 更新进货记录
         if($data['status'] === '在库'){
-            if(isset($data['jiage'])) {
-                $data['jpjiage'] = $data['jiage'];
-            }
-            // $data['jpjiage'] = $data['jiage'];
+            // 超管 店长可查看进价
+            // if(isset($data['jiage'])) {
+            //     $data['jpjiage'] = $data['jiage'];
+            // }
+            $data['jpjiage'] = $data['jiage'];
             //$data['remark']  = '';
             $proin           = A('Proin');
             $proin->autoAdd($data);
