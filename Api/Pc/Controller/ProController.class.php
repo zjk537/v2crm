@@ -264,7 +264,7 @@ class ProController extends CommonController
             $posArrName = array('超管', '店长');
             if (!in_array($this->curUser['uid'], C('ADMINISTRATOR')) && in_array(trim($this->curUser['posname']), $posArrName))
             {
-                unset($data['jpjiage']);
+                unset($data['jpjiage'])
             }
             //$data['remark']  = '';
             $proin           = A('Proin');
