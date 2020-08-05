@@ -41,7 +41,8 @@ class CommonController extends ApiController
             S('DB_CONFIG_DATA', $config);
         }
         C($config);
-        // $name = MODULE_NAME . '/' . CONTROLLER_NAME . '/' . ACTION_NAME;
+        $name = MODULE_NAME . '/' . CONTROLLER_NAME . '/' . ACTION_NAME;
+        \Think\Log::write($name);
         // if (!authcheck($name, $this->curUser['uid'])) {
         //     $this->mtReturn($this->curUser['username'] . '很抱歉,此项操作您没有权限！');
         // }
