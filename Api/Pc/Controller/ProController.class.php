@@ -138,7 +138,14 @@ class ProController extends CommonController
     {
         $tmpArr = array();
         foreach ($array as $value) {
-            $newValue = '`' . C('DB_PREFIX') . $prefix . '`.`' . $value . '` as `' . $prefix . $value . '`';
+            $newValue = '';
+            $asName = $prefix.$value;
+            $authField = 'home/'. $prefix . '/dbfields'; // 功能列表中配置的 商品属性 客户属性
+            if(in_array($asName, C('SEARCHKEY') && !authcheck($proDBFields, $this->curUser['uid']))){
+                $newValue = "'' as `". $asName ."`";
+            } else {
+                $newValue = '`' . C('DB_PREFIX') . $prefix . '`.`' . $value . '` as `' . $asName . '`';
+            }
             array_push($tmpArr, $newValue);
         }
         return $tmpArr;
@@ -154,13 +161,17 @@ class ProController extends CommonController
         array_push($depFields, '`' . C('DB_PREFIX') . 'auth_group`.`name` as `prodepname`');
         array_push($depFields, '`' . C('DB_PREFIX') . 'auth_group`.`phone` as `prodepphone`');
 
+        $uid = $this->curUser['uid'];
+        $proDBFields = 'home/pro/dbfields';
+        $custDBFields = 'home/cust/dbfields';
+        
         // 超管 店长可查看进价
-        $posArrName = array('超管', '店长');
-        if (!in_array($this->curUser['uid'], C('ADMINISTRATOR')) && !in_array(trim($this->curUser['posname']), $posArrName))
-        {
-            $key = array_search('`' . C('DB_PREFIX') .'pro`.`jiage` as `projiage`', $proFields);
-            unset($proFields[$key]);
-        }
+        // $posArrName = array('超管', '店长');
+        // if (!in_array($this->curUser['uid'], C('ADMINISTRATOR')) && !in_array(trim($this->curUser['posname']), $posArrName))
+        // {
+        //     $key = array_search('`' . C('DB_PREFIX') .'pro`.`jiage` as `projiage`', $proFields);
+        //     unset($proFields[$key]);
+        // }
 
         $field        = implode(',', $proFields) . ','
         . implode(',', $depFields) . ','
