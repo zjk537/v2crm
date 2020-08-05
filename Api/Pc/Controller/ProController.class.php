@@ -142,7 +142,7 @@ class ProController extends CommonController
             $asName = $prefix.$value;
             $authField = 'home/'. $prefix . '/dbfields'; // 功能列表中配置的 商品属性 客户属性
             if(in_array($asName, C('AUTH_FIELDS')) && !authcheck($authField, $this->curUser['uid'])){
-                $newValue = "'' as `". $asName ."`";
+                $newValue = "NULL as `". $asName ."`";
             } else {
                 $newValue = '`' . C('DB_PREFIX') . $prefix . '`.`' . $value . '` as `' . $asName . '`';
             }
