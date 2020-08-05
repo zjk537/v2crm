@@ -215,12 +215,23 @@ class CommonController extends ApiController
         // if(empty($keys)){
             $id    = $this->postData['id'];
             $vo    = $model->getById($id);
-            // 超管 店长可查看进价
-            $posArrName = array('超管', '店长');
-            if (!in_array($this->curUser['uid'], C('ADMINISTRATOR')) && !in_array(trim($this->curUser['posname']), $posArrName))
-            {
-                unset($vo["jiage"]);
+
+            // 无权限字段，查看详情时不展示
+            $dbFieldArr = M($this->dbname)->getDbFields();
+            $authField = MODULE_NAME . '/'. $this->dbname . '/dbfields';
+            foreach ($dbFieldArr as $value) {
+                $fieldName = $this->dbname.$value;
+                if(in_array($fieldName, C('AUTH_FIELDS')) && !authcheck($authField, $this->curUser['uid'])){
+                    unset($vo[$value]);
+                }
             }
+            
+            // 超管 店长可查看进价
+            // $posArrName = array('超管', '店长');
+            // if (!in_array($this->curUser['uid'], C('ADMINISTRATOR')) && !in_array(trim($this->curUser['posname']), $posArrName))
+            // {
+            //     unset($vo["jiage"]);
+            // }
             $this->mtReturn('Success',200,$vo);
         // }
 

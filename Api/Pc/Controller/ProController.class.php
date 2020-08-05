@@ -159,10 +159,6 @@ class ProController extends CommonController
         array_push($depFields, '`' . C('DB_PREFIX') . 'auth_group`.`name` as `prodepname`');
         array_push($depFields, '`' . C('DB_PREFIX') . 'auth_group`.`phone` as `prodepphone`');
 
-        $uid = $this->curUser['uid'];
-        $proDBFields = 'home/pro/dbfields';
-        $custDBFields = 'home/cust/dbfields';
-        
         // 超管 店长可查看进价
         // $posArrName = array('超管', '店长');
         // if (!in_array($this->curUser['uid'], C('ADMINISTRATOR')) && !in_array(trim($this->curUser['posname']), $posArrName))
@@ -269,18 +265,15 @@ class ProController extends CommonController
         $data['jpname']  = $data['name'];
         // 更新进货记录
         if($data['status'] === '在库'){
-             // 超管 店长可查看进价
-            $posArrName = array('超管', '店长');
-            if (!in_array($this->curUser['uid'], C('ADMINISTRATOR')) && !in_array(trim($this->curUser['posname']), $posArrName))
-            {
-                unset($data['jpjiage']);
-                unset($data['jiage']);
-            }
-            // if(isset($data['jiage'])) {
-            //     $data['jpjiage'] = $data['jiage'];
+            
+            // // 超管 店长可查看进价
+            // $posArrName = array('超管', '店长');
+            // if (!in_array($this->curUser['uid'], C('ADMINISTRATOR')) && !in_array(trim($this->curUser['posname']), $posArrName))
+            // {
+            //     unset($data['jpjiage']);
+            //     unset($data['jiage']);
             // }
-            // $data['jpjiage'] = $data['jiage'];
-            //$data['remark']  = '';
+
             $proin           = A('Proin');
             $proin->autoAdd($data);
         } elseif ($data['status'] === '预订' || $data['status'] === '售出'){
@@ -312,6 +305,15 @@ class ProController extends CommonController
         }
         $data['cname'] = $custData['name'];
         $data['cid'] = $custid;
+
+        // 过滤受权限控制的字段
+        $authField = MODULE_NAME . '/pro/dbfields';
+        if(!authcheck($authField, $this->curUser['uid'])){
+            foreach(C('AUTH_FIELDS') as $value){ 
+                $fieldName = str_replace('pro', '', $value);// projiage --> jiage
+                unset($data[$fieldName]);
+            }
+        }
         return $data;
     }
 

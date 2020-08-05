@@ -95,6 +95,15 @@ class ProinController extends CommonController
 
     public function autoAdd($data)
     {
+        // 过滤受权限控制的字段
+        $authField = MODULE_NAME . '/pro/dbfields';
+        if(!authcheck($authField, $this->curUser['uid'])){
+            foreach(C('AUTH_FIELDS') as $value){ 
+                $fieldName = str_replace('pro', 'jp', $value);// jp是与商品表同名字段的前缀 projiage --> jpjiage
+                unset($data[$fieldName]);
+            }
+        }
+
     	$model = D('proin');
     	if (false === $data = $model->create($data)) {
             $this->mtReturn($model->getError());

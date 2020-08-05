@@ -86,12 +86,21 @@ class CustController extends CommonController
     	// if(empty($data['id']) || $data['id'] == 0){
     	// 	$data['id'] = $tmpCust[0]['id'];
     	// } elseif ( $tmpCust && $tmpCust[0]['id'] != $data['id']) {
-     //        $this->mtReturn('手机号码已被占用!');
-     //    } 
+        //     $this->mtReturn('手机号码已被占用!');
+        // } 
 
     	$id = $data['id'] = $tmpCust[0]['id'];
         $isSuccess = true;
         
+        // 过滤受权限控制的字段
+        $authField = MODULE_NAME . '/cust/dbfields';
+        if(!authcheck($authField, $this->curUser['uid'])){
+            foreach(C('AUTH_FIELDS') as $value){ 
+                $fieldName = str_replace('cust', '', $value);// custphone --> phone
+                unset($data[$value]);
+            }
+        }
+
     	if (false === $data = $model->create($data)) {
             $this->mtReturn($model->getError());
         }
