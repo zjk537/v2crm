@@ -91,15 +91,6 @@ class CustController extends CommonController
 
     	$id = $data['id'] = $tmpCust[0]['id'];
         $isSuccess = true;
-        
-        // 过滤受权限控制的字段
-        $authField = MODULE_NAME . '/cust/dbfields';
-        if(!authcheck($authField, $this->curUser['uid'])){
-            foreach(C('AUTH_FIELDS') as $value){ 
-                $fieldName = str_replace('cust', '', $value);// custphone --> phone
-                unset($data[$value]);
-            }
-        }
 
     	if (false === $data = $model->create($data)) {
             $this->mtReturn($model->getError());
@@ -108,6 +99,14 @@ class CustController extends CommonController
     		$isSuccess = $model->add($data);
     		$id = $model->getLastInsID();
     	} else {
+            // 过滤受权限控制的字段 无权限字段不能更新  前端已控制 店员不能更新 这里是非店员且无权限的情况
+            $authField = MODULE_NAME . '/cust/dbfields';
+            if(!authcheck($authField, $this->curUser['uid'])){
+                foreach(C('AUTH_FIELDS') as $value){ 
+                    $fieldName = str_replace('cust', '', $value);// custphone --> phone
+                    unset($data[$value]);
+                }
+            }
     		$isSuccess = $model->save($data);
     	}
     	

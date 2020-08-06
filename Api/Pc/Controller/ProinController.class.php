@@ -95,14 +95,7 @@ class ProinController extends CommonController
 
     public function autoAdd($data)
     {
-        // 过滤受权限控制的字段
-        $authField = MODULE_NAME . '/pro/dbfields';
-        if(!authcheck($authField, $this->curUser['uid'])){
-            foreach(C('AUTH_FIELDS') as $value){ 
-                $fieldName = str_replace('pro', 'jp', $value);// jp是与商品表同名字段的前缀 projiage --> jpjiage
-                unset($data[$fieldName]);
-            }
-        }
+        
 
     	$model = D('proin');
     	if (false === $data = $model->create($data)) {
@@ -116,6 +109,14 @@ class ProinController extends CommonController
         } else {
             // Log::write(json_encode($data),'notice');
             unset($data['id']);
+            // 过滤受权限控制的字段 无权限的字段不能更新，主要指跟pro表同步的字段
+            $authField = MODULE_NAME . '/pro/dbfields';
+            if(!authcheck($authField, $this->curUser['uid'])){
+                foreach(C('AUTH_FIELDS') as $value){ 
+                    $fieldName = str_replace('pro', 'jp', $value);// jp是与商品表同名字段的前缀 projiage --> jpjiage
+                    unset($data[$fieldName]);
+                }
+            }
             $isSuccess = $model->where(array("id" => $id))->save($data);
         }
         if (!$isSuccess) {

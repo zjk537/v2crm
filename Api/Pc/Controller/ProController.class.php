@@ -306,7 +306,7 @@ class ProController extends CommonController
         $data['cname'] = $custData['name'];
         $data['cid'] = $custid;
 
-        // 过滤受权限控制的字段
+        // 过滤受权限控制的字段 无权限字段不能更新
         $authField = MODULE_NAME . '/pro/dbfields';
         if(!authcheck($authField, $this->curUser['uid'])){
             foreach(C('AUTH_FIELDS') as $value){ 
