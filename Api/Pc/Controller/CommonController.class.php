@@ -220,7 +220,7 @@ class CommonController extends ApiController
             $dbFieldArr = M($this->dbname)->getDbFields();
             $authField = MODULE_NAME . '/'. $this->dbname . '/dbfields';
             foreach ($dbFieldArr as $value) {
-                $fieldName = $this->dbname.$value;
+                $fieldName = strtolower($this->dbname.$value);
                 \Think\Log::write($fieldName);
                 if(in_array($fieldName, C('AUTH_FIELDS')) && !authcheck($authField, $this->curUser['uid'])){
                     unset($vo[$value]);
