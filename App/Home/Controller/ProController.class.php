@@ -181,22 +181,26 @@ class ProController extends CommonController
             // $sql .= 'INSERT INTO v2_pro_del SELECT * FROM v2_pro WHERE `lock` = 0;';
             // \Think\Log::write('del: '. $sql);
             // $dbModel->execute($sql);
+            $whereDepId = '';
+            if(!in_array(session('uid'),C('ADMINISTRATOR'))){
+                $whereDepId = 'AND `depid` = '. getdepid();
+            }
+            \Think\Log::write('INSERT INTO v2_files_del SELECT * FROM v2_files WHERE attid in (SELECT id FROM v2_pro WHERE `lock` = 0 '. $whereDepId .');');
             $dbModel->execute('
-                INSERT INTO v2_files_del SELECT * FROM v2_files WHERE attid in (SELECT id FROM v2_pro WHERE `lock` = 0);
-                DELETE FROM v2_files WHERE attid in (SELECT id FROM v2_pro WHERE `lock` = 0);
+                INSERT INTO v2_files_del SELECT * FROM v2_files WHERE attid in (SELECT id FROM v2_pro WHERE `lock` = 0 '. $whereDepId .');
+                DELETE FROM v2_files WHERE attid in (SELECT id FROM v2_pro WHERE `lock` = 0 '. $whereDepId .');
 
-                INSERT INTO v2_proout_del SELECT * FROM v2_proout WHERE jpid in (SELECT id FROM v2_pro WHERE `lock` = 0);
-                DELETE FROM v2_proout WHERE jpid in (SELECT id FROM v2_pro WHERE `lock` = 0);
+                INSERT INTO v2_proout_del SELECT * FROM v2_proout WHERE jpid in (SELECT id FROM v2_pro WHERE `lock` = 0 '. $whereDepId .');
+                DELETE FROM v2_proout WHERE jpid in (SELECT id FROM v2_pro WHERE `lock` = 0 '. $whereDepId .');
 
-                INSERT INTO v2_proin_del SELECT * FROM v2_proin WHERE jpid in (SELECT id FROM v2_pro WHERE `lock` = 0);
-                DELETE FROM v2_proin WHERE jpid in (SELECT id FROM v2_pro WHERE `lock` = 0);
+                INSERT INTO v2_proin_del SELECT * FROM v2_proin WHERE jpid in (SELECT id FROM v2_pro WHERE `lock` = 0 '. $whereDepId .');
+                DELETE FROM v2_proin WHERE jpid in (SELECT id FROM v2_pro WHERE `lock` = 0 '. $whereDepId .');
 
-                INSERT INTO v2_pro_del SELECT * FROM v2_pro WHERE `lock` = 0;
+                INSERT INTO v2_pro_del SELECT * FROM v2_pro WHERE `lock` = 0 '. $whereDepId .';
             ');
             
             // DELETE FROM v2_pro WHERE lock = 0;
-			
-            $Rs = $model->where('`lock` = 0')->delete();
+            $Rs = $model->where('`lock` = 0 '. $whereDepId)->delete();
             $this->mtReturn(200, '清理' . $Rs . '条无用的记录', $_REQUEST['navTabId'], false);
         }
         
