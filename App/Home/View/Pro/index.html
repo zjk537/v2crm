@@ -13,8 +13,10 @@
             <input class="form-control" data-toggle="datepicker" name="time1" size="15" type="text" value="{$_REQUEST['stime']}"/>
             -
             <input class="form-control" data-toggle="datepicker" name="time2" size="15" type="text" value="{$_REQUEST['etime']}"/>
-            <label>待清数据：</label>
-            <input name="lock" type="checkbox" value="{$_REQUEST['lock']}"/>
+            <span <php> echo display(CONTROLLER_NAME.'/lock');</php> >
+                <label>待清数据：</label>
+                <input name="lock" type="checkbox" value=""/>
+            </span>
             <button class="btn-default" data-icon="search" type="submit">
                 查询
             </button>
