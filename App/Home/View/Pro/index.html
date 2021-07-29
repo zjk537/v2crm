@@ -13,6 +13,8 @@
             <input class="form-control" data-toggle="datepicker" name="time1" size="15" type="text" value="{$_REQUEST['stime']}"/>
             -
             <input class="form-control" data-toggle="datepicker" name="time2" size="15" type="text" value="{$_REQUEST['etime']}"/>
+            <label>待清数据：</label>
+            <input name="lock" type="checkbox" value="{$_REQUEST['lock']}"/>
             <button class="btn-default" data-icon="search" type="submit">
                 查询
             </button>
@@ -20,7 +22,7 @@
                 清空查询
             </a>
             <span <php> echo display(CONTROLLER_NAME.'/lock');</php> style="float:right;">
-                <a class="btn btn-red" data-confirm-msg="确定要清理吗？" data-icon="remove" data-toggle="doajax" href="__URL__/lock/navTabId/{:CONTROLLER_NAME}">
+                <a class="btn btn-red" data-confirm-msg="确定要清理吗？本店【所有被锁定】的商品将被彻底清除,清除其他查询条件可查看待清理数据" data-icon="remove" data-toggle="doajax" href="__URL__/lock/navTabId/{:CONTROLLER_NAME}">
                     清理
                 </a>
             </span>

@@ -32,6 +32,11 @@ class ProController extends CommonController
         if(IS_POST && isset($_REQUEST['stime']) && $_REQUEST['stime'] != ''&&isset($_REQUEST['etime']) && $_REQUEST['etime'] != ''){
          $map['addtime'] =array(array('egt',I('stime')),array('elt',I('etime'))) ;
         }
+
+        \Think\Log::write('111111111'. $_REQUEST['lock']);
+        if(IS_POST && isset($_REQUEST['lock'])){
+            $map['lock'] = array('EQ', 0);
+        }
     }
 
     public function _befor_index()
@@ -165,7 +170,7 @@ class ProController extends CommonController
             $model->where('id=' . $id .'')->setField('lock', $data['lock']);
             $this->mtReturn(200, $msg . $id, $_REQUEST['navTabId'], false);
         } else {
-            \Think\Log::write('lock: 清理数据');
+            // \Think\Log::write('lock: 清理数据');
             $dbModel = D();
             // 1、备份数据； 2、删除数据
             // 图片文件
@@ -185,7 +190,6 @@ class ProController extends CommonController
             if(!in_array(session('uid'),C('ADMINISTRATOR'))){
                 $whereDepId = 'AND `depid` = '. getdepid();
             }
-            \Think\Log::write('INSERT INTO v2_files_del SELECT * FROM v2_files WHERE attid in (SELECT id FROM v2_pro WHERE `lock` = 0 '. $whereDepId .');');
             $dbModel->execute('
                 INSERT INTO v2_files_del SELECT * FROM v2_files WHERE attid in (SELECT id FROM v2_pro WHERE `lock` = 0 '. $whereDepId .');
                 DELETE FROM v2_files WHERE attid in (SELECT id FROM v2_pro WHERE `lock` = 0 '. $whereDepId .');
