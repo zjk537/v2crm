@@ -33,7 +33,6 @@ class ProController extends CommonController
          $map['addtime'] =array(array('egt',I('stime')),array('elt',I('etime'))) ;
         }
 
-        \Think\Log::write('111111111'. $_REQUEST['lock']);
         if(IS_POST && isset($_REQUEST['lock'])){
             $map['lock'] = array('EQ', 0);
         }
