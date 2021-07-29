@@ -7,3 +7,5 @@ dizhi not null --> null
 v2_user
 1、phone 长度  11--》 20
 
+2021-07-21
+ALTER TABLE v2_pro ADD `lock` tinyint DEFAULT 1 AFTER `status`; -- 增加锁定状态

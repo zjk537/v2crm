@@ -12,6 +12,7 @@
 namespace Home\Controller;
 
 use Think\Controller;
+use Think\Log;
 
 class ProController extends CommonController
 {
@@ -144,6 +145,61 @@ class ProController extends CommonController
     public function _befor_del($id)
     {
 
+    }
+
+    public function lock(){
+        $model = D($this->dbname);
+        $id    = I('get.id');
+        if ($id) {
+            \Think\Log::write('lock: '. $id);
+            $data       = $model->find($id);
+            $data['id'] = $id;
+            if ($data['lock'] == 1) {
+                $data['lock'] = 0;
+                $msg          = '锁定';
+            } else {
+                $data['lock'] = 1;
+                $msg            = '启用';
+            }
+            // $model->save($data);
+            $model->where('id=' . $id .'')->setField('lock', $data['lock']);
+            $this->mtReturn(200, $msg . $id, $_REQUEST['navTabId'], false);
+        } else {
+            \Think\Log::write('lock: 清理数据');
+            $dbModel = D();
+            // 1、备份数据； 2、删除数据
+            // 图片文件
+			// -- 出库记录
+			// -- 入库记录
+			// -- 库存数据
+            // $sql = 'INSERT INTO v2_files_del SELECT * FROM v2_files WHERE attid in (SELECT id FROM v2_pro WHERE `lock` = 0);';
+            // $sql .= 'DELETE FROM v2_files WHERE attid in (SELECT id FROM v2_pro WHERE `lock` = 0);';
+            // $sql .= 'INSERT INTO v2_proout_del SELECT * FROM v2_proout WHERE jpid in (SELECT id FROM v2_pro WHERE `lock` = 0);';
+            // $sql .= 'DELETE FROM v2_proout WHERE jpid in (SELECT id FROM v2_pro WHERE `lock` = 0);';
+            // $sql .= 'INSERT INTO v2_proin_del SELECT * FROM v2_proin WHERE jpid in (SELECT id FROM v2_pro WHERE `lock` = 0);';
+            // $sql .= 'DELETE FROM v2_proin WHERE jpid in (SELECT id FROM v2_pro WHERE `lock` = 0);';
+            // $sql .= 'INSERT INTO v2_pro_del SELECT * FROM v2_pro WHERE `lock` = 0;';
+            // \Think\Log::write('del: '. $sql);
+            // $dbModel->execute($sql);
+            $dbModel->execute('
+                INSERT INTO v2_files_del SELECT * FROM v2_files WHERE attid in (SELECT id FROM v2_pro WHERE `lock` = 0);
+                DELETE FROM v2_files WHERE attid in (SELECT id FROM v2_pro WHERE `lock` = 0);
+
+                INSERT INTO v2_proout_del SELECT * FROM v2_proout WHERE jpid in (SELECT id FROM v2_pro WHERE `lock` = 0);
+                DELETE FROM v2_proout WHERE jpid in (SELECT id FROM v2_pro WHERE `lock` = 0);
+
+                INSERT INTO v2_proin_del SELECT * FROM v2_proin WHERE jpid in (SELECT id FROM v2_pro WHERE `lock` = 0);
+                DELETE FROM v2_proin WHERE jpid in (SELECT id FROM v2_pro WHERE `lock` = 0);
+
+                INSERT INTO v2_pro_del SELECT * FROM v2_pro WHERE `lock` = 0;
+            ');
+            
+            // DELETE FROM v2_pro WHERE lock = 0;
+			
+            $Rs = $model->where('`lock` = 0')->delete();
+            $this->mtReturn(200, '清理' . $Rs . '条无用的记录', $_REQUEST['navTabId'], false);
+        }
+        
     }
     
     public function outxls()

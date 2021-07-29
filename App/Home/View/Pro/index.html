@@ -19,11 +19,11 @@
             <a class="btn btn-orange" data-icon="undo" href="javascript:;" onclick="$(this).navtab('reloadForm', true);">
                 清空查询
             </a>
-            <!-- <span <php> echo display(CONTROLLER_NAME.'/del');</php> style="float:right;">
-                <a class="btn btn-red" data-confirm-msg="确定要清理吗？" data-icon="remove" data-toggle="doajax" href="__URL__/del/navTabId/{:CONTROLLER_NAME}">
+            <span <php> echo display(CONTROLLER_NAME.'/lock');</php> style="float:right;">
+                <a class="btn btn-red" data-confirm-msg="确定要清理吗？" data-icon="remove" data-toggle="doajax" href="__URL__/lock/navTabId/{:CONTROLLER_NAME}">
                     清理
                 </a>
-            </span> -->
+            </span>
             
 
            
@@ -86,7 +86,7 @@
                     付款状态
                 </th>
                 <th data-order-direction="desc" data-order-field="status">
-                    状态
+                    库存状态
                 </th>
                 <th>
                     添加人
@@ -97,6 +97,7 @@
                 <th data-order-direction="desc" data-order-field="updatetime">
                     更新时间
                 </th>
+                <th <php>echo display(CONTROLLER_NAME.'/lock');</php> > 状态</th>
                 <th>
                     详细
                 </th>
@@ -145,6 +146,15 @@
                     </td>
                     <td>
                         {$v.updatetime|substr=###,0,10}
+                    </td>
+                    <td <php>echo display(CONTROLLER_NAME.'/lock');</php> >
+                        <a data-confirm-msg="确定要操作吗？" data-toggle="doajax" href="__URL__/lock/id/{$v['id']}/navTabId/{:CONTROLLER_NAME}">
+                            <if condition="$v.lock EQ 1 ">
+                                <img border="0" src="__PUBLIC__/images/ok.gif"/>
+                            <else/>
+                                <img border="0" src="__PUBLIC__/images/locked.gif"/>
+                            </if>
+                        </a>
                     </td>
                     <td>
                         <a data-height="500" data-id="dialog-mask" data-mask="true" data-toggle="dialog" data-width="900" href="__URL__/view/id/{$v['id']}/navTabId/{:CONTROLLER_NAME}">
